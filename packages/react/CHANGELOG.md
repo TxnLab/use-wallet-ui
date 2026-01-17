@@ -1,3 +1,10 @@
+## [0.3.1](https://github.com/TxnLab/use-wallet-ui/compare/v0.3.0...v0.3.1) (2026-01-17)
+
+
+### Bug Fixes
+
+* **ci:** remove pnpm version to use packageManager field ([#3](https://github.com/TxnLab/use-wallet-ui/issues/3)) ([fdf7c12](https://github.com/TxnLab/use-wallet-ui/commit/fdf7c122886f3f1ce1d3f3b6808285d7c77ebff7))
+
 # Changelog
 
 ## [0.3.0](https://github.com/TxnLab/use-wallet-ui/compare/v0.2.3...v0.3.0) (2025-07-10)
