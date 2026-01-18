@@ -38,20 +38,23 @@ export default defineConfig({
   },
 
   // Snapshot configuration for visual regression
+  snapshotPathTemplate:
+    '{testDir}/{testFileDir}/__snapshots__/{testFileName}/{arg}{ext}',
+
   expect: {
     toHaveScreenshot: {
-      // Allow 1% pixel difference for anti-aliasing
-      maxDiffPixelRatio: 0.01,
+      // Allow 3% pixel difference for cross-platform font rendering
+      maxDiffPixelRatio: 0.03,
 
-      // Threshold for color difference
-      threshold: 0.2,
+      // Threshold for color difference (per-pixel)
+      threshold: 0.3,
 
       // Animation stabilization
       animations: 'disabled',
     },
     toMatchSnapshot: {
       // Threshold for image comparison
-      threshold: 0.2,
+      threshold: 0.3,
     },
   },
 
