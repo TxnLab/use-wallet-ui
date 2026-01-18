@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  pull_request:
+    paths:
+      - '**/*.md'
+
+jobs:
+  test:
+    name: Lint, Type Check, Test, and Build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Skipping CI for docs-only changes"
+
+  e2e:
+    name: E2E Visual Regression Tests
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Skipping E2E for docs-only changes"
