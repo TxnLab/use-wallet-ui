@@ -1,0 +1,79 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":preserveSemverRanges"
+  ],
+  "packageRules": [
+    {
+      "description": "Group all ESLint-related packages",
+      "matchManagers": ["npm"],
+      "matchPackagePatterns": ["^eslint", "^@eslint/", "^@typescript-eslint/"],
+      "groupName": "ESLint",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "description": "Group Playwright and related E2E dependencies",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["@playwright/test", "playwright"],
+      "groupName": "Playwright",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "description": "Group GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "description": "Group all remaining non-major npm dependencies",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "all non-major dependencies",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "description": "Group pnpm updates",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["pnpm"],
+      "groupName": "pnpm",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "description": "Pin Node.js version in GitHub Actions to 22.x",
+      "matchManagers": ["github-actions"],
+      "matchPackageNames": ["node"],
+      "allowedVersions": "22.x"
+    },
+    {
+      "description": "Pin @types/node to 22.x",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["@types/node"],
+      "allowedVersions": "22.x"
+    },
+    {
+      "description": "Require dashboard approval for major updates",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
+    }
+  ],
+  "schedule": ["before 3am on Monday"],
+  "timezone": "America/New_York",
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "labels": ["dependencies"],
+  "commitMessagePrefix": "chore(deps):",
+  "semanticCommits": "enabled"
+}
