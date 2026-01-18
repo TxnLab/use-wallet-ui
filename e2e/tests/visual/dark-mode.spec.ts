@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/test'
 
+// Skip visual regression tests in CI - they require platform-specific baselines
+// Run locally with: pnpm test:e2e:update to generate/update snapshots
 test.describe('Visual Regression - Dark Mode', () => {
+  test.skip(!!process.env.CI, 'Visual tests skipped in CI - platform differences')
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
     await page.waitForSelector('[data-wallet-ui]')
