@@ -1,3 +1,10 @@
+# [0.4.0](https://github.com/TxnLab/use-wallet-ui/compare/v0.3.1...v0.4.0) (2026-01-18)
+
+
+### Features
+
+* **theme:** add light/dark mode theming support ([#5](https://github.com/TxnLab/use-wallet-ui/issues/5)) ([f1fd7ac](https://github.com/TxnLab/use-wallet-ui/commit/f1fd7aca0bd078fed91b3a7c5fd48d62ba41e5ca))
+
 ## [0.3.1](https://github.com/TxnLab/use-wallet-ui/compare/v0.3.0...v0.3.1) (2026-01-17)
 
 
