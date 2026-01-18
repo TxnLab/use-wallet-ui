@@ -10,11 +10,15 @@
     {
       "description": "Group all ESLint-related packages",
       "matchManagers": ["npm"],
-      "matchPackagePatterns": ["^eslint", "^@eslint/", "^@typescript-eslint/"],
       "groupName": "ESLint",
       "automerge": true,
       "automergeType": "pr",
-      "automergeStrategy": "squash"
+      "automergeStrategy": "squash",
+      "matchPackageNames": [
+        "/^eslint/",
+        "/^@eslint//",
+        "/^@typescript-eslint//"
+      ]
     },
     {
       "description": "Group Playwright and related E2E dependencies",
