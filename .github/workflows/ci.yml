@@ -1,8 +1,6 @@
 name: CI
 
 on:
-  push:
-    branches: ['main', 'alpha', 'beta', 'next']
   pull_request:
     paths-ignore:
       - '**/*.md'
