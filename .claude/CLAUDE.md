@@ -77,3 +77,7 @@ CSS is generated via `pnpm generate:css` which runs Tailwind CLI and post-proces
 Uses Angular commit format: `<type>(<scope>): <subject>`
 
 Types: feat, fix, docs, style, refactor, perf, test, chore
+
+## Maintaining This File
+
+Keep this file updated when making significant changes to the codebase. It doesn't need to be updated on every change, but ensure the information remains accurate—fix or update anything that becomes outdated. Use best judgement when determining if updates are necessary.
