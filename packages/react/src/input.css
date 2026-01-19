@@ -1,11 +1,14 @@
 @import 'tailwindcss/theme.css';
 
-[data-wallet-ui] {
-  /*
-			Wrap components in a div with the data-wallet-ui attribute
-			to prevent style conflicts with the application's existing styles.
-			See: https://github.com/Roman86/tailwindcss-scoped-preflight/issues/67
-		*/
+/*
+  Preflight/reset styles are scoped to [data-wallet-ui-scope] to prevent
+  affecting consumer application content. Only wallet UI component containers
+  (modals, dropdowns) should have this attribute.
+
+  Theme variables remain on [data-wallet-ui] for inheritance to all children.
+  See: https://github.com/Roman86/tailwindcss-scoped-preflight/issues/67
+*/
+[data-wallet-ui-scope] {
   @import 'tailwindcss/preflight.css';
 }
 
@@ -84,14 +87,5 @@
   }
 }
 
-[data-wallet-ui-reset] {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    all: revert-layer;
-  }
-}
 
 @import 'tailwindcss/utilities.css';
