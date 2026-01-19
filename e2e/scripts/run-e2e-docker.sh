@@ -1,6 +1,6 @@
 #!/bin/bash
-# Update visual regression snapshots using Docker (Linux environment)
-# This ensures snapshots match what CI will see
+# Run E2E tests in Docker (Linux environment) without affecting local node_modules
+# This ensures tests run in the same environment as CI
 
 set -e
 
@@ -14,7 +14,10 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-echo -e "${YELLOW}Updating visual regression snapshots using Docker...${NC}"
+# Default to chromium project (matches CI)
+PROJECT="${1:-chromium}"
+
+echo -e "${YELLOW}Running E2E tests in Docker (Linux environment)...${NC}"
 echo ""
 
 # Check if Docker is running
@@ -28,14 +31,13 @@ PLAYWRIGHT_VERSION="v1.50.1"
 IMAGE="mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}"
 
 echo "Using Playwright image: $IMAGE"
-echo "Mounting: $ROOT_DIR -> /work"
+echo "Project: $PROJECT"
 echo ""
 
-# Run the update command in Docker
-# - Mount the repo as read-write for source files and snapshots
+# Run tests in Docker with isolated node_modules
+# - Mount the repo as read-write for source files
 # - Use anonymous volumes for node_modules directories to isolate from host
 # - This prevents Docker's pnpm install from affecting your local node_modules
-# - Run only chromium project (matches CI)
 docker run --rm \
   -v "$ROOT_DIR:/work" \
   -v /work/node_modules \
@@ -52,12 +54,16 @@ docker run --rm \
     pnpm install --frozen-lockfile && \
     pnpm build && \
     cd e2e && \
-    pnpm e2e:update --project=chromium
+    pnpm e2e --project=$PROJECT
   "
 
+EXIT_CODE=$?
+
 echo ""
-echo -e "${GREEN}Snapshots updated successfully!${NC}"
-echo ""
-echo "Next steps:"
-echo "  1. Review the updated snapshots in e2e/tests/visual/__snapshots__/"
-echo "  2. Commit the changes: git add e2e/tests/visual/__snapshots__ && git commit -m 'chore: update visual regression baselines'"
+if [ $EXIT_CODE -eq 0 ]; then
+  echo -e "${GREEN}E2E tests passed!${NC}"
+else
+  echo -e "${RED}E2E tests failed with exit code $EXIT_CODE${NC}"
+fi
+
+exit $EXIT_CODE
