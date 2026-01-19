@@ -83,16 +83,11 @@ export function NfdAvatar({
     // Default fallback is a rounded placeholder with light/dark mode variants
     return (
       <div
-        className={cn(
-          'flex items-center justify-center rounded-full',
-          lightOnly
-            ? 'bg-gray-200 dark:bg-gray-200'
-            : 'bg-gray-200 dark:bg-[#192A39]',
-          className,
-        )}
+        className={cn('flex items-center justify-center rounded-full', className)}
         style={{
           width: `${size}px`,
           height: `${size}px`,
+          backgroundColor: lightOnly ? '#e5e7eb' : 'var(--wui-color-avatar-bg)',
         }}
         aria-label={imgAlt}
         role="img"
@@ -101,10 +96,10 @@ export function NfdAvatar({
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
-          className={cn('text-gray-400', !lightOnly && 'dark:text-gray-500')}
           style={{
             width: `${Math.max(size / 2, 12)}px`,
             height: `${Math.max(size / 2, 12)}px`,
+            color: lightOnly ? '#9ca3af' : 'var(--wui-color-avatar-icon)',
           }}
         >
           <path

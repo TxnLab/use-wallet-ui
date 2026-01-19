@@ -387,7 +387,7 @@ function ConnectedWalletMenuContent({ children }: ConnectedWalletMenuProps) {
                     {/* Disconnect Button */}
                     <button
                       onClick={handleDisconnect}
-                      className="flex-1 py-2 px-4 bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 font-medium rounded-xl hover:bg-red-200 dark:hover:bg-red-800/60 transition-colors text-sm"
+                      className="flex-1 py-2 px-4 bg-[var(--wui-color-danger-bg)] text-[var(--wui-color-danger-text)] font-medium rounded-xl hover:bg-[var(--wui-color-danger-bg-hover)] transition-colors text-sm"
                     >
                       Disconnect
                     </button>

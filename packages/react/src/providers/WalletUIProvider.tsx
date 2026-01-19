@@ -39,6 +39,11 @@ const lightThemeVars = `
   --wui-color-link: rgba(45, 45, 241, 0.8);
   --wui-color-link-hover: #2d2df1;
   --wui-color-overlay: rgba(0, 0, 0, 0.3);
+  --wui-color-danger-bg: #fee2e2;
+  --wui-color-danger-bg-hover: #fecaca;
+  --wui-color-danger-text: #b91c1c;
+  --wui-color-avatar-bg: #e5e7eb;
+  --wui-color-avatar-icon: #9ca3af;
 `
 
 const darkThemeVars = `
@@ -56,6 +61,11 @@ const darkThemeVars = `
   --wui-color-link: #6c6cf1;
   --wui-color-link-hover: #8080f3;
   --wui-color-overlay: rgba(0, 0, 0, 0.5);
+  --wui-color-danger-bg: rgba(127, 29, 29, 0.4);
+  --wui-color-danger-bg-hover: rgba(127, 29, 29, 0.6);
+  --wui-color-danger-text: #fca5a5;
+  --wui-color-avatar-bg: #192a39;
+  --wui-color-avatar-icon: #6b7280;
 `
 
 function injectThemeStyles() {
