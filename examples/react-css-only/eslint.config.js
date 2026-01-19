@@ -1,8 +1,14 @@
+import { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
+
 import baseConfig from '../../eslint.config.js'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default tseslint.config(
   ...baseConfig,
@@ -13,6 +19,7 @@ export default tseslint.config(
       globals: globals.browser,
       parserOptions: {
         project: './tsconfig.app.json',
+        tsconfigRootDir: __dirname,
       },
     },
     plugins: {
@@ -33,6 +40,7 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: {
         project: './tsconfig.node.json',
+        tsconfigRootDir: __dirname,
       },
     },
   },
