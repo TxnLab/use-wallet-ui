@@ -79,11 +79,14 @@ Variables:
 
 ## Remaining Work
 
-### E2E Testing
-- [ ] Run existing E2E tests: `pnpm test:e2e`
-- [ ] Verify tests pass with new architecture
-- [ ] Add/update tests for new customization features if needed
-- [ ] Consider adding visual regression tests for theming
+### E2E Testing ✅
+- [x] Run existing E2E tests: `pnpm test:e2e`
+- [x] Verify tests pass with new architecture
+- [x] Update CI workflow to run on `beta` branch
+- [x] Fix Docker scripts to use Playwright v1.57.0
+- [x] Fix `css-variables.spec.ts` portal selector (`#wallet-dialog-portal [data-wallet-ui]`)
+- [x] Regenerate visual regression baselines via Docker
+- [ ] *(Optional)* Add E2E tests for `react-custom` example app
 
 ### README Documentation
 - [ ] Update main README.md with new customization API

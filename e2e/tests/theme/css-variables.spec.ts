@@ -41,7 +41,8 @@ test.describe('Portal-Critical CSS Variables', () => {
       await page.waitForTimeout(300)
 
       // Get CSS variables from the portal-rendered element
-      const portalElement = page.locator('[data-wallet-ui-scope]')
+      // The portal wraps content in a div with data-wallet-ui attribute
+      const portalElement = page.locator('#wallet-dialog-portal [data-wallet-ui]')
 
       const bgColor = await portalElement.evaluate((el) => {
         return getComputedStyle(el).getPropertyValue('--wui-color-bg').trim()
@@ -93,7 +94,8 @@ test.describe('Portal-Critical CSS Variables', () => {
       await page.waitForTimeout(300)
 
       // Get CSS variables from the portal-rendered element
-      const portalElement = page.locator('[data-wallet-ui-scope]')
+      // The portal wraps content in a div with data-wallet-ui attribute
+      const portalElement = page.locator('#wallet-dialog-portal [data-wallet-ui]')
 
       const bgColor = await portalElement.evaluate((el) => {
         return getComputedStyle(el).getPropertyValue('--wui-color-bg').trim()

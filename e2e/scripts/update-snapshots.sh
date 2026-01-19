@@ -24,7 +24,7 @@ if ! docker info > /dev/null 2>&1; then
 fi
 
 # Use the official Playwright Docker image matching our version
-PLAYWRIGHT_VERSION="v1.50.1"
+PLAYWRIGHT_VERSION="v1.57.0"
 IMAGE="mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}"
 
 echo "Using Playwright image: $IMAGE"
