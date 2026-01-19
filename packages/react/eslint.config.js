@@ -1,5 +1,11 @@
+import { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 import tseslint from 'typescript-eslint'
+
 import baseConfig from '../../eslint.config.js'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default tseslint.config(
   ...baseConfig,
@@ -9,6 +15,7 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: {
         project: './tsconfig.json',
+        tsconfigRootDir: __dirname,
       },
     },
     plugins: {
@@ -24,6 +31,7 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: {
         project: './tsconfig.eslint.json',
+        tsconfigRootDir: __dirname,
       },
     },
   },
