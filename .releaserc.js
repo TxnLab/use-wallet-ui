@@ -1,5 +1,8 @@
 export default {
-  branches: ['main'],
+  branches: [
+    'main',
+    { name: 'beta', prerelease: true },
+  ],
   tagFormat: 'v${version}',
   pkgRoot: 'packages/react',
   plugins: [

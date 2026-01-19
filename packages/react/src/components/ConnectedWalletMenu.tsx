@@ -153,11 +153,12 @@ function ConnectedWalletMenuContent({ children }: ConnectedWalletMenuProps) {
       {isOpen && (
         <FloatingPortal>
           <FloatingFocusManager context={context} modal={false}>
-            <div data-wallet-ui data-wallet-ui-scope data-theme={dataTheme}>
+            <div data-wallet-ui data-theme={dataTheme}>
               <div
                 ref={refs.setFloating}
                 style={floatingStyles}
                 {...getFloatingProps()}
+                role="menu"
                 aria-labelledby={labelId}
                 className="z-50 w-80 rounded-xl bg-(--wui-color-bg) shadow-xl border border-(--wui-color-border)"
               >

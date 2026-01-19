@@ -1,0 +1,270 @@
+/* ==========================================================================
+   Import Fonts
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ==========================================================================
+   Base App Styles
+   ========================================================================== */
+:root {
+  --bg-color: #f9fafb;
+  --text-color: #1f2937;
+  --text-secondary: #6b7280;
+  --border-color: #e5e7eb;
+  --card-bg: #ffffff;
+}
+
+/* Dark mode via .dark class (set by theme switcher) */
+:root.dark {
+  --bg-color: #0f172a;
+  --text-color: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border-color: #334155;
+  --card-bg: #1e293b;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.app {
+  min-height: 100vh;
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+.header {
+  background-color: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem;
+}
+
+.header-content {
+  max-width: 1024px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.theme-select {
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  font-size: 0.875rem;
+}
+
+/* ==========================================================================
+   Main Content
+   ========================================================================== */
+.main {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.section {
+  margin-bottom: 3rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.section-description {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.example-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.example-description {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.example-description code {
+  background-color: var(--border-color);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.8125rem;
+}
+
+.example-demo {
+  padding: 1.5rem;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.example-demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-end;
+}
+
+.size-example {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.size-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.code-block {
+  background-color: #1e293b;
+  color: #e2e8f0;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+/* ==========================================================================
+   Customization Examples
+   ========================================================================== */
+
+/* Example 3: Purple Theme */
+.purple-theme {
+  --wui-color-primary: #8b5cf6;
+  --wui-color-primary-hover: #7c3aed;
+  --wui-color-primary-text: #ffffff;
+}
+
+/* Example 5: Pill Button */
+.pill-button [data-wallet-button] {
+  border-radius: 9999px;
+}
+
+/* Example 6: Amber/Gold Theme
+   This example shows how to create theme-aware customizations */
+
+/* Light mode amber theme */
+.amber-theme {
+  --wui-color-primary: #f59e0b;
+  --wui-color-primary-hover: #d97706;
+  --wui-color-primary-text: #ffffff;
+}
+
+/* Dark mode amber theme - more subtle/glassy */
+.dark .amber-theme {
+  --wui-color-primary: rgba(245, 179, 71, 0.15);
+  --wui-color-primary-hover: rgba(245, 179, 71, 0.25);
+  --wui-color-primary-text: rgba(255, 255, 255, 0.9);
+}
+
+.dark .amber-theme [data-wallet-button] {
+  border: 1px solid rgba(245, 179, 71, 0.3);
+}
+
+/* ==========================================================================
+   Custom Trigger Button (Example 7)
+   ========================================================================== */
+.custom-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-color);
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.custom-button:hover {
+  background-color: var(--border-color);
+}
+
+.custom-button-connected {
+  background-color: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #22c55e;
+}
+
+.custom-button-connected:hover {
+  background-color: rgba(34, 197, 94, 0.2);
+}
+
+.custom-button-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #22c55e;
+  border-radius: 50%;
+}
+
+/* ==========================================================================
+   Summary Grid
+   ========================================================================== */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.summary-item {
+  padding: 1rem;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+}
+
+.summary-item h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.summary-item p {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.summary-item code {
+  background-color: var(--border-color);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (min-width: 640px) {
+  .main {
+    padding: 3rem 1.5rem;
+  }
+}

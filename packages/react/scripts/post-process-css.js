@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 /**
  * Post-processes the generated Tailwind CSS file to ensure utility classes
- * have higher specificity than preflight styles when scoped.
+ * are scoped to wallet UI components.
  *
- * This script adds [data-wallet-ui-scope] prefix to CSS class selectors to increase
- * their specificity and prevent them from being overridden by preflight styles.
- * The scope attribute is only applied to wallet UI component containers (modals,
- * dropdowns), not the entire provider wrapper.
+ * This script adds [data-wallet-ui] prefix to CSS class selectors to scope
+ * them to wallet UI components. This ensures styles only apply within the
+ * WalletUIProvider wrapper and don't leak to the consumer's application.
+ *
+ * With CSS @layer, consumer CSS (unlayered) automatically beats the layered
+ * library CSS, enabling easy customization without !important.
  */
 
 import fs from 'fs/promises'
@@ -19,7 +21,6 @@ function isTopLevelClassSelector(line) {
   const trimmed = line.trim()
   // Skip existing prefixed lines, theme selectors, at-rules, and comments
   if (
-    line.includes('[data-wallet-ui-scope]') ||
     line.includes('[data-wallet-ui]') ||
     trimmed.startsWith('@') ||
     trimmed.startsWith('/*') ||
@@ -40,8 +41,8 @@ async function main() {
     // Process each line
     const processedLines = lines.map((line) => {
       if (isTopLevelClassSelector(line)) {
-        // Replace the first occurrence of a period with '[data-wallet-ui-scope] .'
-        return line.replace(/(\s*)\./, '$1[data-wallet-ui-scope] .')
+        // Replace the first occurrence of a period with '[data-wallet-ui] .'
+        return line.replace(/(\s*)\./, '$1[data-wallet-ui] .')
       }
       return line
     })
@@ -50,7 +51,7 @@ async function main() {
     await fs.writeFile(STYLE_FILE_PATH, processedLines.join('\n'))
 
     console.log(
-      `Processed CSS file to add [data-wallet-ui-scope] prefix to class selectors in ${STYLE_FILE_PATH}`,
+      `Processed CSS file to add [data-wallet-ui] prefix to class selectors in ${STYLE_FILE_PATH}`,
     )
   } catch (error) {
     console.error('Error processing CSS file:', error)

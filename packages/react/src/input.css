@@ -1,18 +1,73 @@
+/*
+  CSS Architecture for use-wallet-ui
+
+  All styles are scoped to [data-wallet-ui] to:
+  1. Prevent library styles from leaking into consumer apps
+  2. Provide enough specificity to override consumer CSS resets (e.g., * { margin: 0 })
+  3. Enable easy customization via [data-wallet-ui] selector overrides
+
+  Note: We use a minimal reset that only targets library component elements,
+  NOT Tailwind's full preflight, to avoid affecting consumer app elements
+  that may be inside the WalletUIProvider wrapper.
+*/
+
 @import 'tailwindcss/theme.css';
 
 /*
-  Preflight/reset styles are scoped to [data-wallet-ui-scope] to prevent
-  affecting consumer application content. Only wallet UI component containers
-  (modals, dropdowns) should have this attribute.
+  Minimal reset for library components only.
+  This targets only the elements the library actually renders, avoiding
+  interference with consumer app elements (headings, paragraphs, etc.).
 
-  Theme variables remain on [data-wallet-ui] for inheritance to all children.
-  See: https://github.com/Roman86/tailwindcss-scoped-preflight/issues/67
+  Note: We use [data-wallet-button] to target only the library's buttons,
+  not custom trigger buttons that consumers may pass as children.
 */
-[data-wallet-ui-scope] {
-  @import 'tailwindcss/preflight.css';
+[data-wallet-ui] [data-wallet-button],
+[data-wallet-ui] [role="dialog"],
+[data-wallet-ui] [role="menu"],
+[data-wallet-ui] [role="listbox"] {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0 solid;
+  font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  line-height: 1.5;
 }
 
-/* Theme CSS custom properties */
+/* Button-specific reset - for library buttons and buttons inside dialogs/menus */
+[data-wallet-ui] [data-wallet-button],
+[data-wallet-ui] [role="dialog"] button,
+[data-wallet-ui] [role="menu"] button,
+[data-wallet-ui] [role="listbox"] button {
+  cursor: pointer;
+  background-color: transparent;
+  background-image: none;
+  text-transform: none;
+  -webkit-appearance: button;
+  appearance: button;
+}
+
+/* Reset for elements inside dialogs/menus (the actual library UI) */
+[data-wallet-ui] [role="dialog"] *,
+[data-wallet-ui] [role="menu"] *,
+[data-wallet-ui] [role="listbox"] * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0 solid;
+  list-style: none;
+}
+
+/* Image resets for library elements */
+[data-wallet-ui] [role="dialog"] img,
+[data-wallet-ui] [role="menu"] img,
+[data-wallet-ui] [role="listbox"] img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Theme - CSS custom properties */
+
 /* Light mode (default) */
 [data-wallet-ui] {
   --wui-color-primary: #2d2df1;
@@ -107,5 +162,5 @@
   }
 }
 
-
+/* Tailwind utilities (post-processed to add [data-wallet-ui] prefix) */
 @import 'tailwindcss/utilities.css';

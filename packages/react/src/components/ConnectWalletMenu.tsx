@@ -127,7 +127,7 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
       {trigger}
       <FloatingPortal id="wallet-dialog-portal">
         {isOpen && (
-          <div data-wallet-ui data-wallet-ui-scope data-theme={dataTheme}>
+          <div data-wallet-ui data-theme={dataTheme}>
             <FloatingOverlay
               className="grid place-items-center px-4 z-50 transition-opacity duration-150 ease-in-out bg-(--wui-color-overlay) data-[state=starting]:opacity-0 data-[state=exiting]:opacity-0 data-[state=entered]:opacity-100"
               data-state={animationState}
@@ -140,6 +140,7 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
                     'aria-labelledby': labelId,
                     'aria-describedby': descriptionId,
                   })}
+                  role="dialog"
                   data-state={animationState}
                   className="w-full max-w-sm rounded-3xl bg-(--wui-color-bg) shadow-xl transform transition-all duration-150 ease-in-out data-[state=starting]:opacity-0 data-[state=starting]:scale-90 data-[state=exiting]:opacity-0 data-[state=exiting]:scale-90 data-[state=entered]:opacity-100 data-[state=entered]:scale-100"
                   style={{

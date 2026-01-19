@@ -76,10 +76,7 @@ function App() {
   return (
     <WalletProvider manager={walletManager}>
       <WalletUIProvider>
-        {/* Add data-wallet-ui attribute when not using Tailwind */}
-        <div data-wallet-ui>
-          <WalletButton />
-        </div>
+        <WalletButton />
       </WalletUIProvider>
     </WalletProvider>
   )
@@ -189,22 +186,19 @@ See the [Tailwind CSS v3 Installation Guide](https://v3.tailwindcss.com/docs/ins
 For projects that don't use Tailwind, we provide a pre-built CSS file:
 
 ```jsx
-// 1. Import the pre-built CSS
+// Import the pre-built CSS
 import '@txnlab/use-wallet-ui-react/dist/style.css'
 
 function App() {
   return (
-    // 2. Add the data-wallet-ui attribute to any container with wallet components
-    <div data-wallet-ui>
+    <WalletUIProvider>
       <WalletButton />
-    </div>
+    </WalletUIProvider>
   )
 }
 ```
 
-**Important:** Add the `data-wallet-ui` attribute to scope our styles and prevent conflicts with your application's existing styles.
-
-While this approach offers less flexibility for customization compared to Tailwind, it provides a simple way to use the components with minimal setup.
+The pre-built CSS includes all necessary styles. While this approach offers less flexibility for customization compared to Tailwind, it provides a simple way to use the components with minimal setup.
 
 ## Theming
 
@@ -376,6 +370,15 @@ All-in-one solution for wallet connectivity - combines the connect and connected
 
 ```jsx
 <WalletButton />
+
+// With size variants
+<WalletButton size="sm" />  // Small
+<WalletButton size="md" />  // Medium (default)
+<WalletButton size="lg" />  // Large
+
+// With custom styles
+<WalletButton className="my-custom-class" />
+<WalletButton style={{ '--wui-color-primary': '#8b5cf6' }} />
 ```
 
 ### Connection Components

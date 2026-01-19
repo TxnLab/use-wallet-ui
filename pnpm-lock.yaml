@@ -188,6 +188,58 @@ importers:
         specifier: ^0.25.0
         version: 0.25.0(rollup@4.55.1)(vite@6.4.1(@types/node@22.19.7)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.7.1))
 
+  examples/react-custom:
+    dependencies:
+      '@blockshake/defly-connect':
+        specifier: ^1.2.1
+        version: 1.2.1(algosdk@3.5.2)
+      '@perawallet/connect':
+        specifier: ^1.4.2
+        version: 1.4.2(algosdk@3.5.2)
+      '@txnlab/use-wallet-react':
+        specifier: ^4.0.1
+        version: 4.0.1(@blockshake/defly-connect@1.2.1(algosdk@3.5.2))(@perawallet/connect@1.4.2(algosdk@3.5.2))(@walletconnect/modal@2.7.0(@types/react@19.2.8)(react@19.2.3))(@walletconnect/sign-client@2.19.2(typescript@5.9.3))(algosdk@3.5.2)(lute-connect@1.5.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@txnlab/use-wallet-ui-react':
+        specifier: workspace:*
+        version: link:../../packages/react
+      '@txnlab/utils-ts':
+        specifier: ^0.1.0
+        version: 0.1.0
+      '@walletconnect/modal':
+        specifier: ^2.7.0
+        version: 2.7.0(@types/react@19.2.8)(react@19.2.3)
+      '@walletconnect/sign-client':
+        specifier: ^2.19.2
+        version: 2.19.2(typescript@5.9.3)
+      algosdk:
+        specifier: ^3.2.0
+        version: 3.5.2
+      lute-connect:
+        specifier: ^1.5.1
+        version: 1.5.1
+      react:
+        specifier: ^19.0.0
+        version: 19.2.3
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.2.3(react@19.2.3)
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.8
+        version: 19.2.8
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.8)
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.3.4(vite@6.4.1(@types/node@22.19.7)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.7.1))
+      vite:
+        specifier: ^6.2.0
+        version: 6.4.1(@types/node@22.19.7)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.7.1)
+      vite-plugin-node-polyfills:
+        specifier: ^0.25.0
+        version: 0.25.0(rollup@4.55.1)(vite@6.4.1(@types/node@22.19.7)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.7.1))
+
   packages/react:
     dependencies:
       '@floating-ui/react':
@@ -5749,7 +5801,6 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
-    optional: true
 
   '@bundled-es-modules/cookie@2.0.1':
     dependencies:
@@ -6426,7 +6477,6 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
-    optional: true
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
@@ -7483,7 +7533,6 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
       - react
-    optional: true
 
   '@walletconnect/modal-ui@2.7.0(@types/react@19.2.8)(react@19.1.0)':
     dependencies:
@@ -7504,7 +7553,6 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
       - react
-    optional: true
 
   '@walletconnect/modal@2.7.0(@types/react@19.2.8)(react@19.1.0)':
     dependencies:
@@ -7521,7 +7569,6 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
       - react
-    optional: true
 
   '@walletconnect/randombytes@1.1.0':
     dependencies:
@@ -11097,7 +11144,6 @@ snapshots:
   use-sync-external-store@1.2.0(react@19.2.3):
     dependencies:
       react: 19.2.3
-    optional: true
 
   use-sync-external-store@1.5.0(react@19.1.0):
     dependencies:
@@ -11137,7 +11183,6 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.8
       react: 19.2.3
-    optional: true
 
   viem@2.23.2(typescript@5.9.3):
     dependencies:

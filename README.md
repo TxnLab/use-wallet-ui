@@ -17,6 +17,7 @@ Ready-to-use UI components for Algorand wallet integration, built as a companion
 - 🏷️ **NFD Support**: Built-in NFD integration
 - 🔄 **Account Management**: Switch between accounts and wallets
 - 🌓 **Dark Mode**: Automatic light/dark theme support
+- 📏 **Size Variants**: Small, medium, and large button sizes
 - 🚀 **Framework Support**: Currently React, with Vue and SolidJS coming soon
 
 ## Quick Start
@@ -34,8 +35,8 @@ import {
 } from '@txnlab/use-wallet-react'
 import { WalletUIProvider, WalletButton } from '@txnlab/use-wallet-ui-react'
 
-// Optional: Import pre-built styles if not using Tailwind
-// import '@txnlab/use-wallet-ui-react/dist/style.css'
+// Import pre-built styles if not using Tailwind
+import '@txnlab/use-wallet-ui-react/dist/style.css'
 
 // Configure the wallets you want to use
 const walletManager = new WalletManager({
@@ -52,10 +53,7 @@ function App() {
   return (
     <WalletProvider manager={walletManager}>
       <WalletUIProvider>
-        {/* Add data-wallet-ui attribute if NOT using Tailwind */}
-        <div data-wallet-ui>
-          <WalletButton />
-        </div>
+        <WalletButton />
       </WalletUIProvider>
     </WalletProvider>
   )
@@ -63,6 +61,67 @@ function App() {
 ```
 
 That's it! You now have a fully functional wallet connection system.
+
+## Customization
+
+### Size Variants
+
+```jsx
+<WalletButton size="sm" />  // Small
+<WalletButton size="md" />  // Medium (default)
+<WalletButton size="lg" />  // Large
+```
+
+### CSS Variable Overrides
+
+Override the default colors by setting CSS variables on `[data-wallet-ui]`:
+
+```css
+[data-wallet-ui] {
+  --wui-color-primary: #8b5cf6;
+  --wui-color-primary-hover: #7c3aed;
+  --wui-color-primary-text: #ffffff;
+}
+```
+
+### Inline Style Overrides
+
+For instance-specific customization:
+
+```jsx
+<WalletButton
+  style={{
+    '--wui-color-primary': '#10b981',
+    '--wui-color-primary-hover': '#059669',
+  }}
+/>
+```
+
+### Custom Trigger Button
+
+For complete control, use the Menu components with your own button:
+
+```jsx
+import { ConnectWalletMenu, ConnectedWalletMenu } from '@txnlab/use-wallet-ui-react'
+
+function CustomWalletButton() {
+  const { activeAddress } = useWallet()
+
+  if (activeAddress) {
+    return (
+      <ConnectedWalletMenu>
+        <button className="my-button">{formatShortAddress(activeAddress)}</button>
+      </ConnectedWalletMenu>
+    )
+  }
+
+  return (
+    <ConnectWalletMenu>
+      <button className="my-button">Connect</button>
+    </ConnectWalletMenu>
+  )
+}
+```
 
 For complete documentation, see [React Package Documentation](./packages/react/README.md).
 
@@ -76,6 +135,7 @@ Check out our working examples:
 
 - [Tailwind CSS Example](./examples/react) - Integration with Tailwind CSS
 - [CSS-only Example](./examples/react-css-only) - Integration without Tailwind CSS
+- [Customization Example](./examples/react-custom) - Demonstrates all customization patterns
 
 ## Documentation
 

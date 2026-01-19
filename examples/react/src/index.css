@@ -1,2 +1,5 @@
 @import 'tailwindcss';
 @source '../node_modules/@txnlab/use-wallet-ui-react';
+
+/* Enable dark mode via .dark class on :root (html element) */
+@custom-variant dark (&:where(.dark, .dark *));

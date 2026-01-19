@@ -333,7 +333,142 @@ body {
 }
 
 /* ==========================================================================
-   Dark Mode
+   Dark Mode (class-based for theme switcher)
+   ========================================================================== */
+:root.dark {
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #001324;
+}
+
+:root.dark body {
+  background-color: #001324;
+}
+
+:root.dark .app-wrapper {
+  background-color: #001324;
+}
+
+/* Header */
+:root.dark .header {
+  background-color: rgba(31, 41, 55, 0.3);
+  border-bottom-color: rgba(55, 65, 81, 0.5);
+}
+
+:root.dark .logo-text {
+  color: #ffffff;
+}
+
+:root.dark .theme-select {
+  background-color: #1f2937;
+  border-color: #4b5563;
+  color: #ffffff;
+}
+
+:root.dark .theme-info {
+  color: #9ca3af;
+}
+
+/* Content */
+:root.dark .main-title {
+  color: #ffffff;
+}
+
+:root.dark .description {
+  color: #d1d5db;
+}
+
+:root.dark .code-block {
+  background-color: #1f2937;
+}
+
+/* Wallet components */
+:root.dark .connect-prompt {
+  background-color: rgba(31, 41, 55, 0.5);
+  border-color: rgba(55, 65, 81, 0.7);
+}
+
+:root.dark .connect-title {
+  color: #ffffff;
+}
+
+:root.dark .connect-description {
+  color: #d1d5db;
+}
+
+:root.dark .wallet-info {
+  background-color: rgba(31, 41, 55, 0.5);
+  border-color: rgba(55, 65, 81, 0.7);
+  box-shadow: none;
+}
+
+:root.dark .wallet-name {
+  color: #ffffff;
+}
+
+:root.dark .wallet-address {
+  color: #9ca3af;
+}
+
+:root.dark .balance-section {
+  background-color: #1f2937;
+}
+
+:root.dark .balance-label {
+  color: #9ca3af;
+}
+
+:root.dark .balance-amount {
+  color: #ffffff;
+}
+
+/* NFD Properties */
+:root.dark .nfd-properties {
+  border-top-color: rgba(55, 65, 81, 0.7);
+}
+
+:root.dark .nfd-properties-title {
+  color: #d1d5db;
+}
+
+:root.dark .nfd-property {
+  background-color: #1f2937;
+}
+
+:root.dark .nfd-property-key {
+  color: #9ca3af;
+}
+
+:root.dark .nfd-property-value {
+  color: #ffffff;
+}
+
+/* Footer */
+:root.dark .footer-text {
+  color: #9ca3af;
+}
+
+:root.dark .footer-link,
+:root.dark .documentation-link {
+  color: #60a5fa;
+}
+
+:root.dark .footer-link:hover,
+:root.dark .documentation-link:hover {
+  color: #93c5fd;
+}
+
+/* Loading */
+:root.dark .loading {
+  background-color: rgba(31, 41, 55, 0.5);
+  border-color: rgba(55, 65, 81, 0.7);
+}
+
+:root.dark .loading-text {
+  color: #d1d5db;
+}
+
+/* ==========================================================================
+   Dark Mode (system preference fallback)
    ========================================================================== */
 @media (prefers-color-scheme: dark) {
   /* Base styles */

@@ -1,6 +1,7 @@
 import { initializeFonts } from './utils/fontLoader'
 
 export { ConnectWalletButton } from './components/ConnectWalletButton'
+export type { ButtonSize } from './components/ConnectWalletButton'
 export { ConnectWalletMenu } from './components/ConnectWalletMenu'
 export { ConnectedWalletButton } from './components/ConnectedWalletButton'
 export { ConnectedWalletMenu } from './components/ConnectedWalletMenu'

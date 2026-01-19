@@ -9,7 +9,7 @@ import {
   WalletButton,
   type Theme,
 } from '@txnlab/use-wallet-ui-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { WalletInfo } from './components/WalletInfo'
 
@@ -29,6 +29,40 @@ const walletManager = new WalletManager({
 
 function App() {
   const [theme, setTheme] = useState<Theme>('system')
+
+  // Sync app theme with the theme switcher
+  // This adds/removes a 'dark' class on the root element for Tailwind
+  useEffect(() => {
+    const root = document.documentElement
+
+    if (theme === 'dark') {
+      root.classList.add('dark')
+    } else if (theme === 'light') {
+      root.classList.remove('dark')
+    } else {
+      // System preference
+      const prefersDark = window.matchMedia(
+        '(prefers-color-scheme: dark)',
+      ).matches
+      if (prefersDark) {
+        root.classList.add('dark')
+      } else {
+        root.classList.remove('dark')
+      }
+
+      // Listen for system preference changes
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+      const handler = (e: MediaQueryListEvent) => {
+        if (e.matches) {
+          root.classList.add('dark')
+        } else {
+          root.classList.remove('dark')
+        }
+      }
+      mediaQuery.addEventListener('change', handler)
+      return () => mediaQuery.removeEventListener('change', handler)
+    }
+  }, [theme])
 
   return (
     <WalletProvider manager={walletManager}>
