@@ -8,6 +8,7 @@
     "e2e:headed": "playwright test --headed",
     "e2e:update": "playwright test --update-snapshots",
     "e2e:update:docker": "./scripts/update-snapshots.sh",
+    "e2e:docker": "./scripts/run-e2e-docker.sh",
     "e2e:debug": "playwright test --debug",
     "e2e:validate": "playwright test --list",
     "typecheck": "tsc --noEmit",
