@@ -1,3 +1,20 @@
+# [1.0.0-beta.1](https://github.com/TxnLab/use-wallet-ui/compare/v0.4.2...v1.0.0-beta.1) (2026-01-20)
+
+
+### Bug Fixes
+
+* **css:** use :where() for button reset to allow utility overrides ([#25](https://github.com/TxnLab/use-wallet-ui/issues/25)) ([221c660](https://github.com/TxnLab/use-wallet-ui/commit/221c660f3824e595e882ed4a3e4180510d7f4b94))
+* **css:** use Tailwind v3-compatible CSS variable syntax ([#24](https://github.com/TxnLab/use-wallet-ui/issues/24)) ([a4aeeb7](https://github.com/TxnLab/use-wallet-ui/commit/a4aeeb75292c801329a91c1d4acdf772caf84a30))
+
+
+* feat(css)!: redesign CSS architecture for v1.0 ([fb6ccc3](https://github.com/TxnLab/use-wallet-ui/commit/fb6ccc37cbc00ecfe353134b6544750053cd5f11))
+
+
+### BREAKING CHANGES
+
+* CSS architecture has been redesigned for better
+customization support and isolation.
+
 ## [0.4.2](https://github.com/TxnLab/use-wallet-ui/compare/v0.4.1...v0.4.2) (2026-01-19)
 
 
