@@ -34,7 +34,7 @@ export function WalletInfo() {
     <div className="wallet-info">
       <div className="wallet-info-content">
         <div className="wallet-avatar-section">
-          <NfdAvatar nfd={nfd} size={64} className="wallet-avatar" />
+          <NfdAvatar nfd={nfd} size={64} className="rounded-xl" />
           <div>
             <h2 className="wallet-name">
               {nfd?.name || formatShortAddress(activeAddress)}
