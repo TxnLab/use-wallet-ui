@@ -88,12 +88,12 @@ Variables:
 - [x] Regenerate visual regression baselines via Docker
 - [x] Add E2E tests for `react-custom` example app (customization tests)
 
-### README Documentation
-- [ ] Update main README.md with new customization API
-- [ ] Document CSS variable override patterns
-- [ ] Document size variants
-- [ ] Document className/style prop usage
-- [ ] Add migration notes for v0.x → v1.0
+### README Documentation ✅
+- [x] Update main README.md with new customization API
+- [x] Document CSS variable override patterns
+- [x] Document size variants
+- [x] Document className/style prop usage
+- [x] Add migration notes for v0.x → v1.0
 
 ### Example App Consistency
 - [ ] Review `react` and `react-css-only` examples for visual consistency with `react-custom`

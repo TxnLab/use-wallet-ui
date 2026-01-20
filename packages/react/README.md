@@ -1,75 +1,64 @@
 # @txnlab/use-wallet-ui-react
 
-Ready-to-use UI components for Algorand wallet integration, built as a companion to [@txnlab/use-wallet](https://github.com/TxnLab/use-wallet).
+Ready-to-use React UI components for Algorand wallet integration, built as a companion to [@txnlab/use-wallet-react](https://github.com/TxnLab/use-wallet).
 
 [![npm version](https://img.shields.io/npm/v/@txnlab/use-wallet-ui-react.svg)](https://www.npmjs.com/package/@txnlab/use-wallet-ui-react)
+[![CI](https://github.com/TxnLab/use-wallet-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/TxnLab/use-wallet-ui/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
 
-## Quick Start
+## Table of Contents
+
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Styling](#styling)
+- [Customization](#customization)
+- [Theming](#theming)
+- [Components](#components)
+- [Hooks](#hooks)
+- [Tanstack Query Integration](#tanstack-query-integration)
+- [Migration from v0.x](#migration-from-v0x)
+- [License](#license)
+
+## Installation
 
 ```bash
 npm install @txnlab/use-wallet-ui-react
+# or
+yarn add @txnlab/use-wallet-ui-react
+# or
+pnpm add @txnlab/use-wallet-ui-react
+# or
+bun add @txnlab/use-wallet-ui-react
 ```
 
-This package provides polished UI components that work on top of `@txnlab/use-wallet-react`. Choose the setup that matches your project:
+### Requirements
 
-### If you're using Tailwind CSS
+- `@txnlab/use-wallet-react` v4+
+- `algosdk` v3+
+- React 18 or 19
 
-```jsx
-import {
-  NetworkId,
-  WalletId,
-  WalletManager,
-  WalletProvider,
-} from '@txnlab/use-wallet-react'
-import { WalletUIProvider, WalletButton } from '@txnlab/use-wallet-ui-react'
-
-// Configure the wallets you want to use
-const walletManager = new WalletManager({
-  wallets: [
-    WalletId.PERA,
-    WalletId.DEFLY,
-    WalletId.LUTE,
-    // Add more wallets as needed
-  ],
-  defaultNetwork: NetworkId.MAINNET,
-})
-
-function App() {
-  return (
-    <WalletProvider manager={walletManager}>
-      <WalletUIProvider>
-        <div>
-          <WalletButton />
-        </div>
-      </WalletUIProvider>
-    </WalletProvider>
-  )
-}
-```
-
-### If you're NOT using Tailwind CSS
+## Quick Start
 
 ```jsx
-import {
-  NetworkId,
-  WalletId,
-  WalletManager,
-  WalletProvider,
-} from '@txnlab/use-wallet-react'
+import { NetworkId, WalletId, WalletManager, WalletProvider } from '@txnlab/use-wallet-react'
 import { WalletUIProvider, WalletButton } from '@txnlab/use-wallet-ui-react'
-// Import our pre-built styles
+
+// Import styles if NOT using Tailwind CSS
 import '@txnlab/use-wallet-ui-react/dist/style.css'
 
-// Configure the wallets you want to use
 const walletManager = new WalletManager({
   wallets: [
     WalletId.PERA,
     WalletId.DEFLY,
     WalletId.LUTE,
-    // Add more wallets as needed
+    WalletId.EXODUS,
+    {
+      id: WalletId.WALLETCONNECT,
+      options: { projectId: 'your-project-id' },
+    },
   ],
-  defaultNetwork: NetworkId.MAINNET,
+  defaultNetwork: NetworkId.TESTNET,
 })
 
 function App() {
@@ -83,353 +72,329 @@ function App() {
 }
 ```
 
-That's it! You now have a fully functional wallet connection system with:
+The `WalletButton` handles everything:
 
-- Clean, accessible UI components
-- NFD integration
-- ALGO balance display
-- Account switching
-- Dark/light mode support
+- Shows "Connect Wallet" when disconnected
+- Opens wallet selection dialog
+- Displays wallet address/NFD name and avatar when connected
+- Provides account switching and disconnect options
 
-> **Note:** This is the React implementation of the UI components. Future versions will support Vue and SolidJS to match all frameworks supported by the core `@txnlab/use-wallet` library.
-
----
-
-## Table of Contents
-
-- [Dependencies](#dependencies)
-- [Installation](#installation)
-- [Styling Options](#styling-options)
-  - [Without Tailwind CSS](#without-tailwind-css)
-  - [With Tailwind CSS](#with-tailwind-css)
-- [Theming](#theming)
-- [Basic Usage](#basic-usage)
-- [Component API](#component-api)
-- [NFD Integration](#nfd-integration)
-- [Account Information](#account-information)
-- [Advanced Customization](#advanced-customization)
-- [Integration with Tanstack Query](#integration-with-tanstack-query)
-- [How It Works](#how-it-works)
-- [License](#license)
-
----
-
-## Dependencies
-
-### Required
-
-- `@txnlab/use-wallet-react` v4
-- `algosdk` v3 (required for use-wallet v4)
-- React v18 or v19
-
-### Optional & Integrated
-
-- **Tanstack Query**: Used internally for NFD lookups (built-in, but can integrate with your existing setup)
-- **Tailwind CSS**: Supported but not required (the library works with or without it)
-
-## Installation
-
-```bash
-# npm
-npm install @txnlab/use-wallet-ui-react
-
-# yarn
-yarn add @txnlab/use-wallet-ui-react
-
-# pnpm
-pnpm add @txnlab/use-wallet-ui-react
-```
-
-## Styling Options
+## Styling
 
 The library supports two styling approaches:
 
-### Option 1: Using Tailwind CSS (Recommended)
+### With Tailwind CSS
 
-Using [Tailwind CSS](https://tailwindcss.com/) provides the richest customization experience:
+Components use Tailwind utility classes. Configure Tailwind to scan our package:
 
-- Full access to Tailwind's utility classes for customization
-- Hover, focus, and active states with simple modifiers
-- Dark mode support with the `dark:` variant
-- Responsive design with breakpoint prefixes
-- Animation and transition utilities
-- Theme customization through your Tailwind config
-
-#### With Tailwind CSS v4
+**Tailwind v4:**
 
 ```css
-/* In your CSS file */
 @import 'tailwindcss';
 @source "../node_modules/@txnlab/use-wallet-ui-react";
 ```
 
-This uses the `@source` directive to tell Tailwind to scan our library for classes. See the [Tailwind CSS v4 Installation Guide](https://tailwindcss.com/docs/installation) for setup instructions.
-
-#### With Tailwind CSS v3
+**Tailwind v3:**
 
 ```js
 // tailwind.config.js
 module.exports = {
   content: [
     './src/**/*.{js,ts,jsx,tsx}',
-    // Add this line to scan our components
     './node_modules/@txnlab/use-wallet-ui-react/dist/**/*.{js,ts,jsx,tsx}',
   ],
-  // ...rest of your config
 }
 ```
 
-See the [Tailwind CSS v3 Installation Guide](https://v3.tailwindcss.com/docs/installation) for setup instructions.
+### Without Tailwind CSS
 
-### Option 2: Using the Pre-built CSS
-
-For projects that don't use Tailwind, we provide a pre-built CSS file:
+Import our pre-built CSS:
 
 ```jsx
-// Import the pre-built CSS
 import '@txnlab/use-wallet-ui-react/dist/style.css'
+```
 
-function App() {
+## Customization
+
+v1.0 introduces a flexible customization system with multiple approaches.
+
+### Size Variants
+
+```jsx
+<WalletButton size="sm" />  {/* Small */}
+<WalletButton size="md" />  {/* Medium (default) */}
+<WalletButton size="lg" />  {/* Large */}
+```
+
+### CSS Variable Overrides
+
+Theme colors are CSS custom properties that can be overridden globally or per-instance.
+
+**Global override (in your CSS):**
+
+```css
+[data-wallet-ui] {
+  --wui-color-primary: #8b5cf6;
+  --wui-color-primary-hover: #7c3aed;
+  --wui-color-primary-text: #ffffff;
+}
+```
+
+**Scoped override (on a wrapper):**
+
+```css
+.my-purple-button {
+  --wui-color-primary: #8b5cf6;
+  --wui-color-primary-hover: #7c3aed;
+}
+```
+
+```jsx
+<div className="my-purple-button">
+  <WalletButton />
+</div>
+```
+
+**Inline style override:**
+
+```jsx
+<WalletButton
+  style={{
+    '--wui-color-primary': '#10b981',
+    '--wui-color-primary-hover': '#059669',
+  } as React.CSSProperties}
+/>
+```
+
+### Available CSS Variables
+
+| Variable | Description |
+|----------|-------------|
+| `--wui-color-primary` | Primary button background |
+| `--wui-color-primary-hover` | Primary button hover state |
+| `--wui-color-primary-text` | Primary button text |
+| `--wui-color-bg` | Panel/dialog background |
+| `--wui-color-bg-secondary` | Secondary background |
+| `--wui-color-bg-tertiary` | Tertiary background |
+| `--wui-color-bg-hover` | Hover background |
+| `--wui-color-text` | Primary text color |
+| `--wui-color-text-secondary` | Secondary text color |
+| `--wui-color-text-tertiary` | Tertiary text color |
+| `--wui-color-border` | Border color |
+| `--wui-color-link` | Link color |
+| `--wui-color-link-hover` | Link hover color |
+| `--wui-color-overlay` | Modal overlay color |
+| `--wui-color-danger-bg` | Danger button background |
+| `--wui-color-danger-bg-hover` | Danger button hover |
+| `--wui-color-danger-text` | Danger button text |
+| `--wui-color-avatar-bg` | Avatar placeholder background |
+| `--wui-color-avatar-icon` | Avatar placeholder icon |
+
+### className Prop
+
+Add custom classes (useful with Tailwind):
+
+```jsx
+<WalletButton className="rounded-full shadow-lg" />
+```
+
+### Direct CSS Selectors
+
+Target the button element directly:
+
+```css
+.pill-button [data-wallet-button] {
+  border-radius: 9999px;
+}
+```
+
+```jsx
+<div className="pill-button">
+  <WalletButton />
+</div>
+```
+
+### Custom Trigger Button
+
+For complete control, use the Menu components with your own button:
+
+```jsx
+import { useWallet } from '@txnlab/use-wallet-react'
+import { ConnectWalletMenu, ConnectedWalletMenu } from '@txnlab/use-wallet-ui-react'
+
+function CustomWalletButton() {
+  const { activeAddress } = useWallet()
+
+  if (activeAddress) {
+    return (
+      <ConnectedWalletMenu>
+        <button className="my-connected-button">
+          {activeAddress.slice(0, 8)}...
+        </button>
+      </ConnectedWalletMenu>
+    )
+  }
+
   return (
-    <WalletUIProvider>
-      <WalletButton />
-    </WalletUIProvider>
+    <ConnectWalletMenu>
+      <button className="my-connect-button">Connect Wallet</button>
+    </ConnectWalletMenu>
   )
 }
 ```
 
-The pre-built CSS includes all necessary styles. While this approach offers less flexibility for customization compared to Tailwind, it provides a simple way to use the components with minimal setup.
+The child element becomes the trigger - the library handles all the menu logic.
+
+### Theme-Aware Customization
+
+Create different styles for light and dark modes:
+
+```css
+.amber-theme {
+  --wui-color-primary: #f59e0b;
+  --wui-color-primary-hover: #d97706;
+}
+
+.dark .amber-theme {
+  --wui-color-primary: rgba(245, 179, 71, 0.15);
+  --wui-color-primary-hover: rgba(245, 179, 71, 0.25);
+}
+
+.dark .amber-theme [data-wallet-button] {
+  border: 1px solid rgba(245, 179, 71, 0.3);
+}
+```
+
+See the [react-custom example](../../examples/react-custom) for comprehensive demos.
 
 ## Theming
 
-The library supports light and dark modes out of the box. You can control the theme using the `theme` prop on `WalletUIProvider`.
+The library supports automatic light/dark mode.
 
 ### Theme Options
 
 ```jsx
-<WalletUIProvider theme="system">  {/* Default: follows OS/browser preference */}
-  {/* ... */}
-</WalletUIProvider>
-
-<WalletUIProvider theme="light">  {/* Always use light mode */}
-  {/* ... */}
-</WalletUIProvider>
-
-<WalletUIProvider theme="dark">   {/* Always use dark mode */}
-  {/* ... */}
-</WalletUIProvider>
+<WalletUIProvider theme="system">  {/* Default: follows OS preference */}
+<WalletUIProvider theme="light">   {/* Always light */}
+<WalletUIProvider theme="dark">    {/* Always dark */}
 ```
 
-### How Theming Works
+### How Theme Detection Works
 
-The library uses CSS custom properties for colors, which are automatically applied based on the theme setting:
+The library checks these in order (first match wins):
 
-1. **`theme="system"` (default)**: The library respects the user's OS/browser preference via the `prefers-color-scheme` media query.
+1. **`data-theme` attribute**: Set by the `theme` prop on `WalletUIProvider`
+2. **`.dark` class**: On any ancestor element (Tailwind convention)
+3. **`prefers-color-scheme`**: System/browser preference (when `theme="system"`)
 
-2. **`theme="light"` or `theme="dark"`**: Explicitly sets the theme regardless of system preference.
-
-3. **Tailwind `.dark` class**: The library also respects the `.dark` class on ancestor elements (common Tailwind convention). If a `.dark` class is present on an ancestor, dark mode will be used unless explicitly overridden with `theme="light"`.
-
-### Accessing Theme in Your App
-
-You can access the current theme state using the `useWalletUI` hook:
+### Accessing Theme State
 
 ```jsx
 import { useWalletUI } from '@txnlab/use-wallet-ui-react'
 
 function MyComponent() {
   const { theme, resolvedTheme } = useWalletUI()
-
   // theme: 'light' | 'dark' | 'system' (the prop value)
-  // resolvedTheme: 'light' | 'dark' (the actual applied theme)
-
-  return <div>Current theme: {resolvedTheme}</div>
+  // resolvedTheme: 'light' | 'dark' (the actual theme in use)
 }
 ```
 
-### Custom Theme Colors
-
-The library uses CSS custom properties that you can override in your own CSS to customize the color scheme:
-
-```css
-/* Override theme colors */
-[data-wallet-ui] {
-  --wui-color-primary: #your-primary-color;
-  --wui-color-primary-hover: #your-primary-hover;
-  --wui-color-primary-text: #your-primary-text;
-  --wui-color-bg: #your-background;
-  --wui-color-bg-secondary: #your-secondary-bg;
-  --wui-color-bg-tertiary: #your-tertiary-bg;
-  --wui-color-bg-hover: #your-hover-bg;
-  --wui-color-text: #your-text-color;
-  --wui-color-text-secondary: #your-secondary-text;
-  --wui-color-text-tertiary: #your-tertiary-text;
-  --wui-color-border: #your-border-color;
-  --wui-color-link: #your-link-color;
-  --wui-color-link-hover: #your-link-hover;
-  --wui-color-overlay: rgba(0, 0, 0, 0.3);
-}
-
-/* Override dark mode colors */
-[data-wallet-ui][data-theme='dark'] {
-  --wui-color-primary: #your-dark-primary;
-  /* ... other dark mode overrides */
-}
-```
-
-## Basic Usage
-
-This library builds on top of `@txnlab/use-wallet-react` to provide UI components for wallet connectivity. Here's the basic setup:
-
-### 1. Set up the Providers
-
-```jsx
-import {
-  NetworkId,
-  WalletId,
-  WalletManager,
-  WalletProvider,
-} from '@txnlab/use-wallet-react'
-import { WalletUIProvider } from '@txnlab/use-wallet-ui-react'
-
-// Create and configure the wallet manager
-const walletManager = new WalletManager({
-  wallets: [
-    // Add the wallets you want to support
-    WalletId.PERA,
-    WalletId.DEFLY,
-    WalletId.LUTE,
-    WalletId.EXODUS,
-    // For WalletConnect, you'll need a project ID
-    {
-      id: WalletId.WALLETCONNECT,
-      options: { projectId: 'your-project-id' },
-    },
-  ],
-  defaultNetwork: NetworkId.TESTNET, // Or MAINNET for production
-})
-
-function App() {
-  return (
-    <WalletProvider manager={walletManager}>
-      <WalletUIProvider>{/* Your app content */}</WalletUIProvider>
-    </WalletProvider>
-  )
-}
-```
-
-The `WalletProvider` from `@txnlab/use-wallet-react` manages the wallet connections using the provided `WalletManager` configuration, while `WalletUIProvider` adds UI-specific features like NFD lookups and data prefetching.
-
-### 2. Add the Wallet Button
-
-The simplest way to enable wallet connectivity is with the `WalletButton` component:
-
-```jsx
-import { WalletButton } from '@txnlab/use-wallet-ui-react'
-
-function MyNav() {
-  return (
-    <nav>
-      <WalletButton />
-    </nav>
-  )
-}
-```
-
-The `WalletButton` is an all-in-one solution that:
-
-- Shows a connect button when disconnected
-- Opens the wallet selection dialog when clicked
-- Displays the connected wallet after connection
-- Shows NFD names and avatars when available
-- Provides access to account switching and disconnection
-
-## Component API
-
-The library provides several components that can be used independently or together:
+## Components
 
 ### WalletUIProvider
 
-Required wrapper that enables NFD lookups, data prefetching, and theming:
+Required wrapper that enables theming, NFD lookups, and data prefetching.
 
 ```jsx
 <WalletUIProvider
-  // Optional configurations
-  theme="system" // Theme setting: 'light' | 'dark' | 'system' (default: 'system')
-  enablePrefetching={false} // Prefetch data for all accounts in a wallet (default: true)
-  prefetchNfdView="brief" // Data view for NFD prefetching (default: 'thumbnail')
-  queryClient={yourQueryClient} // Optional: integrate with existing Tanstack Query
+  theme="system"              // 'light' | 'dark' | 'system'
+  enablePrefetching={true}    // Prefetch data for all wallet accounts
+  prefetchNfdView="thumbnail" // NFD data view: 'tiny' | 'thumbnail' | 'brief' | 'full'
+  queryClient={queryClient}   // Optional: your existing Tanstack Query client
 >
-  {/* Your app content */}
+  {children}
 </WalletUIProvider>
 ```
 
 ### WalletButton
 
-All-in-one solution for wallet connectivity - combines the connect and connected states:
+All-in-one wallet connection component.
 
 ```jsx
-<WalletButton />
-
-// With size variants
-<WalletButton size="sm" />  // Small
-<WalletButton size="md" />  // Medium (default)
-<WalletButton size="lg" />  // Large
-
-// With custom styles
-<WalletButton className="my-custom-class" />
-<WalletButton style={{ '--wui-color-primary': '#8b5cf6' }} />
+<WalletButton
+  size="md"              // 'sm' | 'md' | 'lg'
+  className="..."        // Additional CSS classes
+  style={{...}}          // Inline styles (supports CSS variable overrides)
+/>
 ```
 
-### Connection Components
+### ConnectWalletMenu
 
-For more customization, use these component pairs:
-
-#### Connect State (when disconnected)
+Dropdown menu for wallet selection (disconnected state).
 
 ```jsx
-import { ConnectWalletButton, ConnectWalletMenu } from '@txnlab/use-wallet-ui-react'
-
-// Just the menu with default button:
+// With default button
 <ConnectWalletMenu />
 
-// Customized button:
+// With customized button
 <ConnectWalletMenu>
-  <ConnectWalletButton className="bg-blue-500">
-    Connect Wallet
-  </ConnectWalletButton>
+  <ConnectWalletButton size="lg">Connect</ConnectWalletButton>
 </ConnectWalletMenu>
 
-// Fully custom trigger:
+// With custom trigger
 <ConnectWalletMenu>
-  <button className="my-custom-button">Connect</button>
+  <button>My Custom Button</button>
 </ConnectWalletMenu>
 ```
 
-#### Connected State (when wallet is connected)
+### ConnectWalletButton
+
+Styled button for the connect state.
 
 ```jsx
-import { ConnectedWalletButton, ConnectedWalletMenu } from '@txnlab/use-wallet-ui-react'
+<ConnectWalletButton
+  size="md"       // 'sm' | 'md' | 'lg'
+  className="..." // Additional classes
+  style={{...}}   // Inline styles
+>
+  Connect Wallet  {/* Optional: custom text */}
+</ConnectWalletButton>
+```
 
-// Just the menu with default button:
+### ConnectedWalletMenu
+
+Dropdown menu for account management (connected state).
+
+```jsx
+// With default button
 <ConnectedWalletMenu />
 
-// Customized button:
+// With customized button
 <ConnectedWalletMenu>
-  <ConnectedWalletButton className="border-2 border-green-500" />
+  <ConnectedWalletButton size="sm" />
 </ConnectedWalletMenu>
 
-// Fully custom trigger:
+// With custom trigger
 <ConnectedWalletMenu>
-  <div className="flex items-center gap-2">
-    <span>My Wallet</span>
-  </div>
+  <div className="my-wallet-display">Connected</div>
 </ConnectedWalletMenu>
+```
+
+### ConnectedWalletButton
+
+Styled button showing wallet address/NFD and avatar.
+
+```jsx
+<ConnectedWalletButton
+  size="md"       // 'sm' | 'md' | 'lg'
+  className="..." // Additional classes
+  style={{...}}   // Inline styles
+/>
 ```
 
 ### NfdAvatar
 
-Renders NFD avatars with automatic IPFS gateway handling:
+Renders NFD avatar images with IPFS gateway handling.
 
 ```jsx
 import { useNfd, NfdAvatar } from '@txnlab/use-wallet-ui-react'
@@ -441,169 +406,95 @@ function Profile() {
     <NfdAvatar
       nfd={nfdQuery.data}
       size={48}
-      className="rounded-full border-2"
-      alt="User profile"
+      className="rounded-full"
+      alt="Profile"
     />
   )
 }
 ```
 
-## NFD Integration
+### WalletList
 
-This library includes built-in support for [NFD (Non-Fungible Domains)](https://app.nf.domains/) - Algorand's naming service that provides human-readable identities for wallet addresses.
+Renders a list of available wallets (used internally by ConnectWalletMenu).
 
-### The useNfd Hook
+```jsx
+<WalletList onWalletSelected={() => closeMenu()} />
+```
+
+## Hooks
+
+### useNfd
+
+Fetch NFD data for the active address.
 
 ```jsx
 import { useNfd } from '@txnlab/use-wallet-ui-react'
 
 function Profile() {
-  // Gets NFD data for the currently connected address
-  const nfdQuery = useNfd()
+  const nfdQuery = useNfd({
+    enabled: true,    // Enable/disable the query
+    view: 'thumbnail' // 'tiny' | 'thumbnail' | 'brief' | 'full'
+  })
 
   if (nfdQuery.isLoading) return <div>Loading...</div>
 
-  // Access NFD properties
-  const name = nfdQuery.data?.name
-  const userProperties = nfdQuery.data?.properties?.userDefined
-
-  return (
-    <div>
-      <h2>{name || 'No NFD found'}</h2>
-      <p>{userProperties?.bio || 'No bio'}</p>
-    </div>
-  )
+  return <div>{nfdQuery.data?.name || 'No NFD'}</div>
 }
 ```
 
-### NFD Features
+### useAccountInfo
 
-- Automatic lookup for the active wallet address
-- Support for different data views: 'tiny', 'thumbnail', 'brief', 'full'
-- Efficient caching via Tanstack Query
-- Works with both MainNet and TestNet
-
-```jsx
-// Customizing the NFD lookup
-const nfdQuery = useNfd({
-  enabled: true, // Whether to enable the lookup
-  view: 'brief', // Data view to request (default: 'thumbnail')
-})
-```
-
-## Account Information
-
-Get account data like ALGO balance and asset holdings using the `useAccountInfo` hook:
+Fetch account information (balance, assets) for the active address.
 
 ```jsx
 import { useAccountInfo } from '@txnlab/use-wallet-ui-react'
 
 function Balance() {
-  // Gets account data for the connected address
   const accountQuery = useAccountInfo()
 
   if (accountQuery.isLoading) return <div>Loading...</div>
-  if (!accountQuery.data) return <div>No account data</div>
+  if (!accountQuery.data) return null
 
-  // Convert microAlgos to Algos (1 ALGO = 1,000,000 microAlgos)
   const algoBalance = Number(accountQuery.data.amount) / 1_000_000
 
-  // Available balance (total minus minimum required)
-  const minBalance = Number(accountQuery.data.minBalance) / 1_000_000
-  const availableBalance = Math.max(0, algoBalance - minBalance)
-
-  return (
-    <div>
-      <div>Total: {algoBalance.toFixed(2)} ALGO</div>
-      <div>Available: {availableBalance.toFixed(2)} ALGO</div>
-    </div>
-  )
+  return <div>{algoBalance.toFixed(2)} ALGO</div>
 }
 ```
 
-## Advanced Customization
+### useWalletUI
 
-### Styling Without Tailwind
-
-When not using Tailwind, you have two options for customizing components:
-
-#### 1. Using the `style` prop
+Access the WalletUI context.
 
 ```jsx
-<ConnectWalletButton
-  style={{
-    backgroundColor: '#3366FF',
-    color: 'white',
-    fontWeight: 'bold',
-  }}
->
-  Connect
-</ConnectWalletButton>
+import { useWalletUI } from '@txnlab/use-wallet-ui-react'
+
+function MyComponent() {
+  const { theme, resolvedTheme, queryClient } = useWalletUI()
+}
 ```
 
-#### 2. Using CSS selectors
+### useResolvedTheme
 
-First, add a custom class to the button:
+Get the resolved theme value (handles 'system' preference detection).
 
 ```jsx
-<ConnectWalletButton className="connect-button">Connect</ConnectWalletButton>
-```
+import { useResolvedTheme } from '@txnlab/use-wallet-ui-react'
 
-Then target it in your CSS:
-
-```css
-/* In your CSS */
-[data-wallet-ui] .connect-button {
-  font-family: 'Your Custom Font', sans-serif;
-  background-color: #3366ff;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-[data-wallet-ui] .connect-button:hover {
-  background-color: #2952cc;
+function MyComponent() {
+  const resolvedTheme = useResolvedTheme('system') // Returns 'light' or 'dark'
 }
 ```
 
-### Building Custom Wallet UI
+## Tanstack Query Integration
 
-For complete control, use the menu components with your own UI elements:
-
-```jsx
-import { useWallet } from '@txnlab/use-wallet-react'
-import {
-  ConnectWalletMenu,
-  ConnectedWalletMenu,
-} from '@txnlab/use-wallet-ui-react'
-
-function CustomWalletButton() {
-  const { activeAddress } = useWallet()
-
-  return activeAddress ? (
-    <ConnectedWalletMenu>
-      <YourCustomConnectedButton />
-    </ConnectedWalletMenu>
-  ) : (
-    <ConnectWalletMenu>
-      <YourCustomConnectButton />
-    </ConnectWalletMenu>
-  )
-}
-```
-
-## Integration with Tanstack Query
-
-This library uses [Tanstack Query](https://tanstack.com/query/latest) internally for data fetching. If your application already uses Tanstack Query, you can integrate the two to avoid duplicate caches:
+The library uses [Tanstack Query](https://tanstack.com/query) internally. If your app already uses it, share the QueryClient to avoid duplicate caches:
 
 ```jsx
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { WalletManager, WalletProvider } from '@txnlab/use-wallet-react'
+import { WalletProvider } from '@txnlab/use-wallet-react'
 import { WalletUIProvider } from '@txnlab/use-wallet-ui-react'
 
 const queryClient = new QueryClient()
-const walletManager = new WalletManager({...})
 
 function App() {
   return (
@@ -618,30 +509,45 @@ function App() {
 }
 ```
 
-By sharing the QueryClient, both your application and the wallet UI components will use the same query cache.
+## Migration from v0.x
 
-## How It Works
+v1.0 introduces a redesigned CSS architecture. Here's what changed:
 
-The library follows a simple workflow:
+### Breaking Changes
 
-1. **Disconnected State**: `WalletButton` shows a connect button
-2. **Connection Dialog**: Clicking opens a dropdown with available Algorand wallets
-3. **Connected State**: After connecting, it displays the wallet address/NFD and balance
-4. **Account Management**: The dropdown provides options to switch accounts or disconnect
+1. **CSS Variable Prefix**: Variables now use `--wui-` prefix (previously undocumented)
+2. **Theme Variables Location**: Defined on `[data-wallet-ui]` element
+3. **Button Data Attribute**: Buttons now have `data-wallet-button` attribute for targeting
 
-Behind the scenes, `WalletUIProvider` handles:
+### New Features
 
-- Prefetching NFD data for all accounts in the wallet
-- Converting IPFS URLs to HTTPS for avatars
-- Caching API responses for better performance
-- Handling network-specific behavior (MainNet/TestNet)
+1. **Size Variants**: `WalletButton`, `ConnectWalletButton`, and `ConnectedWalletButton` now accept a `size` prop (`'sm' | 'md' | 'lg'`)
 
-## Related Resources
+2. **className/style Props**: All button components accept `className` and `style` props for customization
 
-- [use-wallet Documentation](https://github.com/TxnLab/use-wallet)
-- [use-wallet-react NPM Package](https://www.npmjs.com/package/@txnlab/use-wallet-react)
-- [NFD (Non-Fungible Domains)](https://nf.domains/)
-- [Algorand Developer Portal](https://developer.algorand.org/)
+3. **CSS Variable Overrides**: Override any theme color via CSS:
+   ```css
+   [data-wallet-ui] {
+     --wui-color-primary: #your-color;
+   }
+   ```
+
+4. **Custom Triggers**: Pass any element as a child to `ConnectWalletMenu` or `ConnectedWalletMenu` for full control:
+   ```jsx
+   <ConnectWalletMenu>
+     <MyCustomButton />
+   </ConnectWalletMenu>
+   ```
+
+5. **Theme Detection**: Now respects `.dark` class on ancestors (Tailwind convention) in addition to `data-theme` attribute and `prefers-color-scheme` media query
+
+### Migration Steps
+
+1. Update any custom CSS targeting the library to use the new `[data-wallet-ui]` selector and `--wui-*` variables
+
+2. If you were using workarounds for customization, you can likely simplify using the new APIs
+
+3. Test dark mode behavior - it should work more reliably with Tailwind's `.dark` class
 
 ## License
 
