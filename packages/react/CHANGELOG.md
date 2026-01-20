@@ -1,3 +1,10 @@
+# [1.0.0-beta.2](https://github.com/TxnLab/use-wallet-ui/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2026-01-20)
+
+
+### Bug Fixes
+
+* **NfdAvatar:** add data-wallet-ui for CSS utility scoping ([#31](https://github.com/TxnLab/use-wallet-ui/issues/31)) ([b58b7a0](https://github.com/TxnLab/use-wallet-ui/commit/b58b7a034ce9c102cf66bddf269c5f4461a1d3c3))
+
 # [1.0.0-beta.1](https://github.com/TxnLab/use-wallet-ui/compare/v0.4.2...v1.0.0-beta.1) (2026-01-20)
 
 
