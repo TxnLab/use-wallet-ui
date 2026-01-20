@@ -95,9 +95,15 @@ Variables:
 - [x] Document className/style prop usage
 - [x] Add migration notes for v0.x → v1.0
 
-### Example App Consistency
-- [ ] Review `react` and `react-css-only` examples for visual consistency with `react-custom`
-- [ ] Ensure all three examples demonstrate the library well
+### Example App Consistency ✅
+- [x] Review `react` and `react-css-only` examples for visual consistency with `react-custom`
+- [x] Ensure all three examples demonstrate the library well
+- [x] Standardize dark mode background color (`#0f172a` slate-900)
+- [x] Refactor `react-css-only` App.css to use CSS variables (607 → 333 lines)
+- [x] Add Inter font loading via CSS `@import`
+- [x] Add CSS resets (box-sizing, margin) for consistent box model
+- [x] Update Tailwind classes from gray to slate palette
+- [x] Remove unused CSS classes and variables
 
 ### Final Verification
 - [ ] Build the package: `pnpm build`

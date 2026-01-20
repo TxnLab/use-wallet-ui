@@ -67,10 +67,10 @@ function App() {
   return (
     <WalletProvider manager={walletManager}>
       <WalletUIProvider theme={theme}>
-        <div className="min-h-screen bg-gray-50 dark:bg-[#001324]">
+        <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
           {/* Header */}
-          <header className="w-full bg-white dark:bg-gray-800/30 border-b border-gray-200 dark:border-gray-700/50">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <header className="w-full bg-white dark:bg-slate-800/50 border-b border-gray-200 dark:border-slate-700/50">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-between items-center h-16">
                 <div className="flex-shrink-0">
                   <span className="text-lg font-semibold text-gray-800 dark:text-white">
@@ -82,7 +82,7 @@ function App() {
                   <select
                     value={theme}
                     onChange={(e) => setTheme(e.target.value as Theme)}
-                    className="text-sm px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white"
+                    className="text-sm px-2 py-1 rounded border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-800 dark:text-white"
                   >
                     <option value="system">System</option>
                     <option value="light">Light</option>
@@ -100,17 +100,17 @@ function App() {
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
                 React Components for use-wallet
               </h1>
-              <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              <p className="text-gray-600 dark:text-slate-300 max-w-2xl mx-auto">
                 A simple example demonstrating wallet connection, NFD profile
                 integration, and balance display using the{' '}
-                <code className="text-sm bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">
+                <code className="text-sm bg-gray-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
                   @txnlab/use-wallet-ui-react
                 </code>{' '}
                 package.
               </p>
-              <p className="text-gray-500 dark:text-gray-400 text-sm mt-4">
+              <p className="text-gray-500 dark:text-slate-400 text-sm mt-4">
                 Current theme:{' '}
-                <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">
+                <code className="bg-gray-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
                   {theme}
                 </code>
               </p>
@@ -119,7 +119,7 @@ function App() {
             <WalletInfo />
 
             <div className="mt-8 text-center">
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-gray-500 dark:text-slate-400">
                 View the{' '}
                 <a
                   href="https://github.com/TxnLab/use-wallet-ui"
