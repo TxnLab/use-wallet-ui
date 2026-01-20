@@ -34,10 +34,11 @@
 }
 
 /* Button-specific reset - for library buttons and buttons inside dialogs/menus */
-[data-wallet-ui] [data-wallet-button],
-[data-wallet-ui] [role="dialog"] button,
-[data-wallet-ui] [role="menu"] button,
-[data-wallet-ui] [role="listbox"] button {
+/* Uses :where() to reduce specificity, allowing utility classes to override */
+[data-wallet-ui] :where([data-wallet-button]),
+[data-wallet-ui] :where([role="dialog"]) button,
+[data-wallet-ui] :where([role="menu"]) button,
+[data-wallet-ui] :where([role="listbox"]) button {
   cursor: pointer;
   background-color: transparent;
   background-image: none;
