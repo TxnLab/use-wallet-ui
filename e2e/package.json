@@ -3,13 +3,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "e2e": "playwright test",
+    "e2e": "playwright test --grep-invert \"connect wallet button\"",
+    "e2e:all": "playwright test",
     "e2e:ui": "playwright test --ui",
-    "e2e:headed": "playwright test --headed",
+    "e2e:headed": "playwright test --headed --grep-invert \"connect wallet button\"",
     "e2e:update": "playwright test --update-snapshots",
     "e2e:update:docker": "./scripts/update-snapshots.sh",
     "e2e:docker": "./scripts/run-e2e-docker.sh",
-    "e2e:debug": "playwright test --debug",
+    "e2e:debug": "playwright test --debug --grep-invert \"connect wallet button\"",
     "e2e:validate": "playwright test --list",
     "typecheck": "tsc --noEmit",
     "lint": "eslint ."

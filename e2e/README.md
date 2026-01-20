@@ -9,14 +9,15 @@ End-to-end tests for `@txnlab/use-wallet-ui-react` using [Playwright](https://pl
 Run tests using your local browser installations:
 
 ```bash
-pnpm e2e                    # Run all tests
+pnpm e2e                    # Run tests (excludes button visual tests)
+pnpm e2e:all                # Run all tests including button visual tests
 pnpm e2e --project=chromium # Run only Chromium tests
 pnpm e2e:headed             # Run with visible browser
 pnpm e2e:ui                 # Run with Playwright UI
 pnpm e2e:debug              # Run in debug mode
 ```
 
-> **Note:** Visual regression tests may fail locally on macOS due to font rendering differences between macOS and Linux (CI). This is expected behavior.
+> **Note:** The default `e2e` script excludes "connect wallet button" visual tests because they fail on macOS due to 1px image dimension differences caused by font rendering variations between macOS and Linux. Use `e2e:all` or Docker to run all tests.
 
 ### Local (Docker)
 
@@ -55,8 +56,17 @@ Visual regression tests are sensitive to:
 - **Font rendering** - macOS and Linux render fonts differently
 - **Subpixel antialiasing** - Varies by platform
 - **System fonts** - Different default fonts between OSes
+- **Element dimensions** - Button screenshots may differ by 1px between platforms
 
 Running in Docker ensures your local tests match CI results.
+
+### Cross-Platform Compatibility
+
+The "connect wallet button" visual tests are excluded from the default `pnpm e2e` script because isolated button screenshots produce images with 1px dimension differences between macOS and Linux. This is due to subtle font rendering variations affecting button sizing.
+
+- **Most visual tests pass locally** - Full page screenshots, modal screenshots, and other tests are large enough that the pixel difference tolerance handles any variations
+- **Button tests require Docker** - Use `pnpm e2e:docker` or `pnpm e2e:all` in a Linux environment to run all tests
+- **CI runs all tests** - The GitHub Actions workflow runs in Linux where all tests pass
 
 ## Test Structure
 
