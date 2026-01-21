@@ -1,3 +1,10 @@
+# [1.0.0-beta.3](https://github.com/TxnLab/use-wallet-ui/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2026-01-21)
+
+
+### Bug Fixes
+
+* **css:** inject styles at start of head for consumer overrides ([#32](https://github.com/TxnLab/use-wallet-ui/issues/32)) ([820c6c7](https://github.com/TxnLab/use-wallet-ui/commit/820c6c70ef3e556d609949bb9d465c2cb8a24d42))
+
 # [1.0.0-beta.2](https://github.com/TxnLab/use-wallet-ui/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2026-01-20)
 
 
