@@ -27,26 +27,6 @@
         "default": "./dist/cjs/plugins/export-key.cjs"
       }
     },
-    "./plugins/before-sign": {
-      "import": {
-        "types": "./dist/types/plugins/before-sign/index.d.ts",
-        "default": "./dist/esm/plugins/before-sign.js"
-      },
-      "require": {
-        "types": "./dist/types/plugins/before-sign/index.d.cts",
-        "default": "./dist/cjs/plugins/before-sign.cjs"
-      }
-    },
-    "./plugins/welcome": {
-      "import": {
-        "types": "./dist/types/plugins/welcome/index.d.ts",
-        "default": "./dist/esm/plugins/welcome.js"
-      },
-      "require": {
-        "types": "./dist/types/plugins/welcome/index.d.cts",
-        "default": "./dist/cjs/plugins/welcome.cjs"
-      }
-    },
     "./dist/style.css": "./dist/style.css",
     "./theme.css": "./src/theme.css",
     "./package.json": "./package.json"
