@@ -4,10 +4,24 @@ import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 
+const entries = {
+  index: resolve(__dirname, 'src/index.ts'),
+  'plugins/export-key': resolve(__dirname, 'src/plugins/export-key/index.tsx'),
+  'plugins/before-sign': resolve(__dirname, 'src/plugins/before-sign/index.ts'),
+  'plugins/welcome': resolve(__dirname, 'src/plugins/welcome/index.ts'),
+}
+
+const globals = {
+  'react-dom': 'ReactDom',
+  react: 'React',
+  'react/jsx-runtime': 'ReactJsxRuntime',
+  'react/jsx-dev-runtime': 'ReactJsxDevRuntime',
+}
+
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: entries,
       name: 'use-wallet-ui-react',
     },
     outDir: 'dist',
@@ -23,30 +37,22 @@ export default defineConfig({
         {
           format: 'es',
           dir: 'dist/esm',
-          entryFileNames: 'index.js',
+          entryFileNames: '[name].js',
+          chunkFileNames: 'chunks/[name]-[hash].js',
           preserveModules: false,
           exports: 'named',
           assetFileNames: 'assets/[name][extname]',
-          globals: {
-            'react-dom': 'ReactDom',
-            react: 'React',
-            'react/jsx-runtime': 'ReactJsxRuntime',
-            'react/jsx-dev-runtime': 'ReactJsxDevRuntime',
-          },
+          globals,
         },
         {
           format: 'cjs',
           dir: 'dist/cjs',
-          entryFileNames: 'index.cjs',
+          entryFileNames: '[name].cjs',
+          chunkFileNames: 'chunks/[name]-[hash].cjs',
           preserveModules: false,
           exports: 'named',
           assetFileNames: 'assets/[name][extname]',
-          globals: {
-            'react-dom': 'ReactDom',
-            react: 'React',
-            'react/jsx-runtime': 'ReactJsxRuntime',
-            'react/jsx-dev-runtime': 'ReactJsxDevRuntime',
-          },
+          globals,
         },
       ],
       treeshake: {
@@ -70,21 +76,38 @@ export default defineConfig({
   plugins: [
     dts({
       outDir: 'dist/types',
-      rollupTypes: true,
+      rollupTypes: false,
       include: ['src'],
       compilerOptions: {
         declarationMap: true,
       },
-      // Use afterBuild hook to copy .d.ts to .d.cts
+      // Copy .d.ts files to .d.cts for CJS consumers
       afterBuild: async () => {
         try {
-          const dtsPath = resolve(__dirname, 'dist/types/index.d.ts')
-          const dctsPath = resolve(__dirname, 'dist/types/index.d.cts')
-          const content = await fs.readFile(dtsPath, 'utf-8')
-          await fs.writeFile(dctsPath, content)
-          console.log('Successfully created .d.cts file')
+          const typesDir = resolve(__dirname, 'dist/types')
+
+          // Copy index types
+          const indexDts = resolve(typesDir, 'index.d.ts')
+          const indexDcts = resolve(typesDir, 'index.d.cts')
+          const indexContent = await fs.readFile(indexDts, 'utf-8')
+          await fs.writeFile(indexDcts, indexContent)
+
+          // Copy plugin types
+          const pluginDirs = ['export-key', 'before-sign', 'welcome']
+          for (const dir of pluginDirs) {
+            const pluginDts = resolve(typesDir, `plugins/${dir}/index.d.ts`)
+            const pluginDcts = resolve(typesDir, `plugins/${dir}/index.d.cts`)
+            try {
+              const content = await fs.readFile(pluginDts, 'utf-8')
+              await fs.writeFile(pluginDcts, content)
+            } catch {
+              // Plugin type file may not exist if no exports
+            }
+          }
+
+          console.log('Successfully created .d.cts files')
         } catch (error) {
-          console.error('Error creating .d.cts file:', error)
+          console.error('Error creating .d.cts files:', error)
         }
       },
     }),

@@ -25,11 +25,15 @@ import React, { ReactElement, RefObject, useState } from 'react'
 
 import { useAccountInfo } from '../hooks/useAccountInfo'
 import { useNfd } from '../hooks/useNfd'
+import { usePlugins } from '../plugins/PluginContext'
+import { PluginSlot } from '../plugins/PluginSlot'
 import { useWalletUI } from '../providers/WalletUIProvider'
 
 import { AlgoSymbol } from './AlgoSymbol'
 import { ConnectedWalletButton } from './ConnectedWalletButton'
 import { NfdAvatar } from './NfdAvatar'
+
+import type { PluginRenderContext } from '../plugins/types'
 
 // A more specific type for the children that includes ref
 type RefableElement = ReactElement & {
@@ -42,7 +46,8 @@ export interface ConnectedWalletMenuProps {
 
 function ConnectedWalletMenuContent({ children }: ConnectedWalletMenuProps) {
   const { activeAddress, activeWallet } = useWallet()
-  const { theme } = useWalletUI()
+  const { theme, resolvedTheme } = useWalletUI()
+  const { openDialog, closeDialog } = usePlugins()
   const [isOpen, setIsOpen] = useState(false)
   const [isCopied, setIsCopied] = useState(false)
   const [showAvailableBalance, setShowAvailableBalance] = useState(() => {
@@ -138,6 +143,27 @@ function ConnectedWalletMenuContent({ children }: ConnectedWalletMenuProps) {
     )
   }
 
+  // Build plugin render context with real closeMenu and dialog control
+  const pluginCtx = React.useMemo<PluginRenderContext>(
+    () => ({
+      activeAddress,
+      activeWallet,
+      theme,
+      resolvedTheme,
+      closeMenu: () => setIsOpen(false),
+      openDialog,
+      closeDialog,
+    }),
+    [
+      activeAddress,
+      activeWallet,
+      theme,
+      resolvedTheme,
+      openDialog,
+      closeDialog,
+    ],
+  )
+
   // If no children are provided, create the default connected button
   const triggerElement = children || <ConnectedWalletButton />
 
@@ -227,6 +253,8 @@ function ConnectedWalletMenuContent({ children }: ConnectedWalletMenuProps) {
                     </div>
                   </div>
 
+                  <PluginSlot slot="after-balance" ctx={pluginCtx} />
+
                   {/* Account selector (when multiple accounts available) */}
                   {activeWallet &&
                     activeWallet.accounts &&
@@ -306,6 +334,8 @@ function ConnectedWalletMenuContent({ children }: ConnectedWalletMenuProps) {
                       </div>
                     )}
 
+                  <PluginSlot slot="after-accounts" ctx={pluginCtx} />
+
                   {/* Divider */}
                   <div className="border-t border-[var(--wui-color-border)] mt-2 mb-2" />
 
@@ -341,6 +371,10 @@ function ConnectedWalletMenuContent({ children }: ConnectedWalletMenuProps) {
                       </p>
                     </div>
                   )}
+
+                  <PluginSlot slot="after-wallet-info" ctx={pluginCtx} />
+
+                  <PluginSlot slot="before-actions" ctx={pluginCtx} />
 
                   {/* Divider */}
                   <div className="border-t border-[var(--wui-color-border)] mb-3 mt-2" />
@@ -384,6 +418,8 @@ function ConnectedWalletMenuContent({ children }: ConnectedWalletMenuProps) {
                         </>
                       )}
                     </button>
+
+                    <PluginSlot slot="actions" ctx={pluginCtx} />
 
                     {/* Disconnect Button */}
                     <button

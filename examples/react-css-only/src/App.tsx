@@ -9,6 +9,7 @@ import {
   WalletUIProvider,
   type Theme,
 } from '@txnlab/use-wallet-ui-react'
+import { exportKeyPlugin } from '@txnlab/use-wallet-ui-react/plugins/export-key'
 import { useState, useEffect } from 'react'
 
 import { WalletInfo } from './components/WalletInfo'
@@ -69,7 +70,7 @@ function App() {
 
   return (
     <WalletProvider manager={walletManager}>
-      <WalletUIProvider theme={theme}>
+      <WalletUIProvider theme={theme} plugins={[exportKeyPlugin()]}>
         <div className="app-wrapper">
           {/* Header */}
           <header className="header">

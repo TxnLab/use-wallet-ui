@@ -18,8 +18,12 @@ import {
   type Theme,
   type ResolvedTheme,
 } from '../hooks/useResolvedTheme'
+import { PluginContextProvider } from '../plugins/PluginContext'
+import { PluginDialogRenderer } from '../plugins/PluginDialogRenderer'
+import { PluginLifecycleManager } from '../plugins/PluginLifecycleManager'
 
 import type { NfdLookupResponse, NfdView } from '../hooks/useNfd'
+import type { PluginRenderContext, WalletUIPlugin } from '../plugins/types'
 
 // CSS custom properties for theming - injected via JavaScript to avoid requiring CSS imports
 const THEME_STYLES_ID = 'wallet-ui-theme-styles'
@@ -130,6 +134,11 @@ interface WalletUIProviderProps {
    * which will enable dark mode unless explicitly overridden with theme="light".
    */
   theme?: Theme
+  /**
+   * Plugins to register. Each plugin can contribute menu items, dialogs,
+   * lifecycle hooks, and context providers.
+   */
+  plugins?: WalletUIPlugin[]
 }
 
 // Default query client configuration for NFD queries
@@ -319,6 +328,7 @@ export function WalletUIProvider({
   enablePrefetching = true,
   prefetchNfdView = 'thumbnail',
   theme = 'system',
+  plugins = [],
 }: WalletUIProviderProps) {
   // Use provided query client or create a default one
   const queryClient = useMemo(
@@ -356,7 +366,7 @@ export function WalletUIProvider({
           enabled={enablePrefetching}
           nfdView={prefetchNfdView}
         />
-        {children}
+        <PluginHost plugins={plugins}>{children}</PluginHost>
       </div>
     </WalletUIContext.Provider>
   )
@@ -370,6 +380,48 @@ export function WalletUIProvider({
 
   // Otherwise just return the context provider
   return content
+}
+
+/**
+ * Internal component that sets up plugin infrastructure.
+ * Separated so it can call useWallet() (which requires WalletProvider ancestor).
+ */
+function PluginHost({
+  plugins,
+  children,
+}: {
+  plugins: WalletUIPlugin[]
+  children: ReactNode
+}) {
+  const { activeAddress, activeWallet } = useWallet()
+  const { theme, resolvedTheme } = useWalletUI()
+
+  // Base render context without dialog control (added by PluginContextProvider)
+  const baseRenderContext = useMemo<PluginRenderContext>(
+    () => ({
+      activeAddress,
+      activeWallet,
+      theme,
+      resolvedTheme,
+      // These are placeholders — PluginContextProvider enriches them
+      closeMenu: () => {},
+      openDialog: () => {},
+      closeDialog: () => {},
+    }),
+    [activeAddress, activeWallet, theme, resolvedTheme],
+  )
+
+  if (plugins.length === 0) {
+    return <>{children}</>
+  }
+
+  return (
+    <PluginContextProvider plugins={plugins} renderContext={baseRenderContext}>
+      <PluginLifecycleManager plugins={plugins} ctx={baseRenderContext} />
+      <PluginDialogRenderer ctx={baseRenderContext} />
+      {children}
+    </PluginContextProvider>
+  )
 }
 
 /**

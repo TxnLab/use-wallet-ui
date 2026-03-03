@@ -12,6 +12,7 @@ import {
   ConnectedWalletMenu,
   type Theme,
 } from '@txnlab/use-wallet-ui-react'
+import { exportKeyPlugin } from '@txnlab/use-wallet-ui-react/plugins/export-key'
 import { formatShortAddress } from '@txnlab/utils-ts'
 import { useState, useEffect } from 'react'
 
@@ -94,7 +95,7 @@ function App() {
 
   return (
     <WalletProvider manager={walletManager}>
-      <WalletUIProvider theme={theme}>
+      <WalletUIProvider theme={theme} plugins={[exportKeyPlugin()]}>
         <div className="app">
           {/* Header */}
           <header className="header">

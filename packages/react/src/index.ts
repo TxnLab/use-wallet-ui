@@ -19,5 +19,16 @@ export type { Theme, ResolvedTheme } from './hooks/useResolvedTheme'
 // Providers
 export { WalletUIProvider, useWalletUI } from './providers/WalletUIProvider'
 
+// Plugin system
+export { usePlugins } from './plugins/PluginContext'
+export type {
+  MenuSlot,
+  PluginDialog,
+  PluginLifecycleHooks,
+  PluginMenuItem,
+  PluginRenderContext,
+  WalletUIPlugin,
+} from './plugins/types'
+
 // Initialize custom fonts
 initializeFonts()
