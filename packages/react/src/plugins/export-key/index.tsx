@@ -1,7 +1,10 @@
+import { EXPORT_KEY_DIALOG } from './constants'
 import { ExportKeyDialog } from './ExportKeyDialog'
 import { ExportKeyMenuButton } from './ExportKeyMenuButton'
 
 import type { WalletUIPlugin } from '../types'
+
+export { EXPORT_KEY_DIALOG } from './constants'
 
 export interface ExportKeyPluginOptions {
   /** How long to display the mnemonic before auto-closing (seconds). Default: 120 */
@@ -33,7 +36,7 @@ export function exportKeyPlugin(
 
     dialogs: [
       {
-        key: 'export-key-dialog',
+        key: EXPORT_KEY_DIALOG,
         render: ({ onClose }) => (
           <ExportKeyDialog onClose={onClose} displayTimeout={displayTimeout} />
         ),

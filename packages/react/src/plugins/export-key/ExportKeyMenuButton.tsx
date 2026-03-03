@@ -1,9 +1,11 @@
+import { EXPORT_KEY_DIALOG } from './constants'
+
 import type { MenuRenderContext } from '../types'
 
 export function ExportKeyMenuButton({ ctx }: { ctx: MenuRenderContext }) {
   const handleClick = () => {
     ctx.closeMenu()
-    ctx.openDialog('export-key-dialog')
+    ctx.openDialog(EXPORT_KEY_DIALOG)
   }
 
   return (
