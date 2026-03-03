@@ -28,6 +28,8 @@ interface PluginContextType {
   openDialogs: Set<string>
   /** All registered plugins */
   plugins: WalletUIPlugin[]
+  /** Enriched render context with working openDialog/closeDialog */
+  renderContext: PluginRenderContext
 }
 
 const ALL_SLOTS: MenuSlot[] = [
@@ -46,6 +48,16 @@ const EMPTY_MENU_ITEMS: Record<MenuSlot, PluginMenuItem[]> = {
   actions: [],
 }
 
+const EMPTY_RENDER_CONTEXT: PluginRenderContext = {
+  activeAddress: null,
+  activeWallet: null,
+  theme: 'system',
+  resolvedTheme: 'light',
+  closeMenu: () => {},
+  openDialog: () => {},
+  closeDialog: () => {},
+}
+
 const EMPTY_CONTEXT: PluginContextType = {
   menuItemsBySlot: EMPTY_MENU_ITEMS,
   dialogs: [],
@@ -53,6 +65,7 @@ const EMPTY_CONTEXT: PluginContextType = {
   closeDialog: () => {},
   openDialogs: new Set(),
   plugins: [],
+  renderContext: EMPTY_RENDER_CONTEXT,
 }
 
 const PluginContext = createContext<PluginContextType | undefined>(undefined)
@@ -148,18 +161,6 @@ export function PluginContextProvider({
     [plugins],
   )
 
-  const contextValue = useMemo(
-    () => ({
-      menuItemsBySlot,
-      dialogs,
-      openDialog,
-      closeDialog,
-      openDialogs,
-      plugins,
-    }),
-    [menuItemsBySlot, dialogs, openDialog, closeDialog, openDialogs, plugins],
-  )
-
   // Build a render context that includes dialog control
   const enrichedContext = useMemo(
     () => ({
@@ -168,6 +169,27 @@ export function PluginContextProvider({
       closeDialog,
     }),
     [renderContext, openDialog, closeDialog],
+  )
+
+  const contextValue = useMemo(
+    () => ({
+      menuItemsBySlot,
+      dialogs,
+      openDialog,
+      closeDialog,
+      openDialogs,
+      plugins,
+      renderContext: enrichedContext,
+    }),
+    [
+      menuItemsBySlot,
+      dialogs,
+      openDialog,
+      closeDialog,
+      openDialogs,
+      plugins,
+      enrichedContext,
+    ],
   )
 
   return (

@@ -396,14 +396,14 @@ function PluginHost({
   const { activeAddress, activeWallet } = useWallet()
   const { theme, resolvedTheme } = useWalletUI()
 
-  // Base render context without dialog control (added by PluginContextProvider)
+  // Base render context — PluginContextProvider enriches it with
+  // working openDialog/closeDialog before exposing via usePlugins()
   const baseRenderContext = useMemo<PluginRenderContext>(
     () => ({
       activeAddress,
       activeWallet,
       theme,
       resolvedTheme,
-      // These are placeholders — PluginContextProvider enriches them
       closeMenu: () => {},
       openDialog: () => {},
       closeDialog: () => {},
@@ -417,8 +417,8 @@ function PluginHost({
 
   return (
     <PluginContextProvider plugins={plugins} renderContext={baseRenderContext}>
-      <PluginLifecycleManager plugins={plugins} ctx={baseRenderContext} />
-      <PluginDialogRenderer ctx={baseRenderContext} />
+      <PluginLifecycleManager />
+      <PluginDialogRenderer />
       {children}
     </PluginContextProvider>
   )

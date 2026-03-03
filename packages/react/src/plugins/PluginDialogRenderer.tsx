@@ -5,15 +5,16 @@ import { useWalletUI } from '../providers/WalletUIProvider'
 
 import { usePlugins } from './PluginContext'
 
-import type { PluginRenderContext } from './types'
-
 /**
  * Renders all open plugin dialogs via FloatingPortal.
  * Centralizes the QueryClientProvider wrapping needed to fix
  * FloatingPortal context inheritance issues.
+ *
+ * Must be rendered inside PluginContextProvider to access the
+ * enriched render context with working openDialog/closeDialog.
  */
-export function PluginDialogRenderer({ ctx }: { ctx: PluginRenderContext }) {
-  const { dialogs, openDialogs, closeDialog } = usePlugins()
+export function PluginDialogRenderer() {
+  const { dialogs, openDialogs, closeDialog, renderContext } = usePlugins()
   const { queryClient, theme } = useWalletUI()
 
   const dataTheme = theme === 'system' ? undefined : theme
@@ -31,7 +32,7 @@ export function PluginDialogRenderer({ ctx }: { ctx: PluginRenderContext }) {
                 {dialog.render({
                   isOpen,
                   onClose: () => closeDialog(dialog.key),
-                  ctx,
+                  ctx: renderContext,
                 })}
               </div>
             </QueryClientProvider>

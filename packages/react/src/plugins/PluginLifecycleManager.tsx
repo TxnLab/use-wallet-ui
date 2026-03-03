@@ -1,18 +1,17 @@
 import { useEffect, useRef } from 'react'
 
-import type { PluginRenderContext, WalletUIPlugin } from './types'
+import { usePlugins } from './PluginContext'
 
 /**
  * Monitors wallet state changes and invokes plugin lifecycle hooks.
  * Detects connect, disconnect, and account change transitions.
+ *
+ * Must be rendered inside PluginContextProvider to access the
+ * enriched render context with working openDialog/closeDialog.
  */
-export function PluginLifecycleManager({
-  plugins,
-  ctx,
-}: {
-  plugins: WalletUIPlugin[]
-  ctx: PluginRenderContext
-}) {
+export function PluginLifecycleManager() {
+  const { plugins, renderContext: ctx } = usePlugins()
+
   const prevAddressRef = useRef<string | null>(null)
   const prevWalletIdRef = useRef<string | null>(null)
 
@@ -49,7 +48,7 @@ export function PluginLifecycleManager({
 
     prevAddressRef.current = ctx.activeAddress
     prevWalletIdRef.current = currentWalletId
-  }, [ctx.activeAddress, ctx.activeWallet, plugins, ctx])
+  }, [ctx, plugins])
 
   return null
 }
