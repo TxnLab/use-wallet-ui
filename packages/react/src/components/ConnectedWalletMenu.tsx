@@ -33,7 +33,7 @@ import { AlgoSymbol } from './AlgoSymbol'
 import { ConnectedWalletButton } from './ConnectedWalletButton'
 import { NfdAvatar } from './NfdAvatar'
 
-import type { PluginRenderContext } from '../plugins/types'
+import type { MenuRenderContext } from '../plugins/types'
 
 // A more specific type for the children that includes ref
 type RefableElement = ReactElement & {
@@ -144,7 +144,7 @@ function ConnectedWalletMenuContent({ children }: ConnectedWalletMenuProps) {
   }
 
   // Build plugin render context with real closeMenu and dialog control
-  const pluginCtx = React.useMemo<PluginRenderContext>(
+  const pluginCtx = React.useMemo<MenuRenderContext>(
     () => ({
       activeAddress,
       activeWallet,

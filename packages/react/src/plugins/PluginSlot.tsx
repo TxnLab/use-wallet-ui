@@ -2,7 +2,7 @@ import React from 'react'
 
 import { usePlugins } from './PluginContext'
 
-import type { MenuSlot, PluginRenderContext } from './types'
+import type { MenuRenderContext, MenuSlot } from './types'
 
 /**
  * Renders plugin menu items for a given slot.
@@ -13,7 +13,7 @@ export function PluginSlot({
   ctx,
 }: {
   slot: MenuSlot
-  ctx: PluginRenderContext
+  ctx: MenuRenderContext
 }) {
   const { menuItemsBySlot } = usePlugins()
   const items = menuItemsBySlot[slot]

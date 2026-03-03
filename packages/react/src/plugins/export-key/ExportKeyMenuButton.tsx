@@ -1,6 +1,6 @@
-import type { PluginRenderContext } from '../types'
+import type { MenuRenderContext } from '../types'
 
-export function ExportKeyMenuButton({ ctx }: { ctx: PluginRenderContext }) {
+export function ExportKeyMenuButton({ ctx }: { ctx: MenuRenderContext }) {
   const handleClick = () => {
     ctx.closeMenu()
     ctx.openDialog('export-key-dialog')

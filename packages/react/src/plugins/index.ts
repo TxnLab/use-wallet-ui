@@ -4,6 +4,7 @@ export { PluginLifecycleManager } from './PluginLifecycleManager'
 export { PluginSlot } from './PluginSlot'
 
 export type {
+  MenuRenderContext,
   MenuSlot,
   PluginDialog,
   PluginLifecycleHooks,

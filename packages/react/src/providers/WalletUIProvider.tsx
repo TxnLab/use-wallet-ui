@@ -404,7 +404,6 @@ function PluginHost({
       activeWallet,
       theme,
       resolvedTheme,
-      closeMenu: () => {},
       openDialog: () => {},
       closeDialog: () => {},
     }),

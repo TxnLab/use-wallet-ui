@@ -54,7 +54,6 @@ const EMPTY_RENDER_CONTEXT: PluginRenderContext = {
   activeWallet: null,
   theme: 'system',
   resolvedTheme: 'light',
-  closeMenu: () => {},
   openDialog: () => {},
   closeDialog: () => {},
 }

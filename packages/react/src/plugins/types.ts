@@ -8,12 +8,16 @@ export interface PluginRenderContext {
   activeWallet: Wallet | null
   theme: Theme
   resolvedTheme: ResolvedTheme
-  /** Close the ConnectedWalletMenu dropdown */
-  closeMenu: () => void
   /** Open a plugin dialog by key */
   openDialog: (key: string) => void
   /** Close a plugin dialog by key */
   closeDialog: (key: string) => void
+}
+
+/** Extended context available to menu items rendered inside ConnectedWalletMenu */
+export interface MenuRenderContext extends PluginRenderContext {
+  /** Close the ConnectedWalletMenu dropdown */
+  closeMenu: () => void
 }
 
 /**
@@ -36,9 +40,9 @@ export interface PluginMenuItem {
   /** Ordering weight within the slot. Lower = earlier. Default: 100. */
   order?: number
   /** Return false to hide this item */
-  enabled?: (ctx: PluginRenderContext) => boolean
+  enabled?: (ctx: MenuRenderContext) => boolean
   /** The React element to render */
-  render: (ctx: PluginRenderContext) => ReactNode
+  render: (ctx: MenuRenderContext) => ReactNode
 }
 
 /** A dialog contributed by a plugin, rendered via FloatingPortal */

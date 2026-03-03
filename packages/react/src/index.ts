@@ -22,6 +22,7 @@ export { WalletUIProvider, useWalletUI } from './providers/WalletUIProvider'
 // Plugin system
 export { usePlugins } from './plugins/PluginContext'
 export type {
+  MenuRenderContext,
   MenuSlot,
   PluginDialog,
   PluginLifecycleHooks,
