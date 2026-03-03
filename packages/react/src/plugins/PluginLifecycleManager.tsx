@@ -2,6 +2,30 @@ import { useEffect, useRef } from 'react'
 
 import { usePlugins } from './PluginContext'
 
+import type { WalletUIPlugin } from './types'
+
+/**
+ * Safely invoke a plugin lifecycle hook, catching both sync and async errors.
+ */
+function safeInvoke(plugin: WalletUIPlugin, fn: () => void | Promise<void>) {
+  try {
+    const result = fn()
+    if (result && typeof result.catch === 'function') {
+      result.catch((err) => {
+        console.error(
+          `[WalletUI] Plugin "${plugin.id}" lifecycle hook error:`,
+          err,
+        )
+      })
+    }
+  } catch (err) {
+    console.error(
+      `[WalletUI] Plugin "${plugin.id}" lifecycle hook error:`,
+      err,
+    )
+  }
+}
+
 /**
  * Monitors wallet state changes and invokes plugin lifecycle hooks.
  * Detects connect, disconnect, and account change transitions.
@@ -23,14 +47,18 @@ export function PluginLifecycleManager() {
     // Detect connection (no wallet → has wallet)
     if (!prevWalletId && currentWalletId) {
       for (const plugin of plugins) {
-        plugin.lifecycle?.onConnect?.(ctx)
+        if (plugin.lifecycle?.onConnect) {
+          safeInvoke(plugin, () => plugin.lifecycle!.onConnect!(ctx))
+        }
       }
     }
 
     // Detect disconnection (had wallet → no wallet)
     if (prevWalletId && !currentWalletId) {
       for (const plugin of plugins) {
-        plugin.lifecycle?.onDisconnect?.()
+        if (plugin.lifecycle?.onDisconnect) {
+          safeInvoke(plugin, () => plugin.lifecycle!.onDisconnect!())
+        }
       }
     }
 
@@ -42,7 +70,9 @@ export function PluginLifecycleManager() {
       prevAddress !== ctx.activeAddress
     ) {
       for (const plugin of plugins) {
-        plugin.lifecycle?.onAccountChange?.(ctx.activeAddress, prevAddress, ctx)
+        if (plugin.lifecycle?.onAccountChange) {
+          plugin.lifecycle.onAccountChange(ctx.activeAddress, prevAddress, ctx)
+        }
       }
     }
 
