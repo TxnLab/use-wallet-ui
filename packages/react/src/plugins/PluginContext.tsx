@@ -4,6 +4,7 @@ import {
   useCallback,
   useContext,
   useMemo,
+  useRef,
   useState,
 } from 'react'
 
@@ -100,8 +101,26 @@ function PluginProviderComposer({
   }, children)
 }
 
+/**
+ * Stabilizes the plugins array reference to prevent unnecessary re-renders.
+ * Returns the same array reference as long as the set of plugin IDs hasn't changed.
+ * This protects against the common pattern: `plugins={[myPlugin()]}` inline in JSX.
+ */
+function useStablePlugins(plugins: WalletUIPlugin[]): WalletUIPlugin[] {
+  const stableRef = useRef(plugins)
+
+  const prevIds = stableRef.current.map((p) => p.id).join('\0')
+  const nextIds = plugins.map((p) => p.id).join('\0')
+
+  if (prevIds !== nextIds) {
+    stableRef.current = plugins
+  }
+
+  return stableRef.current
+}
+
 export function PluginContextProvider({
-  plugins,
+  plugins: rawPlugins,
   renderContext,
   children,
 }: {
@@ -109,6 +128,8 @@ export function PluginContextProvider({
   renderContext: PluginRenderContext
   children: ReactNode
 }) {
+  const plugins = useStablePlugins(rawPlugins)
+
   const [openDialogs, setOpenDialogs] = useState<Set<string>>(new Set())
 
   const openDialog = useCallback((key: string) => {
