@@ -129,6 +129,40 @@ export function PluginContextProvider({
 }) {
   const plugins = useStablePlugins(rawPlugins)
 
+  // Validate for duplicate plugin IDs, menu item keys, and dialog keys
+  useMemo(() => {
+    if (process.env.NODE_ENV === 'production') return
+
+    const pluginIds = new Set<string>()
+    const menuKeys = new Set<string>()
+    const dialogKeys = new Set<string>()
+
+    for (const plugin of plugins) {
+      if (pluginIds.has(plugin.id)) {
+        console.warn(`[WalletUI] Duplicate plugin ID: "${plugin.id}"`)
+      }
+      pluginIds.add(plugin.id)
+
+      for (const item of plugin.menuItems ?? []) {
+        if (menuKeys.has(item.key)) {
+          console.warn(
+            `[WalletUI] Duplicate menu item key: "${item.key}" (plugin: "${plugin.id}")`,
+          )
+        }
+        menuKeys.add(item.key)
+      }
+
+      for (const dialog of plugin.dialogs ?? []) {
+        if (dialogKeys.has(dialog.key)) {
+          console.warn(
+            `[WalletUI] Duplicate dialog key: "${dialog.key}" (plugin: "${plugin.id}")`,
+          )
+        }
+        dialogKeys.add(dialog.key)
+      }
+    }
+  }, [plugins])
+
   const [openDialogs, setOpenDialogs] = useState<Set<string>>(new Set())
 
   const openDialog = useCallback((key: string) => {
