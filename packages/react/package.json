@@ -75,7 +75,7 @@
     "generate:css": "npx @tailwindcss/cli -c ./tailwind.config.js -i ./src/input.css -o ./dist/style.css && node ./scripts/post-process-css.js"
   },
   "peerDependencies": {
-    "@txnlab/use-wallet-react": "^4.0.1",
+    "@txnlab/use-wallet-react": "^4.6.0",
     "react": "^18 || ^19",
     "react-dom": "^18 || ^19"
   },
