@@ -17,6 +17,7 @@ Ready-to-use React UI components for Algorand wallet integration, built as a com
 - [Components](#components)
 - [Hooks](#hooks)
 - [Tanstack Query Integration](#tanstack-query-integration)
+- [Plugins](#plugins)
 - [Migration from v0.x](#migration-from-v0x)
 - [License](#license)
 
@@ -550,6 +551,25 @@ v1.0 introduces a redesigned CSS architecture. Here's what changed:
 2. If you were using workarounds for customization, you can likely simplify using the new APIs
 
 3. Test dark mode behavior - it should work more reliably with Tailwind's `.dark` class
+
+## Plugins
+
+The library includes a plugin system for extending the wallet UI without modifying core components. Plugins can inject menu items, register full-panel views, open dialogs, respond to wallet lifecycle events, and provide React context.
+
+```tsx
+import { WalletUIProvider } from '@txnlab/use-wallet-ui-react'
+import { exportKeyPlugin } from '@txnlab/use-wallet-ui-react/plugins/export-key'
+
+function App() {
+  return (
+    <WalletUIProvider plugins={[exportKeyPlugin()]}>
+      {/* ... */}
+    </WalletUIProvider>
+  )
+}
+```
+
+See the [Plugin Architecture Guide](PLUGINS.md) for full documentation.
 
 ## License
 
