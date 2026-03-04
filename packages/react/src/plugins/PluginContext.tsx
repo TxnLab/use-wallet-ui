@@ -12,6 +12,7 @@ import type {
   MenuSlot,
   PluginDialog,
   PluginMenuItem,
+  PluginPanel,
   PluginRenderContext,
   WalletUIPlugin,
 } from './types'
@@ -27,6 +28,8 @@ interface PluginContextType {
   closeDialog: (key: string) => void
   /** Currently open dialog keys */
   openDialogs: Set<string>
+  /** All panels from all plugins, sorted by order */
+  panels: PluginPanel[]
   /** All registered plugins */
   plugins: WalletUIPlugin[]
   /** Enriched render context with working openDialog/closeDialog */
@@ -64,6 +67,7 @@ const EMPTY_CONTEXT: PluginContextType = {
   openDialog: () => {},
   closeDialog: () => {},
   openDialogs: new Set(),
+  panels: [],
   plugins: [],
   renderContext: EMPTY_RENDER_CONTEXT,
 }
@@ -136,6 +140,7 @@ export function PluginContextProvider({
     const pluginIds = new Set<string>()
     const menuKeys = new Set<string>()
     const dialogKeys = new Set<string>()
+    const panelKeys = new Set<string>()
 
     for (const plugin of plugins) {
       if (pluginIds.has(plugin.id)) {
@@ -159,6 +164,15 @@ export function PluginContextProvider({
           )
         }
         dialogKeys.add(dialog.key)
+      }
+
+      for (const panel of plugin.panels ?? []) {
+        if (panelKeys.has(panel.key)) {
+          console.warn(
+            `[WalletUI] Duplicate panel key: "${panel.key}" (plugin: "${plugin.id}")`,
+          )
+        }
+        panelKeys.add(panel.key)
       }
     }
   }, [plugins])
@@ -215,6 +229,15 @@ export function PluginContextProvider({
     [plugins],
   )
 
+  // Collect all panels, sorted by order
+  const panels = useMemo(
+    () =>
+      plugins
+        .flatMap((p) => p.panels ?? [])
+        .sort((a, b) => (a.order ?? 100) - (b.order ?? 100)),
+    [plugins],
+  )
+
   // Build a render context that includes dialog control
   const enrichedContext = useMemo(
     () => ({
@@ -232,6 +255,7 @@ export function PluginContextProvider({
       openDialog,
       closeDialog,
       openDialogs,
+      panels,
       plugins,
       renderContext: enrichedContext,
     }),
@@ -241,6 +265,7 @@ export function PluginContextProvider({
       openDialog,
       closeDialog,
       openDialogs,
+      panels,
       plugins,
       enrichedContext,
     ],

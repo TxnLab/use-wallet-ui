@@ -18,6 +18,10 @@ export interface PluginRenderContext {
 export interface MenuRenderContext extends PluginRenderContext {
   /** Close the ConnectedWalletMenu dropdown */
   closeMenu: () => void
+  /** Navigate to a plugin panel by key, or null to return to main view */
+  setActivePanel: (key: string | null) => void
+  /** Currently active panel key, or null if showing main view */
+  activePanel: string | null
 }
 
 /**
@@ -57,6 +61,22 @@ export interface PluginDialog {
   }) => ReactNode
 }
 
+/** A full panel view contributed by a plugin to ConnectedWalletMenu */
+export interface PluginPanel {
+  /** Unique key for this panel */
+  key: string
+  /** Label shown on the navigation trigger (e.g., "Manage", "Bridge") */
+  label: string
+  /** Optional icon component rendered alongside the label */
+  icon?: (props: { className?: string }) => ReactNode
+  /** Return false to hide this panel's trigger */
+  enabled?: (ctx: MenuRenderContext) => boolean
+  /** Ordering weight in the panel trigger list. Lower = earlier. Default: 100. */
+  order?: number
+  /** The panel content renderer. Receives a `goBack` function to return to main view. */
+  render: (props: { ctx: MenuRenderContext; goBack: () => void }) => ReactNode
+}
+
 /** Wallet lifecycle event hooks */
 export interface PluginLifecycleHooks {
   /** Called after a wallet connects */
@@ -85,6 +105,8 @@ export interface WalletUIPlugin {
   menuItems?: PluginMenuItem[]
   /** Dialogs that the plugin manages */
   dialogs?: PluginDialog[]
+  /** Panels that replace ConnectedWalletMenu content when navigated to */
+  panels?: PluginPanel[]
   /** Wallet lifecycle event hooks */
   lifecycle?: PluginLifecycleHooks
   /**

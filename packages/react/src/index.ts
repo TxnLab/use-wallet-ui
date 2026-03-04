@@ -27,6 +27,7 @@ export type {
   PluginDialog,
   PluginLifecycleHooks,
   PluginMenuItem,
+  PluginPanel,
   PluginRenderContext,
   WalletUIPlugin,
 } from './plugins/types'

@@ -47,8 +47,9 @@ export interface ConnectedWalletMenuProps {
 function ConnectedWalletMenuContent({ children }: ConnectedWalletMenuProps) {
   const { activeAddress, activeWallet } = useWallet()
   const { theme, resolvedTheme } = useWalletUI()
-  const { openDialog, closeDialog } = usePlugins()
+  const { openDialog, closeDialog, panels } = usePlugins()
   const [isOpen, setIsOpen] = useState(false)
+  const [activePanel, setActivePanel] = useState<string | null>(null)
   const [isCopied, setIsCopied] = useState(false)
   const [showAvailableBalance, setShowAvailableBalance] = useState(() => {
     // Try to get the stored preference from localStorage
@@ -93,7 +94,10 @@ function ConnectedWalletMenuContent({ children }: ConnectedWalletMenuProps) {
 
   const { refs, floatingStyles, context } = useFloating({
     open: isOpen,
-    onOpenChange: setIsOpen,
+    onOpenChange: (open) => {
+      setIsOpen(open)
+      if (!open) setActivePanel(null)
+    },
     placement: 'bottom-end',
     middleware: [offset(8), flip(), shift()],
     whileElementsMounted: autoUpdate,
@@ -153,6 +157,8 @@ function ConnectedWalletMenuContent({ children }: ConnectedWalletMenuProps) {
       closeMenu: () => setIsOpen(false),
       openDialog,
       closeDialog,
+      setActivePanel,
+      activePanel,
     }),
     [
       activeAddress,
@@ -161,8 +167,20 @@ function ConnectedWalletMenuContent({ children }: ConnectedWalletMenuProps) {
       resolvedTheme,
       openDialog,
       closeDialog,
+      activePanel,
     ],
   )
+
+  // Filter panels by enabled state
+  const enabledPanels = React.useMemo(
+    () => panels.filter((p) => !p.enabled || p.enabled(pluginCtx)),
+    [panels, pluginCtx],
+  )
+
+  // Find the currently active panel definition
+  const currentPanel = activePanel
+    ? panels.find((p) => p.key === activePanel)
+    : null
 
   // If no children are provided, create the default connected button
   const triggerElement = children || <ConnectedWalletButton />
@@ -189,246 +207,323 @@ function ConnectedWalletMenuContent({ children }: ConnectedWalletMenuProps) {
                 className="z-50 w-80 rounded-xl bg-[var(--wui-color-bg)] shadow-xl border border-[var(--wui-color-border)]"
               >
                 <div className="p-4">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="h-12 w-12 overflow-hidden">
-                      <NfdAvatar
-                        nfd={nfdQuery.data}
-                        alt={`${nfdName || activeAddress} avatar`}
-                        size={48}
-                      />
-                    </div>
-                    <div>
-                      <h3
-                        id={labelId}
-                        className="text-lg font-bold text-[var(--wui-color-text)] max-w-[220px] truncate wallet-custom-font"
-                      >
-                        {nfdName ||
-                          (activeAddress
-                            ? formatShortAddress(activeAddress, 6, 4)
-                            : 'My Wallet')}
-                      </h3>
-                      {nfdName && activeAddress && (
-                        <p className="text-sm text-[var(--wui-color-text-secondary)]">
-                          {formatShortAddress(activeAddress, 6, 4)}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Balance display with toggle */}
-                  <div className="mb-4 bg-[var(--wui-color-bg-secondary)] rounded-lg p-3">
-                    <div className="flex justify-between items-center">
-                      {displayBalance !== null && (
-                        <span className="text-base font-medium text-[var(--wui-color-text)] flex items-center gap-1">
-                          {formatNumber(displayBalance, { fractionDigits: 4 })}
-                          <AlgoSymbol />
-                        </span>
-                      )}
-                      <button
-                        onClick={toggleBalanceView}
-                        className="flex items-center gap-1 text-sm text-[var(--wui-color-text-secondary)] bg-[var(--wui-color-bg-tertiary)] py-1 pl-2.5 pr-2 rounded-md hover:brightness-90 transition-all focus:outline-none"
-                        title={
-                          showAvailableBalance
-                            ? 'Show total balance'
-                            : 'Show available balance'
-                        }
-                      >
-                        {showAvailableBalance ? 'Available' : 'Total'}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="10"
-                          height="10"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="ml-0.5 opacity-80"
+                  {currentPanel ? (
+                    /* Panel view */
+                    <>
+                      <div className="flex items-center gap-2 mb-3">
+                        <button
+                          onClick={() => setActivePanel(null)}
+                          className="p-1 rounded-md hover:bg-[var(--wui-color-bg-secondary)] transition-colors text-[var(--wui-color-text-secondary)]"
+                          aria-label="Back to menu"
                         >
-                          <path d="m17 10-5-5-5 5" />
-                          <path d="m17 14-5 5-5-5" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="m15 18-6-6 6-6" />
+                          </svg>
+                        </button>
+                        <h3 className="text-sm font-medium text-[var(--wui-color-text)]">
+                          {currentPanel.label}
+                        </h3>
+                      </div>
+                      {currentPanel.render({
+                        ctx: pluginCtx,
+                        goBack: () => setActivePanel(null),
+                      })}
+                    </>
+                  ) : (
+                    /* Main menu view */
+                    <>
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="h-12 w-12 overflow-hidden">
+                          <NfdAvatar
+                            nfd={nfdQuery.data}
+                            alt={`${nfdName || activeAddress} avatar`}
+                            size={48}
+                          />
+                        </div>
+                        <div>
+                          <h3
+                            id={labelId}
+                            className="text-lg font-bold text-[var(--wui-color-text)] max-w-[220px] truncate wallet-custom-font"
+                          >
+                            {nfdName ||
+                              (activeAddress
+                                ? formatShortAddress(activeAddress, 6, 4)
+                                : 'My Wallet')}
+                          </h3>
+                          {nfdName && activeAddress && (
+                            <p className="text-sm text-[var(--wui-color-text-secondary)]">
+                              {formatShortAddress(activeAddress, 6, 4)}
+                            </p>
+                          )}
+                        </div>
+                      </div>
 
-                  <PluginSlot slot="after-balance" ctx={pluginCtx} />
-
-                  {/* Account selector (when multiple accounts available) */}
-                  {activeWallet &&
-                    activeWallet.accounts &&
-                    activeWallet.accounts.length > 1 && (
-                      <div className="mb-4">
-                        <Listbox
-                          value={activeAddress || ''}
-                          onChange={handleAccountChange}
-                        >
-                          <Label className="block text-sm font-medium text-[var(--wui-color-text-secondary)] mb-1">
-                            Select Account
-                          </Label>
-                          <div className="relative mt-1">
-                            <ListboxButton className="grid w-full cursor-default grid-cols-1 rounded-lg border border-[var(--wui-color-border)] bg-[var(--wui-color-bg-secondary)] py-2 px-3 text-left text-[var(--wui-color-text)] shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--wui-color-primary)] focus:border-transparent text-sm">
-                              <span className="col-start-1 row-start-1 truncate pr-8">
-                                {activeAddress
-                                  ? formatShortAddress(activeAddress, 6, 4)
-                                  : 'Select account'}
-                              </span>
-                              <span className="col-start-1 row-start-1 self-center justify-self-end">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 16 16"
-                                  fill="none"
-                                  className="text-[var(--wui-color-text-secondary)]"
-                                  aria-hidden="true"
-                                >
-                                  <path
-                                    d="M4 6L8 10L12 6"
-                                    stroke="currentColor"
-                                    strokeWidth="1.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  />
-                                </svg>
-                              </span>
-                            </ListboxButton>
-                            <ListboxOptions
-                              transition
-                              className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-[var(--wui-color-bg-secondary)] py-1 shadow-lg ring-1 ring-black/5 focus:outline-none text-sm data-[closed]:data-[leave]:opacity-0 data-[leave]:transition data-[leave]:duration-100 data-[leave]:ease-in"
+                      {/* Balance display with toggle */}
+                      <div className="mb-4 bg-[var(--wui-color-bg-secondary)] rounded-lg p-3">
+                        <div className="flex justify-between items-center">
+                          {displayBalance !== null && (
+                            <span className="text-base font-medium text-[var(--wui-color-text)] flex items-center gap-1">
+                              {formatNumber(displayBalance, {
+                                fractionDigits: 4,
+                              })}
+                              <AlgoSymbol />
+                            </span>
+                          )}
+                          <button
+                            onClick={toggleBalanceView}
+                            className="flex items-center gap-1 text-sm text-[var(--wui-color-text-secondary)] bg-[var(--wui-color-bg-tertiary)] py-1 pl-2.5 pr-2 rounded-md hover:brightness-90 transition-all focus:outline-none"
+                            title={
+                              showAvailableBalance
+                                ? 'Show total balance'
+                                : 'Show available balance'
+                            }
+                          >
+                            {showAvailableBalance ? 'Available' : 'Total'}
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="10"
+                              height="10"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="ml-0.5 opacity-80"
                             >
-                              {activeWallet.accounts.map((account) => (
-                                <ListboxOption
-                                  key={account.address}
-                                  value={account.address}
-                                  className="group relative cursor-default select-none py-2 pl-3 pr-9 text-[var(--wui-color-text)] data-[focus]:bg-[var(--wui-color-bg-hover)] data-[focus]:outline-none"
-                                >
-                                  <span className="block truncate font-normal group-data-[selected]:font-medium">
-                                    {formatShortAddress(account.address, 6, 4)}
+                              <path d="m17 10-5-5-5 5" />
+                              <path d="m17 14-5 5-5-5" />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+
+                      <PluginSlot slot="after-balance" ctx={pluginCtx} />
+
+                      {/* Account selector (when multiple accounts available) */}
+                      {activeWallet &&
+                        activeWallet.accounts &&
+                        activeWallet.accounts.length > 1 && (
+                          <div className="mb-4">
+                            <Listbox
+                              value={activeAddress || ''}
+                              onChange={handleAccountChange}
+                            >
+                              <Label className="block text-sm font-medium text-[var(--wui-color-text-secondary)] mb-1">
+                                Select Account
+                              </Label>
+                              <div className="relative mt-1">
+                                <ListboxButton className="grid w-full cursor-default grid-cols-1 rounded-lg border border-[var(--wui-color-border)] bg-[var(--wui-color-bg-secondary)] py-2 px-3 text-left text-[var(--wui-color-text)] shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--wui-color-primary)] focus:border-transparent text-sm">
+                                  <span className="col-start-1 row-start-1 truncate pr-8">
+                                    {activeAddress
+                                      ? formatShortAddress(activeAddress, 6, 4)
+                                      : 'Select account'}
                                   </span>
-                                  <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-[var(--wui-color-primary)] group-[&:not([data-selected])]:hidden">
+                                  <span className="col-start-1 row-start-1 self-center justify-self-end">
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
                                       width="16"
                                       height="16"
                                       viewBox="0 0 16 16"
                                       fill="none"
-                                      className="h-5 w-5"
+                                      className="text-[var(--wui-color-text-secondary)]"
                                       aria-hidden="true"
                                     >
                                       <path
-                                        d="M13.3334 4L6.00008 11.3333L2.66675 8"
+                                        d="M4 6L8 10L12 6"
                                         stroke="currentColor"
-                                        strokeWidth="2"
+                                        strokeWidth="1.5"
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                       />
                                     </svg>
                                   </span>
-                                </ListboxOption>
-                              ))}
-                            </ListboxOptions>
-                          </div>
-                        </Listbox>
-                      </div>
-                    )}
-
-                  <PluginSlot slot="after-accounts" ctx={pluginCtx} />
-
-                  {/* Divider */}
-                  <div className="border-t border-[var(--wui-color-border)] mt-2 mb-2" />
-
-                  {/* Wallet info section */}
-                  {activeWallet && (
-                    <div className="mb-2 flex items-center gap-2 px-1 py-0.5">
-                      <div className="h-5 w-5 overflow-hidden rounded flex items-center justify-center">
-                        {activeWallet.metadata.icon ? (
-                          <img
-                            src={activeWallet.metadata.icon}
-                            alt={`${activeWallet.metadata.name} icon`}
-                            className="max-w-full max-h-full"
-                          />
-                        ) : (
-                          <div className="h-5 w-5 rounded-full bg-[var(--wui-color-bg-tertiary)] flex items-center justify-center">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-3 w-3 text-[var(--wui-color-text-tertiary)]"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M17 9c0-.55-.45-1-1-1h-4c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1h4c.55 0 1-.45 1-1V9zm-1 0v8h-4V9h4zM8 4c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v13c0 .55.45 1 1 1h4c.55 0 1-.45 1-1V4zM3 3h4v14H3V3z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
+                                </ListboxButton>
+                                <ListboxOptions
+                                  transition
+                                  className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-[var(--wui-color-bg-secondary)] py-1 shadow-lg ring-1 ring-black/5 focus:outline-none text-sm data-[closed]:data-[leave]:opacity-0 data-[leave]:transition data-[leave]:duration-100 data-[leave]:ease-in"
+                                >
+                                  {activeWallet.accounts.map((account) => (
+                                    <ListboxOption
+                                      key={account.address}
+                                      value={account.address}
+                                      className="group relative cursor-default select-none py-2 pl-3 pr-9 text-[var(--wui-color-text)] data-[focus]:bg-[var(--wui-color-bg-hover)] data-[focus]:outline-none"
+                                    >
+                                      <span className="block truncate font-normal group-data-[selected]:font-medium">
+                                        {formatShortAddress(
+                                          account.address,
+                                          6,
+                                          4,
+                                        )}
+                                      </span>
+                                      <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-[var(--wui-color-primary)] group-[&:not([data-selected])]:hidden">
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="16"
+                                          height="16"
+                                          viewBox="0 0 16 16"
+                                          fill="none"
+                                          className="h-5 w-5"
+                                          aria-hidden="true"
+                                        >
+                                          <path
+                                            d="M13.3334 4L6.00008 11.3333L2.66675 8"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                          />
+                                        </svg>
+                                      </span>
+                                    </ListboxOption>
+                                  ))}
+                                </ListboxOptions>
+                              </div>
+                            </Listbox>
                           </div>
                         )}
-                      </div>
-                      <p className="text-sm text-[var(--wui-color-text-secondary)]">
-                        {activeWallet.metadata.name}
-                      </p>
-                    </div>
-                  )}
 
-                  <PluginSlot slot="after-wallet-info" ctx={pluginCtx} />
+                      <PluginSlot slot="after-accounts" ctx={pluginCtx} />
 
-                  <PluginSlot slot="before-actions" ctx={pluginCtx} />
+                      {/* Divider */}
+                      <div className="border-t border-[var(--wui-color-border)] mt-2 mb-2" />
 
-                  {/* Divider */}
-                  <div className="border-t border-[var(--wui-color-border)] mb-3 mt-2" />
-
-                  {/* Action buttons */}
-                  <div className="flex gap-2">
-                    {/* Copy Address Button */}
-                    <button
-                      onClick={handleCopyAddress}
-                      className="flex-1 py-2 px-4 bg-[var(--wui-color-bg-tertiary)] text-[var(--wui-color-text-secondary)] font-medium rounded-xl hover:brightness-90 transition-all text-sm flex items-center justify-center"
-                      title="Copy address"
-                    >
-                      {isCopied ? (
-                        <>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4 text-green-500 mr-1.5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          Copied
-                        </>
-                      ) : (
-                        <>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4 mr-1.5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
-                            <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
-                          </svg>
-                          Copy
-                        </>
+                      {/* Wallet info section */}
+                      {activeWallet && (
+                        <div className="mb-2 flex items-center gap-2 px-1 py-0.5">
+                          <div className="h-5 w-5 overflow-hidden rounded flex items-center justify-center">
+                            {activeWallet.metadata.icon ? (
+                              <img
+                                src={activeWallet.metadata.icon}
+                                alt={`${activeWallet.metadata.name} icon`}
+                                className="max-w-full max-h-full"
+                              />
+                            ) : (
+                              <div className="h-5 w-5 rounded-full bg-[var(--wui-color-bg-tertiary)] flex items-center justify-center">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-3 w-3 text-[var(--wui-color-text-tertiary)]"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M17 9c0-.55-.45-1-1-1h-4c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1h4c.55 0 1-.45 1-1V9zm-1 0v8h-4V9h4zM8 4c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v13c0 .55.45 1 1 1h4c.55 0 1-.45 1-1V4zM3 3h4v14H3V3z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              </div>
+                            )}
+                          </div>
+                          <p className="text-sm text-[var(--wui-color-text-secondary)]">
+                            {activeWallet.metadata.name}
+                          </p>
+                        </div>
                       )}
-                    </button>
 
-                    <PluginSlot slot="actions" ctx={pluginCtx} />
+                      <PluginSlot slot="after-wallet-info" ctx={pluginCtx} />
 
-                    {/* Disconnect Button */}
-                    <button
-                      onClick={handleDisconnect}
-                      className="flex-1 py-2 px-4 bg-[var(--wui-color-danger-bg)] text-[var(--wui-color-danger-text)] font-medium rounded-xl hover:bg-[var(--wui-color-danger-bg-hover)] transition-colors text-sm"
-                    >
-                      Disconnect
-                    </button>
-                  </div>
+                      <PluginSlot slot="before-actions" ctx={pluginCtx} />
+
+                      {/* Plugin panel triggers */}
+                      {enabledPanels.length > 0 && (
+                        <div className="flex flex-col gap-1 mb-2">
+                          {enabledPanels.map((panel) => (
+                            <button
+                              key={panel.key}
+                              onClick={() => setActivePanel(panel.key)}
+                              className="w-full flex items-center justify-between py-2 px-2 rounded-lg text-sm text-[var(--wui-color-text)] hover:bg-[var(--wui-color-bg-secondary)] transition-colors"
+                            >
+                              <span className="flex items-center gap-2">
+                                {panel.icon && (
+                                  <panel.icon className="h-4 w-4 text-[var(--wui-color-text-secondary)]" />
+                                )}
+                                {panel.label}
+                              </span>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="text-[var(--wui-color-text-tertiary)]"
+                              >
+                                <path d="m9 18 6-6-6-6" />
+                              </svg>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Divider */}
+                      <div className="border-t border-[var(--wui-color-border)] mb-3 mt-2" />
+
+                      {/* Action buttons */}
+                      <div className="flex gap-2">
+                        {/* Copy Address Button */}
+                        <button
+                          onClick={handleCopyAddress}
+                          className="flex-1 py-2 px-4 bg-[var(--wui-color-bg-tertiary)] text-[var(--wui-color-text-secondary)] font-medium rounded-xl hover:brightness-90 transition-all text-sm flex items-center justify-center"
+                          title="Copy address"
+                        >
+                          {isCopied ? (
+                            <>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4 text-green-500 mr-1.5"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                              Copied
+                            </>
+                          ) : (
+                            <>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4 mr-1.5"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                              >
+                                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                              </svg>
+                              Copy
+                            </>
+                          )}
+                        </button>
+
+                        <PluginSlot slot="actions" ctx={pluginCtx} />
+
+                        {/* Disconnect Button */}
+                        <button
+                          onClick={handleDisconnect}
+                          className="flex-1 py-2 px-4 bg-[var(--wui-color-danger-bg)] text-[var(--wui-color-danger-text)] font-medium rounded-xl hover:bg-[var(--wui-color-danger-bg-hover)] transition-colors text-sm"
+                        >
+                          Disconnect
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
