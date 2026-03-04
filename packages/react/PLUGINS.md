@@ -362,7 +362,7 @@ Plugins are plain objects, so they can be published as npm packages. A plugin pa
 ```json
 {
   "peerDependencies": {
-    "@txnlab/use-wallet-ui-react": "^1.0.0",
+    "@txnlab/use-wallet-ui-react": "^1.1.0",
     "@txnlab/use-wallet-react": "^4.0.0",
     "react": "^18.0.0 || ^19.0.0"
   }
