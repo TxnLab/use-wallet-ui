@@ -80,7 +80,7 @@
     "react-dom": "^18 || ^19"
   },
   "dependencies": {
-    "@floating-ui/react": "0.27.18",
+    "@floating-ui/react": "0.27.19",
     "@headlessui/react": "2.2.9",
     "@tanstack/react-query": "5.90.21",
     "@txnlab/utils-ts": "0.1.0",
@@ -93,7 +93,7 @@
     "@types/react-dom": "19.2.3",
     "@vitest/coverage-v8": "3.2.4",
     "algosdk": "3.5.2",
-    "publint": "0.3.17",
+    "publint": "0.3.18",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "tailwindcss": "4.2.1",
