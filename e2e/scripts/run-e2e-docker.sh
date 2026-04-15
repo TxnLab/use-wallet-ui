@@ -26,8 +26,9 @@ if ! docker info > /dev/null 2>&1; then
   exit 1
 fi
 
-# Use the official Playwright Docker image matching our version
-PLAYWRIGHT_VERSION="v1.57.0"
+# Use the official Playwright Docker image matching the installed @playwright/test version
+# Derived from the package so the image tag cannot drift from the npm pin
+PLAYWRIGHT_VERSION="v$(cd "$E2E_DIR" && node -p "require('@playwright/test/package.json').version")"
 IMAGE="mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}"
 
 echo "Using Playwright image: $IMAGE"

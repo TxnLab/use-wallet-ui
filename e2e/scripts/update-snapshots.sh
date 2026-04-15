@@ -14,6 +14,13 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
+# Default to chromium project (matches CI); callers can override via args,
+# e.g. `pnpm test:e2e:update:docker -- --project=vue-chromium`
+PROJECT_ARGS=("$@")
+if [ ${#PROJECT_ARGS[@]} -eq 0 ]; then
+  PROJECT_ARGS=(--project=chromium)
+fi
+
 echo -e "${YELLOW}Updating visual regression snapshots using Docker...${NC}"
 echo ""
 
@@ -23,12 +30,14 @@ if ! docker info > /dev/null 2>&1; then
   exit 1
 fi
 
-# Use the official Playwright Docker image matching our version
-PLAYWRIGHT_VERSION="v1.57.0"
+# Use the official Playwright Docker image matching the installed @playwright/test version
+# Derived from the package so the image tag cannot drift from the npm pin
+PLAYWRIGHT_VERSION="v$(cd "$E2E_DIR" && node -p "require('@playwright/test/package.json').version")"
 IMAGE="mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}"
 
 echo "Using Playwright image: $IMAGE"
 echo "Mounting: $ROOT_DIR -> /work"
+echo "Project args: ${PROJECT_ARGS[*]}"
 echo ""
 
 # Run the update command in Docker
@@ -40,9 +49,11 @@ docker run --rm \
   -v "$ROOT_DIR:/work" \
   -v /work/node_modules \
   -v /work/packages/react/node_modules \
+  -v /work/packages/vue/node_modules \
   -v /work/examples/react/node_modules \
   -v /work/examples/react-css-only/node_modules \
   -v /work/examples/react-custom/node_modules \
+  -v /work/examples/vue/node_modules \
   -v /work/e2e/node_modules \
   -w /work \
   -e CI=true \
@@ -53,7 +64,7 @@ docker run --rm \
     pnpm install --frozen-lockfile && \
     pnpm build && \
     cd e2e && \
-    pnpm e2e:update --project=chromium
+    pnpm e2e:update ${PROJECT_ARGS[*]}
   "
 
 echo ""
