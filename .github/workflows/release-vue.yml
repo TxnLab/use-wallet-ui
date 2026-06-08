@@ -1,0 +1,79 @@
+name: Release Vue (manual)
+
+# Manual publish for @txnlab/use-wallet-ui-vue.
+#
+# The Vue package is published out-of-band from semantic-release (which only
+# handles the React package). Bump packages/vue/package.json "version" in a
+# commit/PR first, then trigger this workflow from the Actions tab.
+#
+# Auth: runs with id-token: write so npm provenance is generated. The first
+# publish of the (new) package name uses the NPM_TOKEN secret; once the package
+# exists and trusted publishing is configured on npmjs.com, NODE_AUTH_TOKEN
+# resolves to empty and the publish authenticates tokenlessly via OIDC.
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (pack only, do not publish)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+
+      - name: Update npm to latest
+        run: npm install -g npm@latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm --filter @txnlab/use-wallet-ui-vue lint
+
+      - name: Type Check
+        run: pnpm --filter @txnlab/use-wallet-ui-vue typecheck
+
+      - name: Test
+        run: pnpm --filter @txnlab/use-wallet-ui-vue test
+
+      - name: Build
+        run: pnpm --filter @txnlab/use-wallet-ui-vue build
+
+      - name: Verify dependency signatures
+        run: npm audit signatures
+
+      - name: Publish (dry run)
+        if: ${{ inputs.dry_run }}
+        working-directory: packages/vue
+        run: npm publish --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish
+        if: ${{ !inputs.dry_run }}
+        working-directory: packages/vue
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
