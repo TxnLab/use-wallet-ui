@@ -60,23 +60,30 @@ jobs:
       - name: Verify dependency signatures
         run: npm audit signatures
 
-      # The React package is released by semantic-release (pkgRoot: packages/react),
-      # but the commit analyzer is not path-scoped. Without this guard, a push that
-      # only touched the Vue package (or examples) would still cut a React release.
-      # Skip the release step unless commits since the last v* tag touched
-      # release-relevant React paths. NOTE: a commit touching both packages still
-      # releases React with the Vue notes included — the clean per-package fix lands
-      # with the future monorepo release migration.
-      - name: Check for React-relevant changes
+      # semantic-release is hardwired to packages/react (pkgRoot) but its commit
+      # analyzer is NOT path-scoped, so it would otherwise attribute a Vue feat/fix
+      # commit to a React release. Guard the release step: run only if a releasing
+      # commit (feat/fix/BREAKING) since the last v* tag actually touched
+      # packages/react. We scope by pathspec (so a Vue-only feat is excluded) AND by
+      # commit type (so accumulated chore(deps) bumps alone don't trigger a release),
+      # which together mirror what semantic-release would legitimately release.
+      # NOTE: a single commit touching BOTH packages still releases React with the
+      # Vue notes — the clean per-package fix lands with the future monorepo migration.
+      - name: Check for releasable React changes
         id: react_changes
         run: |
           LAST_TAG=$(git describe --tags --match 'v[0-9]*' --abbrev=0 2>/dev/null || echo "")
-          if [ -z "$LAST_TAG" ] || git diff --name-only "$LAST_TAG"..HEAD -- \
-               packages/react pnpm-lock.yaml .releaserc.js .github/workflows/release.yml | grep -q .; then
+          RANGE="${LAST_TAG:+$LAST_TAG..HEAD}"
+          # Subjects and bodies of commits since the last tag that touched packages/react
+          SUBJECTS=$(git log ${RANGE:-HEAD} --no-merges --format='%s' -- packages/react)
+          BODIES=$(git log ${RANGE:-HEAD} --no-merges --format='%B' -- packages/react)
+          if [ -z "$LAST_TAG" ] \
+             || printf '%s\n' "$SUBJECTS" | grep -qE '^(feat|fix)(\(.+\))?!?:' \
+             || printf '%s\n' "$BODIES" | grep -q 'BREAKING CHANGE'; then
             echo "run=true" >> "$GITHUB_OUTPUT"
           else
             echo "run=false" >> "$GITHUB_OUTPUT"
-            echo "No React-relevant changes since $LAST_TAG — skipping release."
+            echo "No releasable React (feat/fix/BREAKING) commit since $LAST_TAG — skipping release."
           fi
 
       - name: Release
