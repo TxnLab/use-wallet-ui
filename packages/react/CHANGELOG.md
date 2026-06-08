@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/TxnLab/use-wallet-ui/compare/v1.1.0...v1.2.0) (2026-06-08)
+
+
+### Features
+
+* add Vue library ([#55](https://github.com/TxnLab/use-wallet-ui/issues/55)) ([4d10cdd](https://github.com/TxnLab/use-wallet-ui/commit/4d10cdd38faec2ea03f6877ad50fcd620582ed19))
+
 # [1.1.0](https://github.com/TxnLab/use-wallet-ui/compare/v1.0.0...v1.1.0) (2026-03-04)
 
 
