@@ -1,6 +1,6 @@
 # use-wallet UI
 
-Ready-to-use UI components for Algorand wallet integration, built as a companion to [@txnlab/use-wallet](https://github.com/TxnLab/use-wallet).
+Ready-to-use React and Vue UI components for Algorand wallet integration, built as a companion to [@txnlab/use-wallet](https://github.com/TxnLab/use-wallet).
 
 ![Preview of use-wallet UI components](./preview.png)
 
@@ -15,12 +15,19 @@ Ready-to-use UI components for Algorand wallet integration, built as a companion
 
 ## Quick Start
 
+### React
+
 ```bash
 npm install @txnlab/use-wallet-ui-react
 ```
 
 ```jsx
-import { NetworkId, WalletId, WalletManager, WalletProvider } from '@txnlab/use-wallet-react'
+import {
+  NetworkId,
+  WalletId,
+  WalletManager,
+  WalletProvider,
+} from '@txnlab/use-wallet-react'
 import { WalletUIProvider, WalletButton } from '@txnlab/use-wallet-ui-react'
 
 // Import styles (skip if using Tailwind CSS)
@@ -40,6 +47,49 @@ function App() {
     </WalletProvider>
   )
 }
+```
+
+### Vue
+
+```bash
+npm install @txnlab/use-wallet-ui-vue @txnlab/use-wallet-vue
+```
+
+```ts
+// main.ts
+import { createApp } from 'vue'
+import {
+  NetworkId,
+  WalletId,
+  WalletManagerPlugin,
+} from '@txnlab/use-wallet-vue'
+
+// Import styles (skip if using Tailwind CSS)
+import '@txnlab/use-wallet-ui-react/dist/style.css'
+
+import App from './App.vue'
+
+const app = createApp(App)
+
+app.use(WalletManagerPlugin, {
+  wallets: [WalletId.PERA, WalletId.DEFLY, WalletId.LUTE],
+  defaultNetwork: NetworkId.TESTNET,
+})
+
+app.mount('#app')
+```
+
+```html
+<!-- App.vue -->
+<script setup lang="ts">
+  import { WalletButton, WalletUIProvider } from '@txnlab/use-wallet-ui-vue'
+</script>
+
+<template>
+  <WalletUIProvider>
+    <WalletButton />
+  </WalletUIProvider>
+</template>
 ```
 
 ## Customization
@@ -80,7 +130,10 @@ Override theme colors on any wrapper element:
 For complete control, use the Menu components with your own button:
 
 ```jsx
-import { ConnectWalletMenu, ConnectedWalletMenu } from '@txnlab/use-wallet-ui-react'
+import {
+  ConnectWalletMenu,
+  ConnectedWalletMenu,
+} from '@txnlab/use-wallet-ui-react'
 import { useWallet } from '@txnlab/use-wallet-react'
 
 function CustomWalletButton() {
@@ -102,21 +155,26 @@ function CustomWalletButton() {
 }
 ```
 
-See the [React Package Documentation](./packages/react/README.md) for the full API reference and customization guide.
+See the package documentation for full API references and customization guides:
+
+- [React Package Documentation](./packages/react/README.md)
+- [Vue Package Documentation](./packages/vue/README.md)
 
 ## Packages
 
-| Package | Description |
-|---------|-------------|
+| Package                                         | Description      |
+| ----------------------------------------------- | ---------------- |
 | [@txnlab/use-wallet-ui-react](./packages/react) | React components |
+| [@txnlab/use-wallet-ui-vue](./packages/vue)     | Vue components   |
 
 ## Examples
 
-| Example | Description |
-|---------|-------------|
-| [react](./examples/react) | Tailwind CSS integration |
-| [react-css-only](./examples/react-css-only) | Standalone CSS usage |
-| [react-custom](./examples/react-custom) | All customization patterns |
+| Example                                     | Description                  |
+| ------------------------------------------- | ---------------------------- |
+| [react](./examples/react)                   | Tailwind CSS integration     |
+| [react-css-only](./examples/react-css-only) | Standalone CSS usage         |
+| [react-custom](./examples/react-custom)     | All customization patterns   |
+| [vue](./examples/vue)                       | Vue 3 + Tailwind integration |
 
 ## Development
 

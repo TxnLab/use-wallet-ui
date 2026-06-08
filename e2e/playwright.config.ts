@@ -63,7 +63,7 @@ export default defineConfig({
     // Desktop Chrome - Light Mode (default)
     {
       name: 'chromium',
-      testIgnore: /customization\/.+\.spec\.ts/,
+      testIgnore: [/customization\/.+\.spec\.ts/, /vue\/.+\.spec\.ts/],
       use: {
         ...devices['Desktop Chrome'],
       },
@@ -72,7 +72,7 @@ export default defineConfig({
     // Desktop Chrome - Dark Mode (system preference)
     {
       name: 'chromium-dark',
-      testIgnore: /customization\/.+\.spec\.ts/,
+      testIgnore: [/customization\/.+\.spec\.ts/, /vue\/.+\.spec\.ts/],
       use: {
         ...devices['Desktop Chrome'],
         colorScheme: 'dark',
@@ -82,7 +82,7 @@ export default defineConfig({
     // Desktop Firefox
     {
       name: 'firefox',
-      testIgnore: /customization\/.+\.spec\.ts/,
+      testIgnore: [/customization\/.+\.spec\.ts/, /vue\/.+\.spec\.ts/],
       use: {
         ...devices['Desktop Firefox'],
       },
@@ -91,9 +91,44 @@ export default defineConfig({
     // Desktop Safari
     {
       name: 'webkit',
-      testIgnore: /customization\/.+\.spec\.ts/,
+      testIgnore: [/customization\/.+\.spec\.ts/, /vue\/.+\.spec\.ts/],
       use: {
         ...devices['Desktop Safari'],
+      },
+    },
+
+    // Vue example tests
+    {
+      name: 'vue-chromium',
+      testMatch: /vue\/.+\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://localhost:5175',
+      },
+    },
+    {
+      name: 'vue-chromium-dark',
+      testMatch: /vue\/.+\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://localhost:5175',
+        colorScheme: 'dark',
+      },
+    },
+    {
+      name: 'vue-firefox',
+      testMatch: /vue\/.+\.spec\.ts/,
+      use: {
+        ...devices['Desktop Firefox'],
+        baseURL: 'http://localhost:5175',
+      },
+    },
+    {
+      name: 'vue-webkit',
+      testMatch: /vue\/.+\.spec\.ts/,
+      use: {
+        ...devices['Desktop Safari'],
+        baseURL: 'http://localhost:5175',
       },
     },
 
@@ -121,6 +156,13 @@ export default defineConfig({
     {
       command: 'pnpm --filter @txnlab/use-wallet-ui-react-custom-example dev',
       url: 'http://localhost:5174',
+      reuseExistingServer: !CI,
+      timeout: 120000,
+      cwd: '..',
+    },
+    {
+      command: 'pnpm --filter @txnlab/use-wallet-ui-vue-example dev',
+      url: 'http://localhost:5175',
       reuseExistingServer: !CI,
       timeout: 120000,
       cwd: '..',
