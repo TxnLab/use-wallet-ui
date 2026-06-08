@@ -60,7 +60,27 @@ jobs:
       - name: Verify dependency signatures
         run: npm audit signatures
 
+      # The React package is released by semantic-release (pkgRoot: packages/react),
+      # but the commit analyzer is not path-scoped. Without this guard, a push that
+      # only touched the Vue package (or examples) would still cut a React release.
+      # Skip the release step unless commits since the last v* tag touched
+      # release-relevant React paths. NOTE: a commit touching both packages still
+      # releases React with the Vue notes included — the clean per-package fix lands
+      # with the future monorepo release migration.
+      - name: Check for React-relevant changes
+        id: react_changes
+        run: |
+          LAST_TAG=$(git describe --tags --match 'v[0-9]*' --abbrev=0 2>/dev/null || echo "")
+          if [ -z "$LAST_TAG" ] || git diff --name-only "$LAST_TAG"..HEAD -- \
+               packages/react pnpm-lock.yaml .releaserc.js .github/workflows/release.yml | grep -q .; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "No React-relevant changes since $LAST_TAG — skipping release."
+          fi
+
       - name: Release
+        if: steps.react_changes.outputs.run == 'true'
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
           GIT_AUTHOR_NAME: TxnLab Release Bot[bot]
