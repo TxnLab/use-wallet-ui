@@ -1,6 +1,6 @@
 # E2E Tests
 
-End-to-end tests for `@txnlab/use-wallet-ui-react` using [Playwright](https://playwright.dev/).
+End-to-end tests for `@txnlab/use-wallet-ui-react` and `@txnlab/use-wallet-ui-vue` using [Playwright](https://playwright.dev/).
 
 ## Running Tests
 
@@ -32,14 +32,14 @@ The Docker script uses anonymous volumes for `node_modules` directories, so it w
 
 ## Visual Regression Tests
 
-Visual regression tests capture screenshots and compare them against baseline images stored in `tests/visual/__snapshots__/`.
+Visual regression tests capture screenshots and compare them against baseline images stored in framework-specific snapshot folders under `tests/**/visual/__snapshots__/`.
 
 ### Updating Snapshots
 
 When UI changes are intentional, update the baseline snapshots using Docker to match CI:
 
 ```bash
-pnpm e2e:update:docker
+pnpm test:e2e:update:docker
 ```
 
 This runs in the same Linux environment as CI, ensuring consistent baselines. After running, review the changes and commit:
@@ -82,6 +82,9 @@ e2e/
 │       ├── dark-mode.spec.ts
 │       ├── light-mode.spec.ts
 │       └── __snapshots__/  # Baseline images
+│   └── vue/             # Mirrored Vue tests
+│       ├── theme/
+│       └── visual/
 ├── fixtures/            # Test fixtures and utilities
 ├── scripts/             # Helper scripts
 │   ├── run-e2e-docker.sh
@@ -93,8 +96,8 @@ e2e/
 
 The Playwright configuration (`playwright.config.ts`) includes:
 
-- **Projects**: chromium, chromium-dark, firefox, webkit
-- **Web Server**: Automatically starts the example app on port 5173
+- **Projects**: React (`chromium`, `chromium-dark`, `firefox`, `webkit`, `customization`) and Vue (`vue-chromium`, `vue-chromium-dark`, `vue-firefox`, `vue-webkit`)
+- **Web Server**: Automatically starts React (5173), React custom (5174), and Vue (5175) example apps
 - **Visual Comparison**: 5% pixel difference tolerance for font rendering variations
 - **Retries**: 2 retries in CI, none locally
 

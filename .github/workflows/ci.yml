@@ -113,7 +113,7 @@ jobs:
         run: pnpm --filter @txnlab/use-wallet-ui-e2e e2e:validate
 
       - name: Run E2E tests
-        run: pnpm --filter @txnlab/use-wallet-ui-e2e e2e --project=chromium --project=customization
+        run: pnpm --filter @txnlab/use-wallet-ui-e2e e2e --project=chromium --project=customization --project=vue-chromium
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v6

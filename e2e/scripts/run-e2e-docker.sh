@@ -57,9 +57,11 @@ docker run --rm \
   -v "$ROOT_DIR:/work" \
   -v /work/node_modules \
   -v /work/packages/react/node_modules \
+  -v /work/packages/vue/node_modules \
   -v /work/examples/react/node_modules \
   -v /work/examples/react-css-only/node_modules \
   -v /work/examples/react-custom/node_modules \
+  -v /work/examples/vue/node_modules \
   -v /work/e2e/node_modules \
   -w /work \
   -e CI=true \
