@@ -1,9 +1,7 @@
 # [1.2.0](https://github.com/TxnLab/use-wallet-ui/compare/v1.1.0...v1.2.0) (2026-06-08)
 
 
-### Features
-
-* add Vue library ([#55](https://github.com/TxnLab/use-wallet-ui/issues/55)) ([4d10cdd](https://github.com/TxnLab/use-wallet-ui/commit/4d10cdd38faec2ea03f6877ad50fcd620582ed19))
+This release contains only dependency updates accumulated since 1.1.0 — there are no functional changes to the React package. The minor version bump was an artifact of the monorepo release configuration when the Vue package ([#55](https://github.com/TxnLab/use-wallet-ui/issues/55)) was added, since corrected in [#70](https://github.com/TxnLab/use-wallet-ui/pull/70).
 
 # [1.1.0](https://github.com/TxnLab/use-wallet-ui/compare/v1.0.0...v1.1.0) (2026-03-04)
 
