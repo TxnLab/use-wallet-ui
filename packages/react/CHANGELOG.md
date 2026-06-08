@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/TxnLab/use-wallet-ui/compare/v1.2.0...v1.2.1) (2026-06-08)
+
+
+### Bug Fixes
+
+* **css:** render library SVG icons as block in standalone CSS ([#71](https://github.com/TxnLab/use-wallet-ui/issues/71)) ([d1d21fb](https://github.com/TxnLab/use-wallet-ui/commit/d1d21fbc4009290f39a20a3f018e42497390426c))
+
 # [1.2.0](https://github.com/TxnLab/use-wallet-ui/compare/v1.1.0...v1.2.0) (2026-06-08)
 
 
