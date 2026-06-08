@@ -70,6 +70,20 @@
   height: auto;
 }
 
+/*
+  SVG resets for library elements.
+  Mirrors Tailwind preflight (svg { display: block }), which the Tailwind flavor
+  inherits from the consumer's preflight but the standalone CSS otherwise omits.
+  Without this, library icons default to display: inline and the baseline gap
+  distorts tightly-wrapped controls (e.g. the rounded "Close dialog" button).
+*/
+[data-wallet-ui] [role="dialog"] svg,
+[data-wallet-ui] [role="menu"] svg,
+[data-wallet-ui] [role="listbox"] svg {
+  display: block;
+  vertical-align: middle;
+}
+
 /* Theme - CSS custom properties */
 
 /* Light mode (default) */
