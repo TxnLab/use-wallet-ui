@@ -71,7 +71,11 @@ export function PluginLifecycleManager() {
     ) {
       for (const plugin of plugins) {
         if (plugin.lifecycle?.onAccountChange) {
-          plugin.lifecycle.onAccountChange(ctx.activeAddress, prevAddress, ctx)
+          const newAddress = ctx.activeAddress
+          const oldAddress = prevAddress
+          safeInvoke(plugin, () =>
+            plugin.lifecycle!.onAccountChange!(newAddress, oldAddress, ctx),
+          )
         }
       }
     }

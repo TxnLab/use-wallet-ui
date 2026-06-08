@@ -2,21 +2,48 @@
 const IPFS_GATEWAY_URL = 'https://ipfs.algonode.dev'
 
 /**
+ * Extract the resource path after `ipfs://` or after `/ipfs/` in an HTTP(S) gateway URL.
+ * Used so HTTPS gateway links get the same NFD and HEAD checks as `ipfs://` URLs.
+ */
+export function extractIpfsResourcePath(url: string): string | null {
+  const trimmed = url.trim()
+  if (trimmed.startsWith('ipfs://')) {
+    const rest = trimmed.slice('ipfs://'.length)
+    return rest.length > 0 ? rest : null
+  }
+  try {
+    const parsed = new URL(trimmed)
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+      return null
+    }
+    const mark = '/ipfs/'
+    const idx = parsed.pathname.indexOf(mark)
+    if (idx === -1) {
+      return null
+    }
+    const after = parsed.pathname.slice(idx + mark.length)
+    return after.length > 0 ? after : null
+  } catch {
+    return null
+  }
+}
+
+/**
  * Check availability of an IPFS resource and return appropriate URL
  * Tries images.nf.domains first, falls back to IPFS gateway
  * Only returns URLs for image content types
  *
- * @param url - IPFS URL to check
+ * @param url - `ipfs://` URL or HTTPS URL whose path contains `/ipfs/...`
  * @returns URL to use (either images.nf.domains or fallback gateway)
  */
 export const checkIpfsAvailability = async (url: string): Promise<string> => {
-  if (!url.startsWith('ipfs://')) {
+  const resourcePath = extractIpfsResourcePath(url)
+  if (!resourcePath) {
     return url
   }
 
-  const cid = url.replace('ipfs://', '')
-  const nfdUrl = `https://images.nf.domains/ipfs/${cid}`
-  const gatewayUrl = `${IPFS_GATEWAY_URL}/ipfs/${cid}`
+  const nfdUrl = `https://images.nf.domains/ipfs/${resourcePath}`
+  const gatewayUrl = `${IPFS_GATEWAY_URL}/ipfs/${resourcePath}`
 
   // Helper to check if content type is an image
   const isImageContentType = (contentType: string): boolean => {
@@ -34,7 +61,7 @@ export const checkIpfsAvailability = async (url: string): Promise<string> => {
     }
   } catch {
     console.info(
-      `CID ${cid} is not cached on images.nf.domains, trying IPFS gateway...`,
+      `CID ${resourcePath} is not cached on images.nf.domains, trying IPFS gateway...`,
     )
   }
 
@@ -55,28 +82,12 @@ export const checkIpfsAvailability = async (url: string): Promise<string> => {
           const jsonResponse = await fetch(gatewayUrl)
           const metadata = await jsonResponse.json()
 
-          // Get image URL from metadata
           const imageUrl = metadata.image
-          if (imageUrl) {
-            // If it's an IPFS URL, process it recursively
-            if (imageUrl.startsWith('ipfs://')) {
-              const imageCid = imageUrl.replace('ipfs://', '')
-              const imageGatewayUrl = `${IPFS_GATEWAY_URL}/ipfs/${imageCid}`
-
-              // Verify it's an image
-              const imageResponse = await fetch(imageGatewayUrl, {
-                method: 'HEAD',
-              })
-              if (imageResponse.ok) {
-                const imageContentType =
-                  imageResponse.headers.get('content-type')
-                if (imageContentType && isImageContentType(imageContentType)) {
-                  return imageGatewayUrl
-                }
-              }
+          if (typeof imageUrl === 'string' && imageUrl.length > 0) {
+            if (extractIpfsResourcePath(imageUrl)) {
+              return await checkIpfsAvailability(imageUrl)
             }
-            // If it's already an HTTP URL and it's an image, return it
-            else if (imageUrl.startsWith('http')) {
+            if (imageUrl.startsWith('http')) {
               try {
                 const imageResponse = await fetch(imageUrl, { method: 'HEAD' })
                 if (imageResponse.ok) {
@@ -100,7 +111,7 @@ export const checkIpfsAvailability = async (url: string): Promise<string> => {
       }
     }
   } catch {
-    console.error(`Error checking gateway for CID ${cid}`)
+    console.error(`Error checking gateway for CID ${resourcePath}`)
   }
 
   // Fallback to IPFS gateway without guarantee it's an image

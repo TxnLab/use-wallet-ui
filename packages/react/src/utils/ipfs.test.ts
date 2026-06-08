@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 
-import { checkIpfsAvailability } from './ipfs'
+import { checkIpfsAvailability, extractIpfsResourcePath } from './ipfs'
 
 const IPFS_GATEWAY_URL = 'https://ipfs.algonode.dev'
 
@@ -16,11 +16,28 @@ describe('checkIpfsAvailability', () => {
     vi.resetAllMocks()
   })
 
-  it('returns the URL as-is if it does not start with ipfs://', async () => {
+  it('returns the URL as-is if it is not an IPFS reference', async () => {
     const url = 'https://example.com/image.png'
     const result = await checkIpfsAvailability(url)
     expect(result).toBe(url)
     expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it('treats HTTPS gateway URLs like ipfs:// for resolution', async () => {
+    const cid = 'Qm123456789'
+    const url = `https://ipfs.io/ipfs/${cid}`
+    const nfdUrl = `https://images.nf.domains/ipfs/${cid}`
+
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      headers: new Headers({
+        'content-type': 'image/png',
+      }),
+    } as Response)
+
+    const result = await checkIpfsAvailability(url)
+    expect(result).toBe(nfdUrl)
+    expect(fetchMock).toHaveBeenCalledWith(nfdUrl, { method: 'HEAD' })
   })
 
   it('returns NFD URL when NFD responds with an image content type', async () => {
@@ -96,8 +113,8 @@ describe('checkIpfsAvailability', () => {
     const imageCid = 'Qmimage12345'
     const url = `ipfs://${cid}`
     const nfdUrl = `https://images.nf.domains/ipfs/${cid}`
+    const imageNfdUrl = `https://images.nf.domains/ipfs/${imageCid}`
     const gatewayUrl = `${IPFS_GATEWAY_URL}/ipfs/${cid}`
-    const imageGatewayUrl = `${IPFS_GATEWAY_URL}/ipfs/${imageCid}`
 
     // NFD returns non-image
     fetchMock.mockResolvedValueOnce({
@@ -120,7 +137,7 @@ describe('checkIpfsAvailability', () => {
       json: () => Promise.resolve({ image: `ipfs://${imageCid}` }),
     } as Response)
 
-    // Image URL check
+    // Nested ipfs image: NFD HEAD returns image (same pipeline as top-level ipfs://)
     fetchMock.mockResolvedValueOnce({
       ok: true,
       headers: new Headers({
@@ -129,11 +146,11 @@ describe('checkIpfsAvailability', () => {
     } as Response)
 
     const result = await checkIpfsAvailability(url)
-    expect(result).toBe(imageGatewayUrl)
+    expect(result).toBe(imageNfdUrl)
     expect(fetchMock).toHaveBeenCalledWith(nfdUrl, { method: 'HEAD' })
     expect(fetchMock).toHaveBeenCalledWith(gatewayUrl, { method: 'HEAD' })
     expect(fetchMock).toHaveBeenCalledWith(gatewayUrl)
-    expect(fetchMock).toHaveBeenCalledWith(imageGatewayUrl, { method: 'HEAD' })
+    expect(fetchMock).toHaveBeenCalledWith(imageNfdUrl, { method: 'HEAD' })
   })
 
   it('handles JSON metadata with HTTP image URL', async () => {
@@ -196,5 +213,19 @@ describe('checkIpfsAvailability', () => {
     expect(result).toBe(gatewayUrl)
     expect(fetchMock).toHaveBeenCalledWith(nfdUrl, { method: 'HEAD' })
     expect(fetchMock).toHaveBeenCalledWith(gatewayUrl, { method: 'HEAD' })
+  })
+})
+
+describe('extractIpfsResourcePath', () => {
+  it('reads path after ipfs://', () => {
+    expect(extractIpfsResourcePath('ipfs://Qmabc')).toBe('Qmabc')
+  })
+
+  it('reads path after /ipfs/ in HTTPS URLs', () => {
+    expect(extractIpfsResourcePath('https://ipfs.io/ipfs/Qmabc')).toBe('Qmabc')
+  })
+
+  it('returns null for unrelated HTTPS URLs', () => {
+    expect(extractIpfsResourcePath('https://example.com/image.png')).toBeNull()
   })
 })
