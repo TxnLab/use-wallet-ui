@@ -80,27 +80,27 @@
     "react-dom": "^18 || ^19"
   },
   "dependencies": {
-    "@floating-ui/react": "0.27.19",
+    "@floating-ui/react": "0.27.20",
     "@headlessui/react": "2.2.10",
-    "@tanstack/react-query": "5.100.10",
+    "@tanstack/react-query": "5.102.8",
     "@txnlab/utils-ts": "0.1.0",
     "clsx": "2.1.1",
     "tailwind-merge": "3.6.0"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "4.3.0",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
-    "@vitest/coverage-v8": "3.2.4",
-    "algosdk": "3.5.2",
-    "publint": "0.3.20",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
-    "tailwindcss": "4.3.0",
-    "tsx": "4.21.0",
+    "@tailwindcss/cli": "4.3.3",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "@vitest/coverage-v8": "3.2.7",
+    "algosdk": "3.7.0",
+    "publint": "0.3.24",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "tailwindcss": "4.3.3",
+    "tsx": "4.23.13",
     "vite": "6.4.3",
     "vite-plugin-dts": "4.5.4",
     "vite-tsconfig-paths": "5.1.4",
-    "vitest": "3.2.6"
+    "vitest": "3.2.7"
   }
 }
