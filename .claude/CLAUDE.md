@@ -41,7 +41,7 @@ pnpm typecheck        # TypeScript type checking
 cd examples/react && pnpm dev        # Tailwind CSS example
 cd examples/react-css-only && pnpm dev  # CSS-only example
 cd examples/react-custom && pnpm dev    # Custom trigger/menu example
-cd examples/react-web3auth && pnpm dev  # Web3Auth + export-key plugin (needs VITE_WEB3AUTH_CLIENT_ID)
+cd examples/react-web3auth && pnpm dev  # Web3Auth + export-key plugin (needs VITE_WEB3AUTH_CLIENT_ID; see .env.example)
 cd examples/vue && pnpm dev             # Vue example
 ```
 

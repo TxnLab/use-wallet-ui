@@ -11,15 +11,20 @@ import {
   type Theme,
 } from '@txnlab/use-wallet-ui-react'
 import { exportKeyPlugin } from '@txnlab/use-wallet-ui-react/plugins/export-key'
-import { web3auth } from '@txnlab/use-wallet-web3auth'
+import { web3auth, type Web3AuthOptions } from '@txnlab/use-wallet-web3auth'
 import { useState, useEffect } from 'react'
 
 import { WalletInfo } from './components/WalletInfo'
+
+// Must match the network of the Web3Auth project the client ID belongs to
+const web3AuthNetwork = import.meta.env
+  .VITE_WEB3AUTH_NETWORK as Web3AuthOptions['web3AuthNetwork']
 
 const walletManager = new WalletManager({
   wallets: [
     web3auth({
       clientId: import.meta.env.VITE_WEB3AUTH_CLIENT_ID || 'YOUR_CLIENT_ID',
+      web3AuthNetwork: web3AuthNetwork || 'sapphire_devnet',
     }),
     pera(),
     defly(),
