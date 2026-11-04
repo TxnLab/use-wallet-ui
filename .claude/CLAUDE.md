@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is `@txnlab/use-wallet-ui`, a monorepo providing ready-to-use React UI components for Algorand wallet integration. It's a companion library to `@txnlab/use-wallet` that handles the UI layer for wallet connection, account switching, and display.
+This is `@txnlab/use-wallet-ui`, a monorepo providing ready-to-use React and Vue UI components for Algorand wallet integration. It's a companion library to `@txnlab/use-wallet` that handles the UI layer for wallet connection, account switching, and display.
 
 ## Commands
 
@@ -12,8 +12,9 @@ This is `@txnlab/use-wallet-ui`, a monorepo providing ready-to-use React UI comp
 
 ```bash
 pnpm install          # Install all dependencies
-pnpm build            # Build the React package
-pnpm dev              # Watch mode (in packages/react)
+pnpm build            # Build the React and Vue packages
+pnpm build:examples   # Build all example apps
+pnpm dev              # Watch mode (in packages/react or packages/vue)
 ```
 
 ### Testing
@@ -39,15 +40,22 @@ pnpm typecheck        # TypeScript type checking
 ```bash
 cd examples/react && pnpm dev        # Tailwind CSS example
 cd examples/react-css-only && pnpm dev  # CSS-only example
+cd examples/react-custom && pnpm dev    # Custom trigger/menu example
+cd examples/react-web3auth && pnpm dev  # Web3Auth + export-key plugin (needs VITE_WEB3AUTH_CLIENT_ID)
+cd examples/vue && pnpm dev             # Vue example
 ```
 
 ## Architecture
 
 ### Monorepo Structure (PNPM workspaces)
 
-- `packages/react/` - Main publishable package (`@txnlab/use-wallet-ui-react`)
-- `examples/react/` - Example app with Tailwind CSS
-- `examples/react-css-only/` - Example app without Tailwind
+- `packages/react/` - React package (`@txnlab/use-wallet-ui-react`), released by semantic-release
+- `packages/vue/` - Vue package (`@txnlab/use-wallet-ui-vue`), released manually via the "Release Vue (manual)" workflow
+- `examples/react/` - React example with Tailwind CSS
+- `examples/react-css-only/` - React example without Tailwind
+- `examples/react-custom/` - React example with custom triggers and menus
+- `examples/react-web3auth/` - React example with Web3Auth and the export-key plugin
+- `examples/vue/` - Vue example with Tailwind CSS
 - `e2e/` - Playwright E2E tests
 
 ### React Package Organization (`packages/react/src/`)
@@ -55,13 +63,18 @@ cd examples/react-css-only && pnpm dev  # CSS-only example
 - `components/` - UI components (WalletButton, ConnectWalletMenu, ConnectedWalletMenu, NfdAvatar)
 - `hooks/` - React hooks (useNfd, useAccountInfo, useResolvedTheme)
 - `providers/` - WalletUIProvider (context for NFD lookups, theming, prefetching)
+- `plugins/` - Plugin system and the `export-key` plugin (separate `./plugins/export-key` entry)
 - `utils/` - Utilities (cn for classnames, IPFS URL conversion, font loading)
+
+`packages/vue/src/` mirrors this layout, with `composables/` in place of `hooks/`.
 
 ### Key Dependencies
 
-- Built on `@txnlab/use-wallet-react` v4 and `algosdk` v3
-- Uses `@tanstack/react-query` for data fetching (NFD, account info)
-- Uses `@floating-ui/react` and `@headlessui/react` for dropdowns/dialogs
+- Built on `@txnlab/use-wallet-react` / `@txnlab/use-wallet-vue` and `algosdk` v3. The peer range is `^4.6.0 || ^5.0.0`; devDependencies and examples use v5.
+- Keep the library source compatible with both use-wallet v4 and v5. For example, `ConnectWalletMenu` uses `availableWallets ?? wallets` because v4 has no `availableWallets`.
+- use-wallet v5 configures wallets with adapter factories (`pera()`, `defly()`, …) from separate packages, not the `WalletId` enum.
+- Uses `@tanstack/react-query` / `@tanstack/vue-query` for data fetching (NFD, account info)
+- Uses `@floating-ui/*` and `@headlessui/*` for dropdowns/dialogs
 - Supports both Tailwind CSS and standalone CSS styling
 
 ### Styling System

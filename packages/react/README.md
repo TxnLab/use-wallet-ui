@@ -24,25 +24,38 @@ Ready-to-use React UI components for Algorand wallet integration, built as a com
 ## Installation
 
 ```bash
-npm install @txnlab/use-wallet-ui-react
+npm install @txnlab/use-wallet-ui-react @txnlab/use-wallet-react algosdk
 # or
-yarn add @txnlab/use-wallet-ui-react
+yarn add @txnlab/use-wallet-ui-react @txnlab/use-wallet-react algosdk
 # or
-pnpm add @txnlab/use-wallet-ui-react
+pnpm add @txnlab/use-wallet-ui-react @txnlab/use-wallet-react algosdk
 # or
-bun add @txnlab/use-wallet-ui-react
+bun add @txnlab/use-wallet-ui-react @txnlab/use-wallet-react algosdk
+```
+
+With use-wallet v5, each wallet is a separate adapter package. Install the ones you support:
+
+```bash
+npm install @perawallet/use-wallet-pera @txnlab/use-wallet-defly @galaxypay/use-wallet-lute @txnlab/use-wallet-exodus @txnlab/use-wallet-walletconnect
 ```
 
 ### Requirements
 
-- `@txnlab/use-wallet-react` v4+
+- `@txnlab/use-wallet-react` v4.6+ or v5 (v5 recommended)
 - `algosdk` v3+
 - React 18 or 19
+
+Upgrading from use-wallet v4? See the [use-wallet migration guide](https://txnlab.gitbook.io/use-wallet/guides/migrating-from-v4.x). Only the `WalletManager` configuration changes. This library's components work the same way on both versions.
 
 ## Quick Start
 
 ```jsx
-import { NetworkId, WalletId, WalletManager, WalletProvider } from '@txnlab/use-wallet-react'
+import { lute } from '@galaxypay/use-wallet-lute'
+import { pera } from '@perawallet/use-wallet-pera'
+import { defly } from '@txnlab/use-wallet-defly'
+import { exodus } from '@txnlab/use-wallet-exodus'
+import { NetworkId, WalletManager, WalletProvider } from '@txnlab/use-wallet-react'
+import { walletConnect } from '@txnlab/use-wallet-walletconnect'
 import { WalletUIProvider, WalletButton } from '@txnlab/use-wallet-ui-react'
 
 // Import styles if NOT using Tailwind CSS
@@ -50,14 +63,11 @@ import '@txnlab/use-wallet-ui-react/dist/style.css'
 
 const walletManager = new WalletManager({
   wallets: [
-    WalletId.PERA,
-    WalletId.DEFLY,
-    WalletId.LUTE,
-    WalletId.EXODUS,
-    {
-      id: WalletId.WALLETCONNECT,
-      options: { projectId: 'your-project-id' },
-    },
+    pera(),
+    defly(),
+    lute(),
+    exodus(),
+    walletConnect({ projectId: 'your-project-id' }),
   ],
   defaultNetwork: NetworkId.TESTNET,
 })
@@ -76,7 +86,7 @@ function App() {
 The `WalletButton` handles everything:
 
 - Shows "Connect Wallet" when disconnected
-- Opens wallet selection dialog
+- Opens wallet selection dialog (on v5, lists only the wallets the active network supports)
 - Displays wallet address/NFD name and avatar when connected
 - Provides account switching and disconnect options
 

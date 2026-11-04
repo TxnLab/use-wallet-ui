@@ -1,6 +1,9 @@
+import { lute } from '@galaxypay/use-wallet-lute'
+import { pera } from '@perawallet/use-wallet-pera'
+import { defly } from '@txnlab/use-wallet-defly'
+import { exodus } from '@txnlab/use-wallet-exodus'
 import {
   NetworkId,
-  WalletId,
   WalletManager,
   WalletProvider,
   useWallet,
@@ -13,6 +16,7 @@ import {
   type Theme,
 } from '@txnlab/use-wallet-ui-react'
 import { exportKeyPlugin } from '@txnlab/use-wallet-ui-react/plugins/export-key'
+import { walletConnect } from '@txnlab/use-wallet-walletconnect'
 import { formatShortAddress } from '@txnlab/utils-ts'
 import { useState, useEffect } from 'react'
 
@@ -22,14 +26,11 @@ import './App.css'
 
 const walletManager = new WalletManager({
   wallets: [
-    WalletId.PERA,
-    WalletId.DEFLY,
-    WalletId.LUTE,
-    WalletId.EXODUS,
-    {
-      id: WalletId.WALLETCONNECT,
-      options: { projectId: 'fcfde0713d43baa0d23be0773c80a72b' },
-    },
+    pera(),
+    defly(),
+    lute(),
+    exodus(), // MainNet only, so hidden on TestNet (see availableWallets)
+    walletConnect({ projectId: 'fcfde0713d43baa0d23be0773c80a72b' }),
   ],
   defaultNetwork: NetworkId.TESTNET,
 })
@@ -128,7 +129,9 @@ function App() {
 
             {/* Example 1: Default Button */}
             <section className="section">
-              <h3 className="example-title">1. Default Button (No Customization)</h3>
+              <h3 className="example-title">
+                1. Default Button (No Customization)
+              </h3>
               <p className="example-description">
                 The default WalletButton with no customization.
               </p>
@@ -165,7 +168,9 @@ function App() {
 
             {/* Example 3: CSS Variable Overrides (Global) */}
             <section className="section">
-              <h3 className="example-title">3. CSS Variable Overrides (Global)</h3>
+              <h3 className="example-title">
+                3. CSS Variable Overrides (Global)
+              </h3>
               <p className="example-description">
                 Override CSS variables globally in your stylesheet. See{' '}
                 <code>App.css</code> for the purple button styles.
@@ -210,7 +215,9 @@ function App() {
 
             {/* Example 5: Direct CSS Override */}
             <section className="section">
-              <h3 className="example-title">5. Direct CSS Override (Pill Shape)</h3>
+              <h3 className="example-title">
+                5. Direct CSS Override (Pill Shape)
+              </h3>
               <p className="example-description">
                 Override specific styles directly via CSS selectors.
               </p>

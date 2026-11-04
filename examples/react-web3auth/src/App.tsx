@@ -1,6 +1,7 @@
+import { pera } from '@perawallet/use-wallet-pera'
+import { defly } from '@txnlab/use-wallet-defly'
 import {
   NetworkId,
-  WalletId,
   WalletManager,
   WalletProvider,
 } from '@txnlab/use-wallet-react'
@@ -10,21 +11,18 @@ import {
   type Theme,
 } from '@txnlab/use-wallet-ui-react'
 import { exportKeyPlugin } from '@txnlab/use-wallet-ui-react/plugins/export-key'
+import { web3auth } from '@txnlab/use-wallet-web3auth'
 import { useState, useEffect } from 'react'
 
 import { WalletInfo } from './components/WalletInfo'
 
 const walletManager = new WalletManager({
   wallets: [
-    {
-      id: WalletId.WEB3AUTH,
-      options: {
-        clientId:
-          import.meta.env.VITE_WEB3AUTH_CLIENT_ID || 'YOUR_CLIENT_ID',
-      },
-    },
-    WalletId.PERA,
-    WalletId.DEFLY,
+    web3auth({
+      clientId: import.meta.env.VITE_WEB3AUTH_CLIENT_ID || 'YOUR_CLIENT_ID',
+    }),
+    pera(),
+    defly(),
   ],
   defaultNetwork: NetworkId.MAINNET,
 })
@@ -119,9 +117,9 @@ function App() {
               </p>
               <p className="text-gray-500 dark:text-slate-400 text-sm mt-4">
                 Connect via Web3Auth to see the{' '}
-                <strong>&quot;Export Recovery Phrase&quot;</strong> option in the
-                connected wallet menu. This option only appears for wallets that
-                support private key access.
+                <strong>&quot;Export Recovery Phrase&quot;</strong> option in
+                the connected wallet menu. This option only appears for wallets
+                that support private key access.
               </p>
             </div>
 
