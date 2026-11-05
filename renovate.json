@@ -57,15 +57,15 @@
       "automergeStrategy": "squash"
     },
     {
-      "description": "Pin Node.js to 22.x (LTS)",
+      "description": "Pin Node.js to 24.x (LTS)",
       "matchPackageNames": ["node"],
-      "allowedVersions": "22.x"
+      "allowedVersions": "24.x"
     },
     {
-      "description": "Pin @types/node to 22.x",
+      "description": "Pin @types/node to 24.x",
       "matchManagers": ["npm"],
       "matchPackageNames": ["@types/node"],
-      "allowedVersions": "22.x"
+      "allowedVersions": "24.x"
     },
     {
       "description": "Require dashboard approval for major updates",
