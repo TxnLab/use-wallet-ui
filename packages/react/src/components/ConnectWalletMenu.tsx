@@ -35,8 +35,12 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
     'starting' | 'entered' | 'exiting' | null
   >(null)
 
-  const { wallets, activeAddress } = useWallet()
+  const { wallets, availableWallets, activeAddress } = useWallet()
   const { theme } = useWalletUI()
+
+  // v5 filters wallets by the active network's capabilities (e.g. hides
+  // Mnemonic on MainNet). v4 peers have no `availableWallets`, so fall back.
+  const walletList = availableWallets ?? wallets
 
   // Determine the data-theme attribute for the portal
   // Only set explicit themes, let 'system' use media query fallback
@@ -179,7 +183,7 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
                   {/* Wallet list */}
                   <div className="px-4 pb-3">
                     <WalletList
-                      wallets={wallets}
+                      wallets={walletList}
                       handleWalletClick={handleWalletClick}
                     />
                   </div>

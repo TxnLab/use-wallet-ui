@@ -1,8 +1,9 @@
-import {
-  WalletManagerPlugin,
-  NetworkId,
-  WalletId,
-} from '@txnlab/use-wallet-vue'
+import { lute } from '@galaxypay/use-wallet-lute'
+import { pera } from '@perawallet/use-wallet-pera'
+import { defly } from '@txnlab/use-wallet-defly'
+import { exodus } from '@txnlab/use-wallet-exodus'
+import { WalletManagerPlugin, NetworkId } from '@txnlab/use-wallet-vue'
+import { walletConnect } from '@txnlab/use-wallet-walletconnect'
 import { createApp } from 'vue'
 
 import './index.css'
@@ -12,14 +13,11 @@ const app = createApp(App)
 
 app.use(WalletManagerPlugin, {
   wallets: [
-    WalletId.PERA,
-    WalletId.DEFLY,
-    WalletId.LUTE,
-    WalletId.EXODUS,
-    {
-      id: WalletId.WALLETCONNECT,
-      options: { projectId: 'fcfde0713d43baa0d23be0773c80a72b' },
-    },
+    pera(),
+    defly(),
+    lute(),
+    exodus(), // MainNet only, so hidden on TestNet (see availableWallets)
+    walletConnect({ projectId: 'fcfde0713d43baa0d23be0773c80a72b' }),
   ],
   defaultNetwork: NetworkId.TESTNET,
 })

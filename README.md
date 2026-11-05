@@ -15,16 +15,22 @@ Ready-to-use React and Vue UI components for Algorand wallet integration, built 
 
 ## Quick Start
 
+Works with use-wallet v4.6+ and v5. v5 is recommended, and the examples below use its wallet adapter packages. Upgrading from v4? See the [use-wallet migration guide](https://txnlab.gitbook.io/use-wallet/guides/migrating-from-v4.x).
+
 ### React
 
 ```bash
-npm install @txnlab/use-wallet-ui-react
+npm install @txnlab/use-wallet-ui-react @txnlab/use-wallet-react algosdk
+# Install an adapter for each wallet you support
+npm install @perawallet/use-wallet-pera @txnlab/use-wallet-defly @galaxypay/use-wallet-lute
 ```
 
 ```jsx
+import { lute } from '@galaxypay/use-wallet-lute'
+import { pera } from '@perawallet/use-wallet-pera'
+import { defly } from '@txnlab/use-wallet-defly'
 import {
   NetworkId,
-  WalletId,
   WalletManager,
   WalletProvider,
 } from '@txnlab/use-wallet-react'
@@ -34,7 +40,7 @@ import { WalletUIProvider, WalletButton } from '@txnlab/use-wallet-ui-react'
 import '@txnlab/use-wallet-ui-react/dist/style.css'
 
 const walletManager = new WalletManager({
-  wallets: [WalletId.PERA, WalletId.DEFLY, WalletId.LUTE],
+  wallets: [pera(), defly(), lute()],
   defaultNetwork: NetworkId.TESTNET,
 })
 
@@ -52,27 +58,28 @@ function App() {
 ### Vue
 
 ```bash
-npm install @txnlab/use-wallet-ui-vue @txnlab/use-wallet-vue
+npm install @txnlab/use-wallet-ui-vue @txnlab/use-wallet-vue algosdk
+# Install an adapter for each wallet you support
+npm install @perawallet/use-wallet-pera @txnlab/use-wallet-defly @galaxypay/use-wallet-lute
 ```
 
 ```ts
 // main.ts
 import { createApp } from 'vue'
-import {
-  NetworkId,
-  WalletId,
-  WalletManagerPlugin,
-} from '@txnlab/use-wallet-vue'
+import { lute } from '@galaxypay/use-wallet-lute'
+import { pera } from '@perawallet/use-wallet-pera'
+import { defly } from '@txnlab/use-wallet-defly'
+import { NetworkId, WalletManagerPlugin } from '@txnlab/use-wallet-vue'
 
 // Import styles (skip if using Tailwind CSS)
-import '@txnlab/use-wallet-ui-react/dist/style.css'
+import '@txnlab/use-wallet-ui-vue/dist/style.css'
 
 import App from './App.vue'
 
 const app = createApp(App)
 
 app.use(WalletManagerPlugin, {
-  wallets: [WalletId.PERA, WalletId.DEFLY, WalletId.LUTE],
+  wallets: [pera(), defly(), lute()],
   defaultNetwork: NetworkId.TESTNET,
 })
 

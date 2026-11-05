@@ -7,8 +7,12 @@ import { useWalletUI } from '../providers/walletUIContext'
 import ConnectWalletButton from './ConnectWalletButton.vue'
 import WalletList from './WalletList.vue'
 
-const { wallets, activeAddress } = useWallet()
+const { wallets, availableWallets, activeAddress } = useWallet()
 const { theme } = useWalletUI()
+
+// v5 filters wallets by the active network's capabilities (e.g. hides
+// Mnemonic on MainNet). v4 peers have no `availableWallets`, so fall back.
+const walletList = computed(() => availableWallets?.value ?? wallets.value)
 
 const isOpen = ref(false)
 const animationState = ref<'starting' | 'entered' | 'exiting' | null>(null)
@@ -35,7 +39,7 @@ function closeMenu(): void {
 }
 
 async function handleWalletClick(
-  wallet: (typeof wallets.value)[number],
+  wallet: (typeof walletList.value)[number],
 ): Promise<void> {
   try {
     await wallet.connect()
@@ -109,7 +113,7 @@ async function handleWalletClick(
 
             <div class="px-4 pb-3">
               <WalletList
-                :wallets="wallets"
+                :wallets="walletList"
                 :handle-wallet-click="handleWalletClick"
               />
             </div>

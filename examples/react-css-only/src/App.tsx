@@ -1,6 +1,9 @@
+import { lute } from '@galaxypay/use-wallet-lute'
+import { pera } from '@perawallet/use-wallet-pera'
+import { defly } from '@txnlab/use-wallet-defly'
+import { exodus } from '@txnlab/use-wallet-exodus'
 import {
   NetworkId,
-  WalletId,
   WalletManager,
   WalletProvider,
 } from '@txnlab/use-wallet-react'
@@ -10,6 +13,7 @@ import {
   type Theme,
 } from '@txnlab/use-wallet-ui-react'
 import { exportKeyPlugin } from '@txnlab/use-wallet-ui-react/plugins/export-key'
+import { walletConnect } from '@txnlab/use-wallet-walletconnect'
 import { useState, useEffect } from 'react'
 
 import { WalletInfo } from './components/WalletInfo'
@@ -19,14 +23,11 @@ import './App.css'
 
 const walletManager = new WalletManager({
   wallets: [
-    WalletId.PERA,
-    WalletId.DEFLY,
-    WalletId.LUTE,
-    WalletId.EXODUS,
-    {
-      id: WalletId.WALLETCONNECT,
-      options: { projectId: 'fcfde0713d43baa0d23be0773c80a72b' },
-    },
+    pera(),
+    defly(),
+    lute(),
+    exodus(), // MainNet only, so hidden on TestNet (see availableWallets)
+    walletConnect({ projectId: 'fcfde0713d43baa0d23be0773c80a72b' }),
   ],
   defaultNetwork: NetworkId.TESTNET,
 })
