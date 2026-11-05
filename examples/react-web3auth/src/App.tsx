@@ -29,7 +29,7 @@ const walletManager = new WalletManager({
     pera(),
     defly(),
   ],
-  defaultNetwork: NetworkId.MAINNET,
+  defaultNetwork: NetworkId.TESTNET,
 })
 
 function App() {

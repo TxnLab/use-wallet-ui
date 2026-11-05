@@ -85,28 +85,28 @@ importers:
     dependencies:
       '@galaxypay/use-wallet-lute':
         specifier: ^1.1.0
-        version: 1.1.0(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)
+        version: 1.1.0(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)
       '@perawallet/use-wallet-pera':
         specifier: ^1.0.0
-        version: 1.0.0(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)
+        version: 1.0.0(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)
       '@tailwindcss/vite':
         specifier: ^4.1.0
         version: 4.1.3(vite@6.4.4(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.7.1))
       '@txnlab/use-wallet-defly':
-        specifier: ^5.1.1
-        version: 5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+        specifier: ^5.1.3
+        version: 5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       '@txnlab/use-wallet-exodus':
-        specifier: ^5.1.1
-        version: 5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)
+        specifier: ^5.1.3
+        version: 5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)
       '@txnlab/use-wallet-react':
-        specifier: ^5.1.1
-        version: 5.1.1(algosdk@3.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: ^5.1.3
+        version: 5.1.3(algosdk@3.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@txnlab/use-wallet-ui-react':
         specifier: workspace:*
         version: link:../../packages/react
       '@txnlab/use-wallet-walletconnect':
-        specifier: ^5.1.1
-        version: 5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(@types/react@19.2.8)(algosdk@3.9.0)(bufferutil@4.1.0)(react@19.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
+        specifier: ^5.1.3
+        version: 5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(@types/react@19.2.8)(algosdk@3.9.0)(bufferutil@4.1.0)(react@19.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
       '@txnlab/utils-ts':
         specifier: ^0.1.0
         version: 0.1.0
@@ -143,25 +143,25 @@ importers:
     dependencies:
       '@galaxypay/use-wallet-lute':
         specifier: ^1.1.0
-        version: 1.1.0(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)
+        version: 1.1.0(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)
       '@perawallet/use-wallet-pera':
         specifier: ^1.0.0
-        version: 1.0.0(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)
+        version: 1.0.0(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)
       '@txnlab/use-wallet-defly':
-        specifier: ^5.1.1
-        version: 5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+        specifier: ^5.1.3
+        version: 5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       '@txnlab/use-wallet-exodus':
-        specifier: ^5.1.1
-        version: 5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)
+        specifier: ^5.1.3
+        version: 5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)
       '@txnlab/use-wallet-react':
-        specifier: ^5.1.1
-        version: 5.1.1(algosdk@3.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: ^5.1.3
+        version: 5.1.3(algosdk@3.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@txnlab/use-wallet-ui-react':
         specifier: workspace:*
         version: link:../../packages/react
       '@txnlab/use-wallet-walletconnect':
-        specifier: ^5.1.1
-        version: 5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(@types/react@19.2.8)(algosdk@3.9.0)(bufferutil@4.1.0)(react@19.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
+        specifier: ^5.1.3
+        version: 5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(@types/react@19.2.8)(algosdk@3.9.0)(bufferutil@4.1.0)(react@19.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
       '@txnlab/utils-ts':
         specifier: ^0.1.0
         version: 0.1.0
@@ -195,25 +195,25 @@ importers:
     dependencies:
       '@galaxypay/use-wallet-lute':
         specifier: ^1.1.0
-        version: 1.1.0(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)
+        version: 1.1.0(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)
       '@perawallet/use-wallet-pera':
         specifier: ^1.0.0
-        version: 1.0.0(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)
+        version: 1.0.0(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)
       '@txnlab/use-wallet-defly':
-        specifier: ^5.1.1
-        version: 5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+        specifier: ^5.1.3
+        version: 5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       '@txnlab/use-wallet-exodus':
-        specifier: ^5.1.1
-        version: 5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)
+        specifier: ^5.1.3
+        version: 5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)
       '@txnlab/use-wallet-react':
-        specifier: ^5.1.1
-        version: 5.1.1(algosdk@3.9.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        specifier: ^5.1.3
+        version: 5.1.3(algosdk@3.9.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@txnlab/use-wallet-ui-react':
         specifier: workspace:*
         version: link:../../packages/react
       '@txnlab/use-wallet-walletconnect':
-        specifier: ^5.1.1
-        version: 5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(@types/react@19.2.8)(algosdk@3.9.0)(bufferutil@4.1.0)(react@19.2.3)(typescript@5.9.3)(utf-8-validate@5.0.10)
+        specifier: ^5.1.3
+        version: 5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(@types/react@19.2.8)(algosdk@3.9.0)(bufferutil@4.1.0)(react@19.2.3)(typescript@5.9.3)(utf-8-validate@5.0.10)
       '@txnlab/utils-ts':
         specifier: ^0.1.0
         version: 0.1.0
@@ -247,22 +247,22 @@ importers:
     dependencies:
       '@perawallet/use-wallet-pera':
         specifier: ^1.0.0
-        version: 1.0.0(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)
+        version: 1.0.0(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)
       '@tailwindcss/vite':
         specifier: ^4.1.0
         version: 4.1.3(vite@6.4.4(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.7.1))
       '@txnlab/use-wallet-defly':
-        specifier: ^5.1.1
-        version: 5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+        specifier: ^5.1.3
+        version: 5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(utf-8-validate@6.0.6)
       '@txnlab/use-wallet-react':
-        specifier: ^5.1.1
-        version: 5.1.1(algosdk@3.9.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        specifier: ^5.1.3
+        version: 5.1.3(algosdk@3.9.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@txnlab/use-wallet-ui-react':
         specifier: workspace:*
         version: link:../../packages/react
       '@txnlab/use-wallet-web3auth':
-        specifier: ^5.1.1
-        version: 5.1.1(@babel/runtime@7.29.10)(@sentry/core@9.47.2)(@solana/web3.js@1.99.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6))(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)(utf-8-validate@6.0.6)(viem@2.57.14(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6))(vue@3.5.13(typescript@5.9.3))
+        specifier: ^5.1.3
+        version: 5.1.3(@babel/runtime@7.29.10)(@sentry/core@9.47.2)(@solana/web3.js@1.99.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6))(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)(utf-8-validate@6.0.6)(viem@2.57.14(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6))(vue@3.5.13(typescript@5.9.3))
       '@txnlab/utils-ts':
         specifier: ^0.1.0
         version: 0.1.0
@@ -299,28 +299,28 @@ importers:
     dependencies:
       '@galaxypay/use-wallet-lute':
         specifier: ^1.1.0
-        version: 1.1.0(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)
+        version: 1.1.0(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)
       '@perawallet/use-wallet-pera':
         specifier: ^1.0.0
-        version: 1.0.0(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)
+        version: 1.0.0(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)
       '@tailwindcss/vite':
         specifier: ^4.1.0
         version: 4.1.3(vite@6.4.4(@types/node@22.19.19)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.7.1))
       '@txnlab/use-wallet-defly':
-        specifier: ^5.1.1
-        version: 5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+        specifier: ^5.1.3
+        version: 5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       '@txnlab/use-wallet-exodus':
-        specifier: ^5.1.1
-        version: 5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)
+        specifier: ^5.1.3
+        version: 5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)
       '@txnlab/use-wallet-ui-vue':
         specifier: workspace:*
         version: link:../../packages/vue
       '@txnlab/use-wallet-vue':
-        specifier: ^5.1.1
-        version: 5.1.1(algosdk@3.9.0)(vue@3.5.13(typescript@5.9.3))
+        specifier: ^5.1.3
+        version: 5.1.3(algosdk@3.9.0)(vue@3.5.13(typescript@5.9.3))
       '@txnlab/use-wallet-walletconnect':
-        specifier: ^5.1.1
-        version: 5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
+        specifier: ^5.1.3
+        version: 5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
       '@txnlab/utils-ts':
         specifier: ^0.1.0
         version: 0.1.0
@@ -375,8 +375,8 @@ importers:
         specifier: 4.3.0
         version: 4.3.0
       '@txnlab/use-wallet-react':
-        specifier: ^5.1.1
-        version: 5.1.1(algosdk@3.9.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        specifier: ^5.1.3
+        version: 5.1.3(algosdk@3.9.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@types/react':
         specifier: 19.2.14
         version: 19.2.14
@@ -442,8 +442,8 @@ importers:
         specifier: 4.2.2
         version: 4.2.2
       '@txnlab/use-wallet-vue':
-        specifier: ^5.1.1
-        version: 5.1.1(algosdk@3.9.0)(vue@3.5.13(typescript@5.9.3))
+        specifier: ^5.1.3
+        version: 5.1.3(algosdk@3.9.0)(vue@3.5.13(typescript@5.9.3))
       '@types/node':
         specifier: 22.15.3
         version: 22.15.3
@@ -500,9 +500,6 @@ packages:
 
   '@actions/io@2.0.0':
     resolution: {integrity: sha512-Jv33IN09XLO+0HS79aaODsvIRyduiF7NY/F6LYeK5oeUmrsz7aFdRphQjFoESF4jS7lMauDOttKALcpapVDIAg==}
-
-  '@adraffy/ens-normalize@1.11.0':
-    resolution: {integrity: sha512-/3DDPKHqqIqxUULp8yP4zODUY1i+2xvVWsv8A79xGWdCAG+8sb0hRh0Rk2QyOJUnnbyPUAZYcpBuRe3nS2OIUg==}
 
   '@adraffy/ens-normalize@1.11.1':
     resolution: {integrity: sha512-nhCBV3quEgesuf7c7KYfperqSS14T8bYuvJ8PcLJp6znkZpFc0AuW4qBtr8eKVyPPe/8RSr7sglCWPU5eaxwKQ==}
@@ -577,10 +574,6 @@ packages:
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
-
-  '@babel/runtime@7.28.6':
-    resolution: {integrity: sha512-05WQkdpL9COIMz4LjTxGpPNCdlpyimKppYNoJ5Di5EUObifl8t4tuLuUBBZEpoLYOmfvIWrsp9fCl0HoPRVTdA==}
-    engines: {node: '>=6.9.0'}
 
   '@babel/runtime@7.29.10':
     resolution: {integrity: sha512-NpugTzbKgGrNe45Ui32cN8vCFFMxVtP/9rtfwv0nP5FRDAjvYBxJcLVpYA9mr1jxP6cnIT7x9LUzuDTbWYYNRA==}
@@ -1410,10 +1403,6 @@ packages:
 
   '@noble/hashes@1.7.0':
     resolution: {integrity: sha512-HXydb0DgzTpDPwbVeDGCG1gIu7X6+AuU6Zl6av/E/KG8LMsvPntvq+w17CHRpKBmN6Ybdrt1eP3k4cj8DJa78w==}
-    engines: {node: ^14.21.3 || >=16}
-
-  '@noble/hashes@1.7.1':
-    resolution: {integrity: sha512-B8XBPsn4vT/KJAGqDzbwztd+6Yte3P4V7iafm24bxgDe/mlRuK6xmWPuCNrKt2vDafZ8MfJLlchDG/vYafQEjQ==}
     engines: {node: ^14.21.3 || >=16}
 
   '@noble/hashes@1.8.0':
@@ -2508,51 +2497,51 @@ packages:
   '@toruslabs/tweetnacl-js@1.0.4':
     resolution: {integrity: sha512-h8fVemW5pstsKbm/fTx+y61dZkh5Pepy/92lsyKp83KErf96jT+w4LGx4nEgeAVrdYQDTLg2tO7vu/boEb23Iw==}
 
-  '@txnlab/use-wallet-defly@5.1.1':
-    resolution: {integrity: sha512-EdAtXdMHYtZJ4Nl2IYF+lJB5ua+eLMfswz9FdmgHp6UZM3VZWgaAIiMuwyMlBoK6ju47PFIXtM6G41FLzb3t7g==}
+  '@txnlab/use-wallet-defly@5.1.3':
+    resolution: {integrity: sha512-MD8HhCY3dy5Csc82FoYWlNYppb/VaojgIaoCB3piwCKAE9nkor0BI9lrTGfHTgQpNkAb6L7MWt9P/S8tMrijLA==}
     engines: {node: '>=22'}
     peerDependencies:
-      '@txnlab/use-wallet': ^5.1.1
+      '@txnlab/use-wallet': ^5.1.3
       algosdk: ^3.0.0
 
-  '@txnlab/use-wallet-exodus@5.1.1':
-    resolution: {integrity: sha512-mdENth81fjsNxTpqMxsqd3Xe0qxRTK3KTA1D8hfdOpTk2QDYJdsRrfpxVWJ7EWnE9drJrWQ3Pedl+Ku3Gn1rCQ==}
+  '@txnlab/use-wallet-exodus@5.1.3':
+    resolution: {integrity: sha512-6aIYGSPZbLSh+ImUVbTawsEAJUdoB42Z6jDZ97O8Opt9OFGUYeujlikH8eUp5Uptp1anOTsTlVWaeWdhv5t16A==}
     engines: {node: '>=22'}
     peerDependencies:
-      '@txnlab/use-wallet': ^5.1.1
+      '@txnlab/use-wallet': ^5.1.3
       algosdk: ^3.0.0
 
-  '@txnlab/use-wallet-react@5.1.1':
-    resolution: {integrity: sha512-EFEQqMohEDApclgfvb3I2pBH7kTxeT3FItascjp2IpE+FVr87tNHnQMIsCfA0Vgf6/InqUEONViJEjHYTPjaeQ==}
+  '@txnlab/use-wallet-react@5.1.3':
+    resolution: {integrity: sha512-/uRJ+dliAylhJjnTo2RXodCnuDnwYj9pqzHJ1EorLG3O/Zqp/LygbBE8n6gsB5RWvWwwOjCp3y+sOPq9eWuXdw==}
     engines: {node: '>=22'}
     peerDependencies:
       algosdk: ^3.0.0
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  '@txnlab/use-wallet-vue@5.1.1':
-    resolution: {integrity: sha512-HIK9CUJ75oP/NYhjs63U5eSzXHNH07TAOTGxASvLHlvtmU0IgJEjGayBk7ODZRp+mZnkEc2NjsApaTHSb04SwQ==}
+  '@txnlab/use-wallet-vue@5.1.3':
+    resolution: {integrity: sha512-zWArHl19Z/0JlgFBUmg5Beu7iKBOOC+2KQ+Pcn45ePmQvCj3LtkCXkRKW60t4xlasRWIMA6PqjXsUfD/VNdQOw==}
     engines: {node: '>=22'}
     peerDependencies:
       algosdk: ^3.0.0
       vue: ^3.0.0
 
-  '@txnlab/use-wallet-walletconnect@5.1.1':
-    resolution: {integrity: sha512-DjLl399OMIQt5DYiEP7pMN5H6aFUZ7JDFfQbevkIuWTfpOGxlHZHt40WghVLJwOPpZXp8MoAzb7ptjNXL68vuA==}
+  '@txnlab/use-wallet-walletconnect@5.1.3':
+    resolution: {integrity: sha512-vSUwNuLmCx4+3a+X2ICU3GThYbdXfSo+ncT3ngDppuQ34aRujh96D+bdv7jVXcVNEfUNBCmGv9xOU5rIh6oQeg==}
     engines: {node: '>=22'}
     peerDependencies:
-      '@txnlab/use-wallet': ^5.1.1
+      '@txnlab/use-wallet': ^5.1.3
       algosdk: ^3.0.0
 
-  '@txnlab/use-wallet-web3auth@5.1.1':
-    resolution: {integrity: sha512-ceLyzoTST4jEUq9j95u6LFBEQ3GWo9lrabA0tKCnMqbbFyE0sME/LdnCLyr6eVr8clx7WXLAaZamh4tvDICs2g==}
+  '@txnlab/use-wallet-web3auth@5.1.3':
+    resolution: {integrity: sha512-aVYorvzwmWzAi+B+PvkgWV+H3PRDHqVNgVyauC9a6eGrvby9nGaWymdWe1m8Kv0788wk0OEg8abl3Jnff1/0iQ==}
     engines: {node: '>=22'}
     peerDependencies:
-      '@txnlab/use-wallet': ^5.1.1
+      '@txnlab/use-wallet': ^5.1.3
       algosdk: ^3.0.0
 
-  '@txnlab/use-wallet@5.1.1':
-    resolution: {integrity: sha512-Coz34EUz7rw9LDRbhtcsKSpRi/28SMMNXRI5/mwbcZuZlb6JdTlQbbxHLw/OY5FDmLE1K3qCgf9jfSMW2rzQAQ==}
+  '@txnlab/use-wallet@5.1.3':
+    resolution: {integrity: sha512-yICfkoPXWCgOOBnlfnZxbZqMtmPel8b7Ap0EBRlfRA0JfMbH1xbCWHN0F6DCtuIP+fRs7d/YsHAdt8//MTgABg==}
     engines: {node: '>=22'}
     peerDependencies:
       algosdk: ^3.7.0
@@ -3397,9 +3386,6 @@ packages:
   bn.js@4.12.2:
     resolution: {integrity: sha512-n4DSx829VRTRByMRGdjQ9iqsN0Bh4OolPsFnaZBLcbi8iXcB+kJ9s7EnRt4wILZNV3kPLHkRVfOc/HvhC3ovDw==}
 
-  bn.js@5.2.2:
-    resolution: {integrity: sha512-v2YAxEmKaBLahNwE1mjp4WON6huMNeuDvagFZW+ASCuA/ku0bXR9hSMw0XpiqMoA3+rmnyck/tPRSFQkoC9Cuw==}
-
   bn.js@5.2.5:
     resolution: {integrity: sha512-Vq886eXykuP5E6HcKSSStP3bJgrE6In5WKxVUvJ8XGpWWYs2xZHWqUwzCtGgEtBcxyd57KBFDPFoUfNzdaHCNg==}
 
@@ -3958,9 +3944,6 @@ packages:
 
   encode-utf8@1.0.3:
     resolution: {integrity: sha512-ucAnuBEhUK4boH2HjVYG5Q2mQyPorvv0u/ocS+zhdw0S8AlHYY+GOFhP1Gio5z4icpP2ivFSvhtFjQi8+T9ppw==}
-
-  end-of-stream@1.4.4:
-    resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
 
   end-of-stream@1.4.5:
     resolution: {integrity: sha512-ooEGc6HP26xXq/N+GCGOT0JKCLDGrq2bQUZrQ7gyrJiZANJ/8YDTxTpQBXGMn+WbIQXNVpyWymm7KYVICQnyOg==}
@@ -7312,8 +7295,6 @@ snapshots:
 
   '@actions/io@2.0.0': {}
 
-  '@adraffy/ens-normalize@1.11.0': {}
-
   '@adraffy/ens-normalize@1.11.1': {}
 
   '@ampproject/remapping@2.3.0':
@@ -7407,8 +7388,6 @@ snapshots:
     dependencies:
       '@babel/core': 7.26.10
       '@babel/helper-plugin-utils': 7.26.5
-
-  '@babel/runtime@7.28.6': {}
 
   '@babel/runtime@7.29.10': {}
 
@@ -7816,10 +7795,10 @@ snapshots:
 
   '@galaxypay/lute-connect@3.3.2': {}
 
-  '@galaxypay/use-wallet-lute@1.1.0(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)':
+  '@galaxypay/use-wallet-lute@1.1.0(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)':
     dependencies:
       '@galaxypay/lute-connect': 3.3.2
-      '@txnlab/use-wallet': 5.1.1(algosdk@3.9.0)
+      '@txnlab/use-wallet': 5.1.3(algosdk@3.9.0)
       algosdk: 3.9.0
 
   '@hcaptcha/react-hcaptcha@2.2.0': {}
@@ -8065,7 +8044,7 @@ snapshots:
 
   '@metamask/sdk@0.34.0(bufferutil@4.1.0)(utf-8-validate@6.0.6)':
     dependencies:
-      '@babel/runtime': 7.28.6
+      '@babel/runtime': 7.29.10
       '@metamask/onboarding': 1.0.1
       '@metamask/providers': 16.1.0
       '@metamask/sdk-analytics': 0.0.5
@@ -8320,8 +8299,6 @@ snapshots:
 
   '@noble/hashes@1.7.0': {}
 
-  '@noble/hashes@1.7.1': {}
-
   '@noble/hashes@1.8.0': {}
 
   '@noble/hashes@2.4.0': {}
@@ -8480,10 +8457,10 @@ snapshots:
       tslib: 2.8.1
       tweetnacl-ts: 1.0.3
 
-  '@perawallet/use-wallet-pera@1.0.0(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)':
+  '@perawallet/use-wallet-pera@1.0.0(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)':
     dependencies:
       '@perawallet/connect': 1.7.0(algosdk@3.9.0)
-      '@txnlab/use-wallet': 5.1.1(algosdk@3.9.0)
+      '@txnlab/use-wallet': 5.1.3(algosdk@3.9.0)
       algosdk: 3.9.0
 
   '@perawallet/walletconnect@1.0.2':
@@ -9241,7 +9218,7 @@ snapshots:
       '@web3auth/auth': 9.6.4(@babel/runtime@7.29.10)(bufferutil@4.1.0)(utf-8-validate@6.0.6)
       async-mutex: 0.5.0
       bignumber.js: 9.3.1
-      bowser: 2.11.0
+      bowser: 2.15.0
       jwt-decode: 4.0.0
       loglevel: 1.9.2
     transitivePeerDependencies:
@@ -9259,7 +9236,7 @@ snapshots:
       '@web3auth/auth': 9.6.4(@babel/runtime@7.29.10)(bufferutil@4.1.0)(utf-8-validate@6.0.6)
       async-mutex: 0.5.0
       bignumber.js: 9.3.1
-      bowser: 2.11.0
+      bowser: 2.15.0
       jwt-decode: 4.0.0
       loglevel: 1.9.2
     transitivePeerDependencies:
@@ -9291,9 +9268,9 @@ snapshots:
 
   '@toruslabs/broadcast-channel@11.0.0(bufferutil@4.1.0)(utf-8-validate@6.0.6)':
     dependencies:
-      '@babel/runtime': 7.28.6
+      '@babel/runtime': 7.29.10
       '@toruslabs/eccrypto': 5.0.4
-      '@toruslabs/metadata-helpers': 6.0.0(@babel/runtime@7.28.6)
+      '@toruslabs/metadata-helpers': 6.0.0(@babel/runtime@7.29.10)
       loglevel: 1.9.2
       oblivious-set: 1.4.0
       socket.io-client: 4.8.3(bufferutil@4.1.0)(utf-8-validate@6.0.6)
@@ -9306,10 +9283,10 @@ snapshots:
 
   '@toruslabs/broadcast-channel@12.0.0(@sentry/core@9.47.2)(bufferutil@4.1.0)(utf-8-validate@6.0.6)':
     dependencies:
-      '@babel/runtime': 7.28.6
-      '@toruslabs/constants': 14.2.0(@babel/runtime@7.28.6)
+      '@babel/runtime': 7.29.10
+      '@toruslabs/constants': 14.2.0(@babel/runtime@7.29.10)
       '@toruslabs/eccrypto': 6.2.0
-      '@toruslabs/metadata-helpers': 7.0.2(@babel/runtime@7.28.6)(@sentry/core@9.47.2)
+      '@toruslabs/metadata-helpers': 7.0.2(@babel/runtime@7.29.10)(@sentry/core@9.47.2)
       base64url: 3.0.1
       loglevel: 1.9.2
       oblivious-set: 1.4.0
@@ -9324,10 +9301,6 @@ snapshots:
   '@toruslabs/bs58@1.0.0(@babel/runtime@7.29.10)':
     dependencies:
       '@babel/runtime': 7.29.10
-
-  '@toruslabs/constants@14.2.0(@babel/runtime@7.28.6)':
-    dependencies:
-      '@babel/runtime': 7.28.6
 
   '@toruslabs/constants@14.2.0(@babel/runtime@7.29.10)':
     dependencies:
@@ -9382,7 +9355,7 @@ snapshots:
       '@web3auth/auth': 10.8.0(@babel/runtime@7.29.10)(@sentry/core@9.47.2)(bufferutil@4.1.0)(color@5.0.3)(utf-8-validate@6.0.6)
       async-mutex: 0.5.0
       bignumber.js: 9.3.1
-      bn.js: 5.2.2
+      bn.js: 5.2.5
       deepmerge: 4.3.1
       ethereum-cryptography: 3.2.0
       ethers: 6.17.0(bufferutil@4.1.0)(utf-8-validate@6.0.6)
@@ -9425,25 +9398,11 @@ snapshots:
       '@babel/runtime': 7.29.10
       '@toruslabs/constants': 15.0.0(@babel/runtime@7.29.10)
 
-  '@toruslabs/http-helpers@7.0.1(@babel/runtime@7.28.6)':
-    dependencies:
-      '@babel/runtime': 7.28.6
-      deepmerge: 4.3.1
-      loglevel: 1.9.2
-
   '@toruslabs/http-helpers@7.0.1(@babel/runtime@7.29.10)':
     dependencies:
       '@babel/runtime': 7.29.10
       deepmerge: 4.3.1
       loglevel: 1.9.2
-
-  '@toruslabs/http-helpers@8.1.1(@babel/runtime@7.28.6)(@sentry/core@9.47.2)':
-    dependencies:
-      '@babel/runtime': 7.28.6
-      deepmerge: 4.3.1
-      loglevel: 1.9.2
-    optionalDependencies:
-      '@sentry/core': 9.47.2
 
   '@toruslabs/http-helpers@8.1.1(@babel/runtime@7.29.10)(@sentry/core@9.47.2)':
     dependencies:
@@ -9459,17 +9418,6 @@ snapshots:
       '@sentry/core': 9.47.2
       loglevel: 1.9.2
 
-  '@toruslabs/metadata-helpers@6.0.0(@babel/runtime@7.28.6)':
-    dependencies:
-      '@babel/runtime': 7.28.6
-      '@toruslabs/eccrypto': 5.0.4
-      '@toruslabs/http-helpers': 7.0.1(@babel/runtime@7.28.6)
-      elliptic: 6.6.1
-      ethereum-cryptography: 2.2.1
-      json-stable-stringify: 1.3.0
-    transitivePeerDependencies:
-      - '@sentry/types'
-
   '@toruslabs/metadata-helpers@6.0.0(@babel/runtime@7.29.10)':
     dependencies:
       '@babel/runtime': 7.29.10
@@ -9480,17 +9428,6 @@ snapshots:
       json-stable-stringify: 1.3.0
     transitivePeerDependencies:
       - '@sentry/types'
-
-  '@toruslabs/metadata-helpers@7.0.2(@babel/runtime@7.28.6)(@sentry/core@9.47.2)':
-    dependencies:
-      '@babel/runtime': 7.28.6
-      '@toruslabs/eccrypto': 6.2.0
-      '@toruslabs/http-helpers': 8.1.1(@babel/runtime@7.28.6)(@sentry/core@9.47.2)
-      elliptic: 6.6.1
-      ethereum-cryptography: 3.2.0
-      json-stable-stringify: 1.3.0
-    transitivePeerDependencies:
-      - '@sentry/core'
 
   '@toruslabs/metadata-helpers@7.0.2(@babel/runtime@7.29.10)(@sentry/core@9.47.2)':
     dependencies:
@@ -9562,7 +9499,7 @@ snapshots:
       '@babel/runtime': 7.29.10
       assert: 2.1.0
       bip39: 3.1.0
-      bn.js: 5.2.2
+      bn.js: 5.2.5
       elliptic: 6.6.1
       enc-utils: 3.0.0
       ethereum-cryptography: 2.2.1
@@ -9573,7 +9510,7 @@ snapshots:
       '@babel/runtime': 7.29.10
       assert: 2.1.0
       bip39: 3.1.0
-      bn.js: 5.2.2
+      bn.js: 5.2.5
       elliptic: 6.6.1
       enc-utils: 3.0.0
       ethereum-cryptography: 3.2.0
@@ -9586,7 +9523,7 @@ snapshots:
       '@toruslabs/constants': 14.2.0(@babel/runtime@7.29.10)
       '@toruslabs/eccrypto': 5.0.4
       '@toruslabs/http-helpers': 7.0.1(@babel/runtime@7.29.10)
-      bn.js: 5.2.2
+      bn.js: 5.2.5
       elliptic: 6.6.1
       ethereum-cryptography: 2.2.1
       json-stable-stringify: 1.3.0
@@ -9601,7 +9538,7 @@ snapshots:
       '@toruslabs/constants': 15.0.0(@babel/runtime@7.29.10)
       '@toruslabs/eccrypto': 6.2.0
       '@toruslabs/http-helpers': 8.1.1(@babel/runtime@7.29.10)(@sentry/core@9.47.2)
-      bn.js: 5.2.2
+      bn.js: 5.2.5
       elliptic: 6.6.1
       ethereum-cryptography: 3.2.0
       json-stable-stringify: 1.3.0
@@ -9611,73 +9548,73 @@ snapshots:
 
   '@toruslabs/tweetnacl-js@1.0.4': {}
 
-  '@txnlab/use-wallet-defly@5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(utf-8-validate@5.0.10)':
+  '@txnlab/use-wallet-defly@5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(utf-8-validate@5.0.10)':
     dependencies:
       '@blockshake/defly-connect': 1.2.1(algosdk@3.9.0)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
-      '@txnlab/use-wallet': 5.1.1(algosdk@3.9.0)
+      '@txnlab/use-wallet': 5.1.3(algosdk@3.9.0)
       algosdk: 3.9.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  '@txnlab/use-wallet-defly@5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(utf-8-validate@6.0.6)':
+  '@txnlab/use-wallet-defly@5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(utf-8-validate@6.0.6)':
     dependencies:
       '@blockshake/defly-connect': 1.2.1(algosdk@3.9.0)(bufferutil@4.1.0)(utf-8-validate@6.0.6)
-      '@txnlab/use-wallet': 5.1.1(algosdk@3.9.0)
+      '@txnlab/use-wallet': 5.1.3(algosdk@3.9.0)
       algosdk: 3.9.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  '@txnlab/use-wallet-exodus@5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)':
+  '@txnlab/use-wallet-exodus@5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)':
     dependencies:
-      '@txnlab/use-wallet': 5.1.1(algosdk@3.9.0)
+      '@txnlab/use-wallet': 5.1.3(algosdk@3.9.0)
       algosdk: 3.9.0
 
-  '@txnlab/use-wallet-react@5.1.1(algosdk@3.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@txnlab/use-wallet-react@5.1.3(algosdk@3.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@tanstack/react-store': 0.11.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@txnlab/use-wallet': 5.1.1(algosdk@3.9.0)
+      '@txnlab/use-wallet': 5.1.3(algosdk@3.9.0)
       algosdk: 3.9.0
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
-  '@txnlab/use-wallet-react@5.1.1(algosdk@3.9.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+  '@txnlab/use-wallet-react@5.1.3(algosdk@3.9.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
       '@tanstack/react-store': 0.11.2(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-      '@txnlab/use-wallet': 5.1.1(algosdk@3.9.0)
+      '@txnlab/use-wallet': 5.1.3(algosdk@3.9.0)
       algosdk: 3.9.0
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
 
-  '@txnlab/use-wallet-react@5.1.1(algosdk@3.9.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+  '@txnlab/use-wallet-react@5.1.3(algosdk@3.9.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@tanstack/react-store': 0.11.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      '@txnlab/use-wallet': 5.1.1(algosdk@3.9.0)
+      '@txnlab/use-wallet': 5.1.3(algosdk@3.9.0)
       algosdk: 3.9.0
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
 
-  '@txnlab/use-wallet-react@5.1.1(algosdk@3.9.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+  '@txnlab/use-wallet-react@5.1.3(algosdk@3.9.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
     dependencies:
       '@tanstack/react-store': 0.11.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@txnlab/use-wallet': 5.1.1(algosdk@3.9.0)
+      '@txnlab/use-wallet': 5.1.3(algosdk@3.9.0)
       algosdk: 3.9.0
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
 
-  '@txnlab/use-wallet-vue@5.1.1(algosdk@3.9.0)(vue@3.5.13(typescript@5.9.3))':
+  '@txnlab/use-wallet-vue@5.1.3(algosdk@3.9.0)(vue@3.5.13(typescript@5.9.3))':
     dependencies:
       '@tanstack/vue-store': 0.11.2(vue@3.5.13(typescript@5.9.3))
-      '@txnlab/use-wallet': 5.1.1(algosdk@3.9.0)
+      '@txnlab/use-wallet': 5.1.3(algosdk@3.9.0)
       algosdk: 3.9.0
       vue: 3.5.13(typescript@5.9.3)
     transitivePeerDependencies:
       - '@vue/composition-api'
 
-  '@txnlab/use-wallet-walletconnect@5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(@types/react@19.2.8)(algosdk@3.9.0)(bufferutil@4.1.0)(react@19.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)':
+  '@txnlab/use-wallet-walletconnect@5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(@types/react@19.2.8)(algosdk@3.9.0)(bufferutil@4.1.0)(react@19.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)':
     dependencies:
-      '@txnlab/use-wallet': 5.1.1(algosdk@3.9.0)
+      '@txnlab/use-wallet': 5.1.3(algosdk@3.9.0)
       '@walletconnect/modal': 2.7.0(@types/react@19.2.8)(react@19.1.0)
       '@walletconnect/sign-client': 2.26.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
       '@walletconnect/types': 2.26.0
@@ -9708,9 +9645,9 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@txnlab/use-wallet-walletconnect@5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(@types/react@19.2.8)(algosdk@3.9.0)(bufferutil@4.1.0)(react@19.2.3)(typescript@5.9.3)(utf-8-validate@5.0.10)':
+  '@txnlab/use-wallet-walletconnect@5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(@types/react@19.2.8)(algosdk@3.9.0)(bufferutil@4.1.0)(react@19.2.3)(typescript@5.9.3)(utf-8-validate@5.0.10)':
     dependencies:
-      '@txnlab/use-wallet': 5.1.1(algosdk@3.9.0)
+      '@txnlab/use-wallet': 5.1.3(algosdk@3.9.0)
       '@walletconnect/modal': 2.7.0(@types/react@19.2.8)(react@19.2.3)
       '@walletconnect/sign-client': 2.26.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
       '@walletconnect/types': 2.26.0
@@ -9741,9 +9678,9 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@txnlab/use-wallet-walletconnect@5.1.1(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)':
+  '@txnlab/use-wallet-walletconnect@5.1.3(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)':
     dependencies:
-      '@txnlab/use-wallet': 5.1.1(algosdk@3.9.0)
+      '@txnlab/use-wallet': 5.1.3(algosdk@3.9.0)
       '@walletconnect/modal': 2.7.0
       '@walletconnect/sign-client': 2.26.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
       '@walletconnect/types': 2.26.0
@@ -9774,9 +9711,9 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@txnlab/use-wallet-web3auth@5.1.1(@babel/runtime@7.29.10)(@sentry/core@9.47.2)(@solana/web3.js@1.99.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6))(@txnlab/use-wallet@5.1.1(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)(utf-8-validate@6.0.6)(viem@2.57.14(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6))(vue@3.5.13(typescript@5.9.3))':
+  '@txnlab/use-wallet-web3auth@5.1.3(@babel/runtime@7.29.10)(@sentry/core@9.47.2)(@solana/web3.js@1.99.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6))(@txnlab/use-wallet@5.1.3(algosdk@3.9.0))(algosdk@3.9.0)(bufferutil@4.1.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)(utf-8-validate@6.0.6)(viem@2.57.14(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6))(vue@3.5.13(typescript@5.9.3))':
     dependencies:
-      '@txnlab/use-wallet': 5.1.1(algosdk@3.9.0)
+      '@txnlab/use-wallet': 5.1.3(algosdk@3.9.0)
       '@web3auth/base-provider': 9.7.0(@babel/runtime@7.29.10)(bufferutil@4.1.0)(utf-8-validate@6.0.6)
       '@web3auth/modal': 10.16.0(@babel/runtime@7.29.10)(@sentry/core@9.47.2)(@solana/web3.js@1.99.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6))(bufferutil@4.1.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)(utf-8-validate@6.0.6)(viem@2.57.14(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6))(vue@3.5.13(typescript@5.9.3))
       '@web3auth/single-factor-auth': 9.5.0(@babel/runtime@7.29.10)(bufferutil@4.1.0)(utf-8-validate@6.0.6)
@@ -9818,7 +9755,7 @@ snapshots:
       - vue
       - zod
 
-  '@txnlab/use-wallet@5.1.1(algosdk@3.9.0)':
+  '@txnlab/use-wallet@5.1.3(algosdk@3.9.0)':
     dependencies:
       '@tanstack/store': 0.11.2
       algosdk: 3.9.0
@@ -10849,7 +10786,7 @@ snapshots:
       '@toruslabs/tweetnacl-js': 1.0.4
       base64url: 3.0.1
       bip39: 3.1.0
-      bn.js: 5.2.2
+      bn.js: 5.2.5
       color: 5.0.3
       deepmerge: 4.3.1
       enc-utils: 3.0.0
@@ -10884,11 +10821,11 @@ snapshots:
       '@toruslabs/tweetnacl-js': 1.0.4
       base64url: 3.0.1
       bip39: 3.1.0
-      bn.js: 5.2.2
-      bowser: 2.11.0
+      bn.js: 5.2.5
+      bowser: 2.15.0
       color: 4.2.3
       enc-utils: 3.0.0
-      end-of-stream: 1.4.4
+      end-of-stream: 1.4.5
       events: 3.3.0
       fast-safe-stringify: 2.1.1
       json-stable-stringify: 1.3.0
@@ -11016,7 +10953,7 @@ snapshots:
       '@web3auth/ws-embed': 5.6.0(@babel/runtime@7.29.10)(@sentry/core@9.47.2)(bufferutil@4.1.0)(color@5.0.3)(utf-8-validate@6.0.6)
       assert: 2.1.0
       bignumber.js: 9.3.1
-      bn.js: 5.2.2
+      bn.js: 5.2.5
       bowser: 2.15.0
       deepmerge: 4.3.1
       ethers: 6.17.0(bufferutil@4.1.0)(utf-8-validate@6.0.6)
@@ -11361,15 +11298,13 @@ snapshots:
 
   bip39@3.1.0:
     dependencies:
-      '@noble/hashes': 1.7.1
+      '@noble/hashes': 1.8.0
 
   blakejs@1.2.1: {}
 
   bn.js@4.11.8: {}
 
   bn.js@4.12.2: {}
-
-  bn.js@5.2.2: {}
 
   bn.js@5.2.5: {}
 
@@ -11432,13 +11367,13 @@ snapshots:
 
   browserify-rsa@4.1.1:
     dependencies:
-      bn.js: 5.2.2
+      bn.js: 5.2.5
       randombytes: 2.1.0
       safe-buffer: 5.2.1
 
   browserify-sign@4.2.5:
     dependencies:
-      bn.js: 5.2.2
+      bn.js: 5.2.5
       browserify-rsa: 4.1.1
       create-hash: 1.2.0
       create-hmac: 1.1.7
@@ -11809,7 +11744,7 @@ snapshots:
 
   date-fns@2.30.0:
     dependencies:
-      '@babel/runtime': 7.28.6
+      '@babel/runtime': 7.29.10
 
   de-indent@1.0.2: {}
 
@@ -11955,10 +11890,6 @@ snapshots:
       typedarray-to-buffer: 3.1.5
 
   encode-utf8@1.0.3: {}
-
-  end-of-stream@1.4.4:
-    dependencies:
-      once: 1.4.0
 
   end-of-stream@1.4.5:
     dependencies:
@@ -13641,7 +13572,7 @@ snapshots:
 
   obj-multiplex@1.0.0:
     dependencies:
-      end-of-stream: 1.4.4
+      end-of-stream: 1.4.5
       once: 1.4.0
       readable-stream: 2.3.8
 
@@ -13751,7 +13682,7 @@ snapshots:
 
   ox@0.9.3(typescript@5.9.3):
     dependencies:
-      '@adraffy/ens-normalize': 1.11.0
+      '@adraffy/ens-normalize': 1.11.1
       '@noble/ciphers': 1.3.0
       '@noble/curves': 1.9.1
       '@noble/hashes': 1.8.0
@@ -14294,7 +14225,7 @@ snapshots:
 
   ripple-keypairs@1.4.0:
     dependencies:
-      bn.js: 5.2.2
+      bn.js: 5.2.5
       brorand: 1.1.0
       elliptic: 6.6.1
       hash.js: 1.1.7
