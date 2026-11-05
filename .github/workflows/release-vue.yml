@@ -6,10 +6,9 @@ name: Release Vue (manual)
 # handles the React package). Bump packages/vue/package.json "version" in a
 # commit/PR first, then trigger this workflow from the Actions tab.
 #
-# Auth: runs with id-token: write so npm provenance is generated. The first
-# publish of the (new) package name uses the NPM_TOKEN secret; once the package
-# exists and trusted publishing is configured on npmjs.com, NODE_AUTH_TOKEN
-# resolves to empty and the publish authenticates tokenlessly via OIDC.
+# Auth: npm trusted publishing (OIDC), like release.yml. The package's trusted
+# publisher on npmjs.com must name this workflow file (release-vue.yml). No npm
+# token is used; id-token: write also lets npm sign provenance.
 
 on:
   workflow_dispatch:
@@ -65,12 +64,8 @@ jobs:
         if: ${{ inputs.dry_run }}
         working-directory: packages/vue
         run: npm publish --dry-run
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish
         if: ${{ !inputs.dry_run }}
         working-directory: packages/vue
         run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
