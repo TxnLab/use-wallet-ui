@@ -18,7 +18,7 @@
     "@txnlab/use-wallet-vue": "^5.1.1",
     "@txnlab/use-wallet-walletconnect": "^5.1.1",
     "@txnlab/utils-ts": "^0.1.0",
-    "algosdk": "^3.5.2",
+    "algosdk": "^3.7.0",
     "tailwindcss": "^4.0.17",
     "vue": "^3.3"
   },

@@ -16,7 +16,7 @@
     "@txnlab/use-wallet-ui-react": "workspace:*",
     "@txnlab/use-wallet-web3auth": "^5.1.1",
     "@txnlab/utils-ts": "^0.1.0",
-    "algosdk": "^3.5.2",
+    "algosdk": "^3.7.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwindcss": "^4.0.17"

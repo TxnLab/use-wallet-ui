@@ -42,7 +42,7 @@ npm install @perawallet/use-wallet-pera @txnlab/use-wallet-defly @galaxypay/use-
 ### Requirements
 
 - `@txnlab/use-wallet-react` v4.6+ or v5 (v5 recommended)
-- `algosdk` v3+
+- `algosdk` v3 (v3.7+ with use-wallet v5.1+)
 - React 18 or 19
 
 Upgrading from use-wallet v4? See the [use-wallet migration guide](https://txnlab.gitbook.io/use-wallet/guides/migrating-from-v4.x). Only the `WalletManager` configuration changes. This library's components work the same way on both versions.

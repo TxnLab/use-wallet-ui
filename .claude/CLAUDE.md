@@ -70,7 +70,7 @@ cd examples/vue && pnpm dev             # Vue example
 
 ### Key Dependencies
 
-- Built on `@txnlab/use-wallet-react` / `@txnlab/use-wallet-vue` and `algosdk` v3. The peer range is `^4.6.0 || ^5.0.0`; devDependencies and examples use v5.
+- Built on `@txnlab/use-wallet-react` / `@txnlab/use-wallet-vue` and `algosdk` v3 (use-wallet core 5.1+ requires `^3.7.0`). The peer range is `^4.6.0 || ^5.0.0`; devDependencies and examples use v5.
 - Keep the library source compatible with both use-wallet v4 and v5. For example, `ConnectWalletMenu` uses `availableWallets ?? wallets` because v4 has no `availableWallets`.
 - use-wallet v5 configures wallets with adapter factories (`pera()`, `defly()`, …) from separate packages, not the `WalletId` enum.
 - Uses `@tanstack/react-query` / `@tanstack/vue-query` for data fetching (NFD, account info)
