@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/TxnLab/use-wallet-ui/compare/v1.2.1...v1.3.0) (2026-11-05)
+
+
+### Features
+
+* support @txnlab/use-wallet v5 ([15c01e9](https://github.com/TxnLab/use-wallet-ui/commit/15c01e95e72db5950fa7c07e7f9b3cbba84f7cfe))
+
 ## [1.2.1](https://github.com/TxnLab/use-wallet-ui/compare/v1.2.0...v1.2.1) (2026-06-08)
 
 
