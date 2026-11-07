@@ -3,6 +3,13 @@ import { computed, ref } from 'vue'
 import { useWallet } from '@txnlab/use-wallet-vue'
 
 import { useWalletUI } from '../providers/walletUIContext'
+import {
+  getPasskeyErrorCode,
+  getPasskeyErrorMessage,
+  isPasskeyWallet,
+  type PasskeyConnectArgs,
+  type PasskeyConnectStatus,
+} from '../utils/passkey'
 
 import ConnectWalletButton from './ConnectWalletButton.vue'
 import WalletList from './WalletList.vue'
@@ -16,6 +23,7 @@ const walletList = computed(() => availableWallets?.value ?? wallets.value)
 
 const isOpen = ref(false)
 const animationState = ref<'starting' | 'entered' | 'exiting' | null>(null)
+const passkeyStatus = ref<PasskeyConnectStatus | null>(null)
 
 const dataTheme = computed(() =>
   theme.value === 'system' ? undefined : theme.value,
@@ -25,6 +33,7 @@ function openMenu(): void {
   if (activeAddress.value) return
   isOpen.value = true
   animationState.value = 'starting'
+  passkeyStatus.value = null
   requestAnimationFrame(() => {
     animationState.value = 'entered'
   })
@@ -32,6 +41,7 @@ function openMenu(): void {
 
 function closeMenu(): void {
   animationState.value = 'exiting'
+  passkeyStatus.value = null
   setTimeout(() => {
     isOpen.value = false
     animationState.value = null
@@ -40,12 +50,36 @@ function closeMenu(): void {
 
 async function handleWalletClick(
   wallet: (typeof walletList.value)[number],
+  args?: PasskeyConnectArgs,
 ): Promise<void> {
+  const isPasskey = isPasskeyWallet(wallet)
   try {
-    await wallet.connect()
+    // Call connect before any await: Safari and iOS browsers drop the user's
+    // tap across an await, and the passkey prompt needs it
+    const connecting = wallet.connect(args)
+    if (isPasskey) {
+      passkeyStatus.value = { walletId: wallet.id, pending: true, error: null }
+    }
+    await connecting
     closeMenu()
   } catch (error) {
     console.error(`Error connecting to ${wallet.metadata.name}:`, error)
+
+    // Keep the dialog open for passkey errors, so the user can retry or
+    // switch between creating a passkey and signing in
+    const message = isPasskey ? getPasskeyErrorMessage(error) : null
+    if (message) {
+      const hint =
+        !args?.create && getPasskeyErrorCode(error) === 'cancelled'
+          ? " New here? Choose 'Create passkey'."
+          : ''
+      passkeyStatus.value = {
+        walletId: wallet.id,
+        pending: false,
+        error: message + hint,
+      }
+      return
+    }
     closeMenu()
   }
 }
@@ -115,6 +149,7 @@ async function handleWalletClick(
               <WalletList
                 :wallets="walletList"
                 :handle-wallet-click="handleWalletClick"
+                :passkey-status="passkeyStatus"
               />
             </div>
 

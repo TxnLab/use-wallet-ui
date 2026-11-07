@@ -85,7 +85,8 @@ e2e/
 │   └── vue/             # Mirrored Vue tests
 │       ├── theme/
 │       └── visual/
-├── fixtures/            # Test fixtures and utilities
+│   └── passkey/         # Passkey flows (React and Vue passkey examples)
+├── fixtures/            # Test fixtures and utilities (passkey.ts: virtual authenticator)
 ├── scripts/             # Helper scripts
 │   ├── run-e2e-docker.sh
 │   └── update-snapshots.sh
@@ -96,8 +97,8 @@ e2e/
 
 The Playwright configuration (`playwright.config.ts`) includes:
 
-- **Projects**: React (`chromium`, `chromium-dark`, `firefox`, `webkit`, `customization`) and Vue (`vue-chromium`, `vue-chromium-dark`, `vue-firefox`, `vue-webkit`)
-- **Web Server**: Automatically starts React (5173), React custom (5174), and Vue (5175) example apps
+- **Projects**: React (`chromium`, `chromium-dark`, `firefox`, `webkit`, `customization`), Vue (`vue-chromium`, `vue-chromium-dark`, `vue-firefox`, `vue-webkit`), and passkey (`passkey-react`, `passkey-vue`; Chromium only, using its virtual authenticator with PRF over CDP)
+- **Web Server**: Automatically starts React (5173), React custom (5174), Vue (5175), React passkey (5176), and Vue passkey (5177) example apps
 - **Visual Comparison**: 5% pixel difference tolerance for font rendering variations
 - **Retries**: 2 retries in CI, none locally
 

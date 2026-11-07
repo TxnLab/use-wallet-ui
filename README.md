@@ -181,7 +181,10 @@ See the package documentation for full API references and customization guides:
 | [react](./examples/react)                   | Tailwind CSS integration     |
 | [react-css-only](./examples/react-css-only) | Standalone CSS usage         |
 | [react-custom](./examples/react-custom)     | All customization patterns   |
+| [react-web3auth](./examples/react-web3auth) | Web3Auth + export-key plugin |
+| [react-passkey](./examples/react-passkey)   | Passkey wallet + plugin      |
 | [vue](./examples/vue)                       | Vue 3 + Tailwind integration |
+| [vue-passkey](./examples/vue-passkey)       | Vue passkey wallet + plugin  |
 
 ## Development
 

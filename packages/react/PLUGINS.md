@@ -15,6 +15,7 @@ The plugin system lets you extend `@txnlab/use-wallet-ui-react` without modifyin
 - [Render Contexts](#render-contexts)
 - [Built-in Plugins](#built-in-plugins)
   - [Export Key Plugin](#export-key-plugin)
+  - [Passkey Plugin](#passkey-plugin)
 - [Publishing Plugins](#publishing-plugins)
 - [API Reference](#api-reference)
 
@@ -351,6 +352,38 @@ The export-key plugin is a separate build entry to keep it tree-shakeable:
 import { exportKeyPlugin } from '@txnlab/use-wallet-ui-react/plugins/export-key'
 ```
 
+### Passkey Plugin
+
+Adds passkey account features to the connected wallet menu for the passkey wallet from [`@txnlab/use-wallet-passkey`](https://github.com/TxnLab/use-wallet/tree/main/packages/wallets/passkey#readme). The connect dialog's "Create passkey" and "Sign in" buttons are built in; this plugin covers the connected account.
+
+```tsx
+import { WalletUIProvider } from '@txnlab/use-wallet-ui-react'
+import { passkeyPlugin } from '@txnlab/use-wallet-ui-react/plugins/passkey'
+
+// `session` matches `passkey({ session: true })` in your WalletManager
+const plugins = [passkeyPlugin({ session: true })]
+
+function App() {
+  return <WalletUIProvider plugins={plugins}>{/* ... */}</WalletUIProvider>
+}
+```
+
+The plugin:
+
+- Injects menu items in the `after-wallet-info` slot, only while the passkey wallet is active
+- Shows a note that the account belongs to this site (order 5)
+- With `session: true`, shows Locked or Unlocked with Unlock and Lock buttons (order 10). The adapter's `onLock` and `onUnlock` belong to your app, so the menu reads `isUnlocked` when it opens, after its own buttons, and every second while open.
+- Adds "Export Recovery Phrase" (order 20), which opens a dialog: a warning with Falcon / quantum import instructions, a fresh passkey prompt, then the 25-word phrase with a countdown and copy-to-clipboard. The phrase stays in component state only, and closing clears the clipboard if it was copied (best effort).
+
+The adapter keeps `canUsePrivateKey` false, so the [Export Key Plugin](#export-key-plugin) never shows a passkey account's phrase as a regular account's.
+
+#### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `recoveryPhrase` | `boolean \| { displayTimeout?: number }` | `true` | Add "Export Recovery Phrase". `displayTimeout` is the seconds before the phrase hides (default `60`). |
+| `session` | `boolean` | `false` | Show lock status with Unlock and Lock. Turn it on when the wallet uses `passkey({ session })`. |
+| `disclosure` | `boolean \| string` | `true` | Show the note on whose account it is. A string replaces the text; `{domain}` becomes the account's domain. |
 ## Publishing Plugins
 
 Plugins are plain objects, so they can be published as npm packages. A plugin package should:

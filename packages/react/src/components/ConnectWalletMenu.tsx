@@ -14,9 +14,15 @@ import { useWallet } from '@txnlab/use-wallet-react'
 import React, { ReactElement, RefObject, useState } from 'react'
 
 import { useWalletUI } from '../providers/WalletUIProvider'
+import {
+  getPasskeyErrorCode,
+  getPasskeyErrorMessage,
+  isPasskeyWallet,
+  type PasskeyConnectArgs,
+} from '../utils/passkey'
 
 import { ConnectWalletButton } from './ConnectWalletButton'
-import { WalletList } from './WalletList'
+import { WalletList, type PasskeyConnectStatus } from './WalletList'
 
 import type { Wallet } from '@txnlab/use-wallet-react'
 
@@ -34,6 +40,8 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
   const [animationState, setAnimationState] = useState<
     'starting' | 'entered' | 'exiting' | null
   >(null)
+  const [passkeyStatus, setPasskeyStatus] =
+    useState<PasskeyConnectStatus | null>(null)
 
   const { wallets, availableWallets, activeAddress } = useWallet()
   const { theme } = useWalletUI()
@@ -55,6 +63,7 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
       if (open) {
         setIsOpen(true)
         setAnimationState('starting')
+        setPasskeyStatus(null)
 
         // Start entry animation
         requestAnimationFrame(() => {
@@ -63,6 +72,7 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
       } else {
         // Start exit animation
         setAnimationState('exiting')
+        setPasskeyStatus(null)
 
         // Remove component after animation completes
         setTimeout(() => {
@@ -89,12 +99,38 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
   const labelId = useId()
   const descriptionId = useId()
 
-  const handleWalletClick = async (wallet: Wallet) => {
+  const handleWalletClick = async (
+    wallet: Wallet,
+    args?: PasskeyConnectArgs,
+  ) => {
+    const isPasskey = isPasskeyWallet(wallet)
     try {
-      await wallet.connect()
+      // Call connect before any await: Safari and iOS browsers drop the
+      // user's tap across an await, and the passkey prompt needs it
+      const connecting = wallet.connect(args)
+      if (isPasskey) {
+        setPasskeyStatus({ walletId: wallet.id, pending: true, error: null })
+      }
+      await connecting
       context.onOpenChange(false)
     } catch (error) {
       console.error(`Error connecting to ${wallet.metadata.name}:`, error)
+
+      // Keep the dialog open for passkey errors, so the user can retry or
+      // switch between creating a passkey and signing in
+      const message = isPasskey ? getPasskeyErrorMessage(error) : null
+      if (message) {
+        const hint =
+          !args?.create && getPasskeyErrorCode(error) === 'cancelled'
+            ? " New here? Choose 'Create passkey'."
+            : ''
+        setPasskeyStatus({
+          walletId: wallet.id,
+          pending: false,
+          error: message + hint,
+        })
+        return
+      }
       context.onOpenChange(false)
     }
   }
@@ -185,6 +221,7 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
                     <WalletList
                       wallets={walletList}
                       handleWalletClick={handleWalletClick}
+                      passkeyStatus={passkeyStatus}
                     />
                   </div>
 
