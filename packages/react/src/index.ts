@@ -24,7 +24,11 @@ export { WalletUIProvider, useWalletUI } from './providers/WalletUIProvider'
 
 // Passkey wallet
 export { getPasskeyErrorMessage } from './utils/passkey'
-export type { PasskeyConnectArgs, PasskeyConnectStatus } from './utils/passkey'
+export type {
+  PasskeyConnectArgs,
+  PasskeyConnectLayout,
+  PasskeyConnectStatus,
+} from './utils/passkey'
 
 // Plugin system
 export { usePlugins } from './plugins/PluginContext'

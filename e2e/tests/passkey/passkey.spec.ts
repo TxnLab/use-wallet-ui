@@ -404,3 +404,89 @@ test.describe('Passkey wallet', () => {
     await expect.poll(readClipboard).toBe('')
   })
 })
+
+// passkeyLayout: 'list' (the examples start in it with ?layout=list)
+test.describe('Passkey wallet, list layout', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/?layout=list')
+    await page.waitForSelector('[data-wallet-theme]')
+  })
+
+  test.afterEach(async ({ pageErrors }) => {
+    expect(pageErrors).toEqual([])
+  })
+
+  async function openListDialog(page: Page) {
+    await page.getByRole('button', { name: 'Connect Wallet' }).click()
+    const section = page.locator('[data-passkey-connect="list"]')
+    await expect(section).toBeVisible()
+    return section
+  }
+
+  test('groups the passkey rows above the other wallets', async ({ page }) => {
+    const section = await openListDialog(page)
+    await expect(section.getByText('Passkey', { exact: true })).toBeVisible()
+    await expect(
+      section.getByRole('button', { name: 'Sign in with passkey' }),
+    ).toBeVisible()
+    await expect(
+      section.getByRole('button', { name: 'Create a passkey' }),
+    ).toBeVisible()
+
+    const dialog = page.getByRole('dialog')
+    await expect(dialog.getByText('Wallets', { exact: true })).toBeVisible()
+    await expect(dialog.getByRole('button', { name: /Lute/ })).toBeVisible()
+    await expect(dialog.getByRole('button', { name: /Pera/ })).toBeVisible()
+    // No featured button or divider in this layout
+    await expect(
+      dialog.getByRole('button', { name: 'Continue with passkey' }),
+    ).toHaveCount(0)
+    await expect(dialog.getByText('or connect a wallet')).toHaveCount(0)
+  })
+
+  test('creates a passkey, disconnects, and signs back in from the rows', async ({
+    page,
+  }) => {
+    await addVirtualAuthenticator(page)
+    let section = await openListDialog(page)
+    await section.getByRole('button', { name: 'Create a passkey' }).click()
+    await expect(page.getByRole('dialog')).toBeHidden()
+    const button = page.locator('[data-wallet-button]')
+    await expect(button).not.toHaveText(/Connect Wallet/)
+    const label = (await button.innerText()).trim()
+
+    await button.click()
+    await page.getByRole('button', { name: 'Disconnect' }).click()
+
+    section = await openListDialog(page)
+    await section.getByRole('button', { name: 'Sign in with passkey' }).click()
+    await expect(page.getByRole('dialog')).toBeHidden()
+    await expect(button).toHaveText(label)
+  })
+
+  test('explains a sign-in with no passkey under the passkey group', async ({
+    page,
+  }) => {
+    await addVirtualAuthenticator(page)
+    const section = await openListDialog(page)
+    await section.getByRole('button', { name: 'Sign in with passkey' }).click()
+
+    await expect(section.getByRole('alert')).toHaveText(
+      "The passkey request was cancelled or timed out, or no passkey was found. New here? Choose 'Create a passkey'.",
+    )
+    await expect(page.getByRole('dialog')).toBeVisible()
+  })
+
+  test("follows the provider's layout when it changes", async ({ page }) => {
+    await page.getByLabel('Passkey layout').selectOption('featured')
+    await page.getByRole('button', { name: 'Connect Wallet' }).click()
+    await expect(
+      page.locator('[data-passkey-connect="featured"]'),
+    ).toBeVisible()
+    await page.getByRole('button', { name: 'Close dialog' }).click()
+    await expect(page.getByRole('dialog')).toBeHidden()
+
+    await page.getByLabel('Passkey layout').selectOption('list')
+    await openListDialog(page)
+  })
+})

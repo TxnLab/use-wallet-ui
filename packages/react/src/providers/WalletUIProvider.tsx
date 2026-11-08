@@ -24,6 +24,7 @@ import { PluginLifecycleManager } from '../plugins/PluginLifecycleManager'
 
 import type { NfdLookupResponse, NfdView } from '../hooks/useNfd'
 import type { PluginRenderContext, WalletUIPlugin } from '../plugins/types'
+import type { PasskeyConnectLayout } from '../utils/passkey'
 
 // CSS custom properties for theming - injected via JavaScript to avoid requiring CSS imports
 const THEME_STYLES_ID = 'wallet-ui-theme-styles'
@@ -111,6 +112,8 @@ interface WalletUIContextType {
   queryClient: QueryClient
   theme: Theme
   resolvedTheme: ResolvedTheme
+  /** The app-wide passkey layout for connect dialogs */
+  passkeyLayout: PasskeyConnectLayout
 }
 
 interface WalletUIProviderProps {
@@ -139,6 +142,16 @@ interface WalletUIProviderProps {
    * lifecycle hooks, and context providers.
    */
   plugins?: WalletUIPlugin[]
+  /**
+   * How connect dialogs present a passkey wallet, when one is configured.
+   * - 'featured': a "Continue with passkey" button leads, with the other
+   *   wallets below (default). Suits apps where the passkey is the main way in.
+   * - 'list': "Sign in with passkey" and "Create a passkey" rows in a Passkey
+   *   group above a Wallets group. Suits apps where most users bring a wallet.
+   *
+   * A `passkeyLayout` prop on `WalletButton` or `ConnectWalletMenu` overrides it.
+   */
+  passkeyLayout?: PasskeyConnectLayout
 }
 
 // Default query client configuration for NFD queries
@@ -329,6 +342,7 @@ export function WalletUIProvider({
   prefetchNfdView = 'thumbnail',
   theme = 'system',
   plugins = [],
+  passkeyLayout = 'featured',
 }: WalletUIProviderProps) {
   // Use provided query client or create a default one
   const queryClient = useMemo(
@@ -349,8 +363,9 @@ export function WalletUIProvider({
       queryClient,
       theme,
       resolvedTheme,
+      passkeyLayout,
     }),
-    [queryClient, theme, resolvedTheme],
+    [queryClient, theme, resolvedTheme, passkeyLayout],
   )
 
   // Determine the data-theme attribute value

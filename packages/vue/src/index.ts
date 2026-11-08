@@ -20,7 +20,11 @@ export { default as WalletUIProvider } from './providers/WalletUIProvider.vue'
 export { useWalletUI } from './providers/walletUIContext'
 
 export { getPasskeyErrorMessage } from './utils/passkey'
-export type { PasskeyConnectArgs, PasskeyConnectStatus } from './utils/passkey'
+export type {
+  PasskeyConnectArgs,
+  PasskeyConnectLayout,
+  PasskeyConnectStatus,
+} from './utils/passkey'
 
 export { usePlugins } from './plugins/pluginContext'
 export type {

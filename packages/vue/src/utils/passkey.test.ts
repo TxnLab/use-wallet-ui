@@ -6,6 +6,7 @@ import {
   getPasskeyErrorCode,
   getPasskeyErrorMessage,
   isPasskeyWallet,
+  resolvePasskeyLayout,
   type PasskeyWalletAdapter,
 } from './passkey'
 
@@ -112,5 +113,20 @@ describe('getPasskeyAccountDomain', () => {
       expect(getPasskeyAccountDomain('Passkey · ')).toBe('app.example.com')
       expect(getPasskeyAccountDomain(undefined)).toBe('app.example.com')
     })
+  })
+})
+
+describe('resolvePasskeyLayout', () => {
+  it("defaults to 'featured'", () => {
+    expect(resolvePasskeyLayout()).toBe('featured')
+  })
+
+  it("uses the provider's layout when the menu sets none", () => {
+    expect(resolvePasskeyLayout(undefined, 'list')).toBe('list')
+  })
+
+  it("prefers the menu's layout over the provider's", () => {
+    expect(resolvePasskeyLayout('featured', 'list')).toBe('featured')
+    expect(resolvePasskeyLayout('list', 'featured')).toBe('list')
   })
 })

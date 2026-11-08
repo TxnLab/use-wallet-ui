@@ -2,37 +2,127 @@
 import { computed } from 'vue'
 import type { Wallet } from '@txnlab/use-wallet-vue'
 
-import type { PasskeyConnectArgs, PasskeyConnectStatus } from '../utils/passkey'
+import type {
+  PasskeyConnectArgs,
+  PasskeyConnectLayout,
+  PasskeyConnectStatus,
+} from '../utils/passkey'
+
+import WalletGroupLabel from './WalletGroupLabel.vue'
+import WalletIcon from './WalletIcon.vue'
 
 /**
- * The passkey-first section of the connect dialog: "Continue with passkey"
- * signs in, and "Create a passkey" makes a new one. A missing passkey and a
- * cancelled prompt raise the same browser error, so creating stays a
- * separate, explicit choice.
+ * The passkey section of the connect dialog: one action signs in, and
+ * "Create a passkey" makes a new one. A missing passkey and a cancelled
+ * prompt raise the same browser error, so creating stays a separate,
+ * explicit choice.
  */
-const props = defineProps<{
-  /** The passkey wallet (`id: 'passkey'`) */
-  wallet: Wallet
-  /**
-   * Connects the wallet. "Create a passkey" passes `{ create: true }`; forward
-   * `args` to `wallet.connect(args)` before any `await`.
-   */
-  handleWalletClick: (
-    wallet: Wallet,
-    args?: PasskeyConnectArgs,
-  ) => Promise<void>
-  /** Pending state or error for the passkey wallet's connect request */
-  status?: PasskeyConnectStatus | null
-}>()
+const props = withDefaults(
+  defineProps<{
+    /** The passkey wallet (`id: 'passkey'`) */
+    wallet: Wallet
+    /**
+     * Connects the wallet. "Create a passkey" passes `{ create: true }`; forward
+     * `args` to `wallet.connect(args)` before any `await`.
+     */
+    handleWalletClick: (
+      wallet: Wallet,
+      args?: PasskeyConnectArgs,
+    ) => Promise<void>
+    /** Pending state or error for the passkey wallet's connect request */
+    status?: PasskeyConnectStatus | null
+    /**
+     * `'featured'` (default): a "Continue with passkey" button and a "Create
+     * a passkey" link. `'list'`: "Sign in with passkey" and "Create a
+     * passkey" rows under a "Passkey" group label.
+     */
+    layout?: PasskeyConnectLayout
+    /** Show the "Passkey" group label in the `'list'` layout. Default: true */
+    showLabel?: boolean
+  }>(),
+  { layout: 'featured', showLabel: true },
+)
 
 const current = computed(() =>
   props.status?.walletId === props.wallet.id ? props.status : null,
 )
 const pending = computed(() => !!current.value?.pending)
+
+const ROW_CLASS =
+  'flex w-full items-center gap-3 py-1.5 px-1.5 text-left text-[var(--wui-color-text)] transition-colors hover:bg-[var(--wui-color-bg-hover)] rounded-xl disabled:opacity-50 disabled:cursor-not-allowed'
 </script>
 
 <template>
-  <div data-passkey-connect class="flex flex-col gap-2.5 px-[22px] pt-1 pb-4">
+  <div
+    v-if="layout === 'list'"
+    data-passkey-connect="list"
+    class="flex flex-col gap-1"
+  >
+    <WalletGroupLabel v-if="showLabel">Passkey</WalletGroupLabel>
+    <ul class="space-y-1.5">
+      <li>
+        <button
+          type="button"
+          @click="() => handleWalletClick(wallet)"
+          :disabled="pending"
+          :class="ROW_CLASS"
+        >
+          <WalletIcon :wallet="wallet" />
+          <span class="text-lg font-bold wallet-custom-font">
+            Sign in with passkey
+          </span>
+        </button>
+      </li>
+      <li>
+        <button
+          type="button"
+          @click="() => handleWalletClick(wallet, { create: true })"
+          :disabled="pending"
+          :class="ROW_CLASS"
+        >
+          <div
+            class="shrink-0 h-8 w-8 rounded-md border-[1.5px] border-dashed border-[var(--wui-color-text-tertiary)] text-[var(--wui-color-text-secondary)] flex items-center justify-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-[18px] w-[18px]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+          </div>
+          <span class="text-lg font-bold wallet-custom-font">
+            Create a passkey
+          </span>
+        </button>
+      </li>
+    </ul>
+    <p
+      v-if="pending"
+      role="status"
+      class="px-1.5 pb-1 text-sm text-[var(--wui-color-text-secondary)]"
+    >
+      Waiting for your passkey…
+    </p>
+    <p
+      v-else-if="current?.error"
+      role="alert"
+      class="mx-1.5 mb-1 rounded-lg bg-[var(--wui-color-danger-bg)] px-3 py-2 text-sm text-[var(--wui-color-danger-text)]"
+    >
+      {{ current.error }}
+    </p>
+  </div>
+
+  <div
+    v-else
+    data-passkey-connect="featured"
+    class="flex flex-col gap-2.5 px-[22px] pt-1 pb-4"
+  >
     <button
       type="button"
       @click="() => handleWalletClick(wallet)"

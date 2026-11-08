@@ -18,12 +18,15 @@ import {
   getPasskeyErrorCode,
   getPasskeyErrorMessage,
   isPasskeyWallet,
+  resolvePasskeyLayout,
   type PasskeyConnectArgs,
+  type PasskeyConnectLayout,
   type PasskeyConnectStatus,
 } from '../utils/passkey'
 
 import { ConnectWalletButton } from './ConnectWalletButton'
 import { PasskeyConnect } from './PasskeyConnect'
+import { WalletGroupLabel } from './WalletGroupLabel'
 import { WalletList } from './WalletList'
 
 import type { Wallet } from '@txnlab/use-wallet-react'
@@ -35,9 +38,17 @@ type RefableElement = ReactElement & {
 
 export interface ConnectWalletMenuProps {
   children?: RefableElement
+  /**
+   * How to present a passkey wallet: 'featured' or 'list'. Overrides the
+   * `WalletUIProvider` setting; the default is 'featured'.
+   */
+  passkeyLayout?: PasskeyConnectLayout
 }
 
-export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
+export function ConnectWalletMenu({
+  children,
+  passkeyLayout: menuPasskeyLayout,
+}: ConnectWalletMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [animationState, setAnimationState] = useState<
     'starting' | 'entered' | 'exiting' | null
@@ -46,7 +57,11 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
     useState<PasskeyConnectStatus | null>(null)
 
   const { wallets, availableWallets, activeAddress } = useWallet()
-  const { theme } = useWalletUI()
+  const { theme, passkeyLayout: providerPasskeyLayout } = useWalletUI()
+  const passkeyLayout = resolvePasskeyLayout(
+    menuPasskeyLayout,
+    providerPasskeyLayout,
+  )
 
   // v5 filters wallets by the active network's capabilities (e.g. hides
   // Mnemonic on MainNet). v4 peers have no `availableWallets`, so fall back.
@@ -222,36 +237,62 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
                     </button>
                   </div>
 
-                  {passkeyWallet && (
-                    <PasskeyConnect
-                      wallet={passkeyWallet}
-                      handleWalletClick={handleWalletClick}
-                      status={passkeyStatus}
-                    />
-                  )}
-
-                  {passkeyWallet && otherWallets.length > 0 && (
-                    <div className="flex items-center gap-3 px-6 pt-1 pb-2.5 text-xs text-[var(--wui-color-text-secondary)]">
-                      <span
-                        className="flex-1 h-px bg-[var(--wui-color-border)]"
-                        aria-hidden="true"
-                      />
-                      or connect a wallet
-                      <span
-                        className="flex-1 h-px bg-[var(--wui-color-border)]"
-                        aria-hidden="true"
-                      />
-                    </div>
-                  )}
-
-                  {/* Wallet list */}
-                  {(!passkeyWallet || otherWallets.length > 0) && (
+                  {passkeyWallet && passkeyLayout === 'list' ? (
+                    /* List layout: a Passkey group above a Wallets group */
                     <div className="px-4 pb-3">
-                      <WalletList
-                        wallets={otherWallets}
-                        handleWalletClick={handleWalletClick}
-                      />
+                      <div className="flex flex-col gap-2.5">
+                        <PasskeyConnect
+                          layout="list"
+                          showLabel={otherWallets.length > 0}
+                          wallet={passkeyWallet}
+                          handleWalletClick={handleWalletClick}
+                          status={passkeyStatus}
+                        />
+                        {otherWallets.length > 0 && (
+                          <div className="flex flex-col gap-1">
+                            <WalletGroupLabel>Wallets</WalletGroupLabel>
+                            <WalletList
+                              wallets={otherWallets}
+                              handleWalletClick={handleWalletClick}
+                            />
+                          </div>
+                        )}
+                      </div>
                     </div>
+                  ) : (
+                    <>
+                      {passkeyWallet && (
+                        <PasskeyConnect
+                          wallet={passkeyWallet}
+                          handleWalletClick={handleWalletClick}
+                          status={passkeyStatus}
+                        />
+                      )}
+
+                      {passkeyWallet && otherWallets.length > 0 && (
+                        <div className="flex items-center gap-3 px-6 pt-1 pb-2.5 text-xs text-[var(--wui-color-text-secondary)]">
+                          <span
+                            className="flex-1 h-px bg-[var(--wui-color-border)]"
+                            aria-hidden="true"
+                          />
+                          or connect a wallet
+                          <span
+                            className="flex-1 h-px bg-[var(--wui-color-border)]"
+                            aria-hidden="true"
+                          />
+                        </div>
+                      )}
+
+                      {/* Wallet list */}
+                      {(!passkeyWallet || otherWallets.length > 0) && (
+                        <div className="px-4 pb-3">
+                          <WalletList
+                            wallets={otherWallets}
+                            handleWalletClick={handleWalletClick}
+                          />
+                        </div>
+                      )}
+                    </>
                   )}
 
                   {/* Footer section */}

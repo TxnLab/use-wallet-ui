@@ -3,6 +3,7 @@ import { ref, watchEffect } from 'vue'
 import {
   WalletUIProvider,
   WalletButton,
+  type PasskeyConnectLayout,
   type Theme,
 } from '@txnlab/use-wallet-ui-vue'
 import { passkeyPlugin } from '@txnlab/use-wallet-ui-vue/plugins/passkey'
@@ -10,6 +11,13 @@ import { passkeyPlugin } from '@txnlab/use-wallet-ui-vue/plugins/passkey'
 import WalletInfo from './components/WalletInfo.vue'
 
 const theme = ref<Theme>('system')
+
+// Start from ?layout=list to link to the list layout
+const passkeyLayout = ref<PasskeyConnectLayout>(
+  new URLSearchParams(window.location.search).get('layout') === 'list'
+    ? 'list'
+    : 'featured',
+)
 
 // Create the plugin once: `session` matches `passkey({ session: true })`, and
 // `disclosure` shows the "whose account is this" note until "Got it"
@@ -42,7 +50,11 @@ watchEffect((onCleanup) => {
 </script>
 
 <template>
-  <WalletUIProvider :theme="theme" :plugins="plugins">
+  <WalletUIProvider
+    :theme="theme"
+    :plugins="plugins"
+    :passkey-layout="passkeyLayout"
+  >
     <div class="min-h-screen bg-gray-50 dark:bg-slate-900">
       <!-- Header -->
       <header
@@ -56,6 +68,15 @@ watchEffect((onCleanup) => {
               </span>
             </div>
             <div class="flex items-center gap-4">
+              <!-- Passkey layout selector -->
+              <select
+                v-model="passkeyLayout"
+                aria-label="Passkey layout"
+                class="text-sm px-2 py-1 rounded border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-800 dark:text-white"
+              >
+                <option value="featured">Featured</option>
+                <option value="list">List</option>
+              </select>
               <!-- Theme selector -->
               <select
                 v-model="theme"
@@ -101,10 +122,11 @@ watchEffect((onCleanup) => {
           <p
             class="text-gray-500 dark:text-slate-400 text-sm mt-4 max-w-2xl mx-auto"
           >
-            Choose <strong>Continue with passkey</strong> to sign in, or
-            <strong>Create a passkey</strong> for a new Falcon-1024 account. The
-            connected menu shows the session's lock status and lets you export
-            the account's recovery phrase.
+            Choose <strong>Continue with passkey</strong> (or
+            <strong>Sign in with passkey</strong> in the List layout) to sign
+            in, or <strong>Create a passkey</strong> for a new Falcon-1024
+            account. The connected menu shows the session's lock status and lets
+            you export the account's recovery phrase.
           </p>
           <p
             class="text-gray-500 dark:text-slate-400 text-sm mt-2 max-w-2xl mx-auto"

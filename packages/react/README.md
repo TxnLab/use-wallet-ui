@@ -323,6 +323,7 @@ Required wrapper that enables theming, NFD lookups, and data prefetching.
   enablePrefetching={true}    // Prefetch data for all wallet accounts
   prefetchNfdView="thumbnail" // NFD data view: 'tiny' | 'thumbnail' | 'brief' | 'full'
   queryClient={queryClient}   // Optional: your existing Tanstack Query client
+  passkeyLayout="featured"    // Passkey wallet layout: 'featured' | 'list'
 >
   {children}
 </WalletUIProvider>
@@ -337,6 +338,7 @@ All-in-one wallet connection component.
   size="md"              // 'sm' | 'md' | 'lg'
   className="..."        // Additional CSS classes
   style={{...}}          // Inline styles (supports CSS variable overrides)
+  passkeyLayout="list"   // Optional: overrides WalletUIProvider's passkeyLayout
 />
 ```
 
@@ -357,6 +359,9 @@ Dropdown menu for wallet selection (disconnected state).
 <ConnectWalletMenu>
   <button>My Custom Button</button>
 </ConnectWalletMenu>
+
+// With its own passkey layout (overrides WalletUIProvider's passkeyLayout)
+<ConnectWalletMenu passkeyLayout="list" />
 ```
 
 ### ConnectWalletButton
@@ -438,14 +443,19 @@ Renders a list of wallets (used internally by ConnectWalletMenu). The dialog ren
 
 ### PasskeyConnect
 
-The passkey-first section of the connect dialog, for custom connect menus: **Continue with passkey** calls `handleWalletClick(wallet)` and **Create a passkey** calls `handleWalletClick(wallet, { create: true })`. Forward `args` to `wallet.connect(args)` before any `await`, or Safari and iOS browsers drop the passkey prompt. Pass `status` (`{ walletId, pending, error }`) to disable the controls while the prompt is open and to show an error.
+The passkey section of the connect dialog, for custom connect menus. Signing in (**Continue with passkey**, or **Sign in with passkey** in the list layout) calls `handleWalletClick(wallet)`, and **Create a passkey** calls `handleWalletClick(wallet, { create: true })`. Forward `args` to `wallet.connect(args)` before any `await`, or Safari and iOS browsers drop the passkey prompt. Pass `status` (`{ walletId, pending, error }`) to disable the controls while the prompt is open and to show an error.
 
 ```jsx
 <PasskeyConnect
   wallet={passkeyWallet}
   handleWalletClick={(wallet, args) => wallet.connect(args)}
+  layout="featured" // 'featured' (default) | 'list'
+  showLabel={true}  // 'list' only: show the "Passkey" group label
 />
 ```
+
+In the list layout, label your own wallet group to match (the dialog uses "Wallets").
+
 
 ## Hooks
 
@@ -646,6 +656,23 @@ The connected wallet menu tags a passkey account with its domain (for example, `
 The plugin uses `useWalletManager()`, so it requires `@txnlab/use-wallet-react` 5.2 or later, which any app with the passkey wallet has. The main entry still supports v4.6+. See [Passkey Plugin](PLUGINS.md#passkey-plugin) for options, and the adapter's [security model](https://github.com/TxnLab/use-wallet/tree/main/packages/wallets/passkey#security-model) before you ship it.
 
 For your own connect UI, `getPasskeyErrorMessage(error)` returns a message for a `PasskeyError`, or `null` for any other error.
+
+### Passkey layout
+
+Choose how the connect dialog presents the passkey wallet with `passkeyLayout`:
+
+- **`'featured'`** (default): a full-width **Continue with passkey** button and a "New here? **Create a passkey**" link, then the other wallets under "or connect a wallet". For consumer apps where most users have no wallet, so the passkey is the main way in.
+- **`'list'`**: **Sign in with passkey** and **Create a passkey** rows in a "Passkey" group, above a "Wallets" group. For crypto-native apps where most users bring a wallet like Pera or Lute, and the passkey is one choice among many.
+
+```tsx
+// App-wide
+<WalletUIProvider passkeyLayout="list">
+
+// Per menu: a WalletButton or ConnectWalletMenu prop wins over the provider
+<WalletButton passkeyLayout="featured" />
+```
+
+With only the passkey wallet configured, neither layout shows the other-wallets heading. Without a passkey wallet, the dialog is the same in both.
 
 ## License
 

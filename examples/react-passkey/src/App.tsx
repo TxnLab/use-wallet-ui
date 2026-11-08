@@ -9,6 +9,7 @@ import {
 import {
   WalletUIProvider,
   WalletButton,
+  type PasskeyConnectLayout,
   type Theme,
 } from '@txnlab/use-wallet-ui-react'
 import { passkeyPlugin } from '@txnlab/use-wallet-ui-react/plugins/passkey'
@@ -27,8 +28,17 @@ const walletManager = new WalletManager({
 // `disclosure` shows the "whose account is this" note until "Got it"
 const plugins = [passkeyPlugin({ session: true, disclosure: true })]
 
+// Start from ?layout=list to link to the list layout
+function initialPasskeyLayout(): PasskeyConnectLayout {
+  return new URLSearchParams(window.location.search).get('layout') === 'list'
+    ? 'list'
+    : 'featured'
+}
+
 function App() {
   const [theme, setTheme] = useState<Theme>('system')
+  const [passkeyLayout, setPasskeyLayout] =
+    useState<PasskeyConnectLayout>(initialPasskeyLayout)
 
   // Sync app theme with the theme switcher
   // This adds/removes a 'dark' class on the root element for Tailwind
@@ -53,7 +63,11 @@ function App() {
 
   return (
     <WalletProvider manager={walletManager}>
-      <WalletUIProvider theme={theme} plugins={plugins}>
+      <WalletUIProvider
+        theme={theme}
+        plugins={plugins}
+        passkeyLayout={passkeyLayout}
+      >
         <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
           {/* Header */}
           <header className="w-full bg-white dark:bg-slate-800/50 border-b border-gray-200 dark:border-slate-700/50">
@@ -65,6 +79,18 @@ function App() {
                   </span>
                 </div>
                 <div className="flex items-center gap-4">
+                  {/* Passkey layout selector */}
+                  <select
+                    aria-label="Passkey layout"
+                    value={passkeyLayout}
+                    onChange={(e) =>
+                      setPasskeyLayout(e.target.value as PasskeyConnectLayout)
+                    }
+                    className="text-sm px-2 py-1 rounded border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-800 dark:text-white"
+                  >
+                    <option value="featured">Featured</option>
+                    <option value="list">List</option>
+                  </select>
                   {/* Theme selector */}
                   <select
                     value={theme}
@@ -103,10 +129,12 @@ function App() {
                 .
               </p>
               <p className="text-gray-500 dark:text-slate-400 text-sm mt-4 max-w-2xl mx-auto">
-                Choose <strong>Continue with passkey</strong> to sign in, or{' '}
-                <strong>Create a passkey</strong> for a new Falcon-1024 account.
-                The connected menu shows the session&apos;s lock status and lets
-                you export the account&apos;s recovery phrase.
+                Choose <strong>Continue with passkey</strong> (or{' '}
+                <strong>Sign in with passkey</strong> in the List layout) to
+                sign in, or <strong>Create a passkey</strong> for a new
+                Falcon-1024 account. The connected menu shows the session&apos;s
+                lock status and lets you export the account&apos;s recovery
+                phrase.
               </p>
               <p className="text-gray-500 dark:text-slate-400 text-sm mt-2 max-w-2xl mx-auto">
                 The note on whose account it is shows until you choose{' '}

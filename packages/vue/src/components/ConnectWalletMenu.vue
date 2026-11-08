@@ -7,16 +7,31 @@ import {
   getPasskeyErrorCode,
   getPasskeyErrorMessage,
   isPasskeyWallet,
+  resolvePasskeyLayout,
   type PasskeyConnectArgs,
+  type PasskeyConnectLayout,
   type PasskeyConnectStatus,
 } from '../utils/passkey'
 
 import ConnectWalletButton from './ConnectWalletButton.vue'
 import PasskeyConnect from './PasskeyConnect.vue'
+import WalletGroupLabel from './WalletGroupLabel.vue'
 import WalletList from './WalletList.vue'
 
+const props = defineProps<{
+  /**
+   * How to present a passkey wallet: 'featured' or 'list'. Overrides the
+   * `WalletUIProvider` setting; the default is 'featured'.
+   */
+  passkeyLayout?: PasskeyConnectLayout
+}>()
+
 const { wallets, availableWallets, activeAddress } = useWallet()
-const { theme } = useWalletUI()
+const { theme, passkeyLayout: providerPasskeyLayout } = useWalletUI()
+
+const passkeyLayout = computed(() =>
+  resolvePasskeyLayout(props.passkeyLayout, providerPasskeyLayout.value),
+)
 
 // v5 filters wallets by the active network's capabilities (e.g. hides
 // Mnemonic on MainNet). v4 peers have no `availableWallets`, so fall back.
@@ -152,37 +167,62 @@ async function handleWalletClick(
               </button>
             </div>
 
-            <PasskeyConnect
-              v-if="passkeyWallet"
-              :wallet="passkeyWallet"
-              :handle-wallet-click="handleWalletClick"
-              :status="passkeyStatus"
-            />
-
+            <!-- List layout: a Passkey group above a Wallets group -->
             <div
-              v-if="passkeyWallet && otherWallets.length > 0"
-              class="flex items-center gap-3 px-6 pt-1 pb-2.5 text-xs text-[var(--wui-color-text-secondary)]"
-            >
-              <span
-                class="flex-1 h-px bg-[var(--wui-color-border)]"
-                aria-hidden="true"
-              />
-              or connect a wallet
-              <span
-                class="flex-1 h-px bg-[var(--wui-color-border)]"
-                aria-hidden="true"
-              />
-            </div>
-
-            <div
-              v-if="!passkeyWallet || otherWallets.length > 0"
+              v-if="passkeyWallet && passkeyLayout === 'list'"
               class="px-4 pb-3"
             >
-              <WalletList
-                :wallets="otherWallets"
-                :handle-wallet-click="handleWalletClick"
-              />
+              <div class="flex flex-col gap-2.5">
+                <PasskeyConnect
+                  layout="list"
+                  :show-label="otherWallets.length > 0"
+                  :wallet="passkeyWallet"
+                  :handle-wallet-click="handleWalletClick"
+                  :status="passkeyStatus"
+                />
+                <div v-if="otherWallets.length > 0" class="flex flex-col gap-1">
+                  <WalletGroupLabel>Wallets</WalletGroupLabel>
+                  <WalletList
+                    :wallets="otherWallets"
+                    :handle-wallet-click="handleWalletClick"
+                  />
+                </div>
+              </div>
             </div>
+
+            <template v-else>
+              <PasskeyConnect
+                v-if="passkeyWallet"
+                :wallet="passkeyWallet"
+                :handle-wallet-click="handleWalletClick"
+                :status="passkeyStatus"
+              />
+
+              <div
+                v-if="passkeyWallet && otherWallets.length > 0"
+                class="flex items-center gap-3 px-6 pt-1 pb-2.5 text-xs text-[var(--wui-color-text-secondary)]"
+              >
+                <span
+                  class="flex-1 h-px bg-[var(--wui-color-border)]"
+                  aria-hidden="true"
+                />
+                or connect a wallet
+                <span
+                  class="flex-1 h-px bg-[var(--wui-color-border)]"
+                  aria-hidden="true"
+                />
+              </div>
+
+              <div
+                v-if="!passkeyWallet || otherWallets.length > 0"
+                class="px-4 pb-3"
+              >
+                <WalletList
+                  :wallets="otherWallets"
+                  :handle-wallet-click="handleWalletClick"
+                />
+              </div>
+            </template>
 
             <div
               class="px-6 py-5 border-t border-[var(--wui-color-border)] flex items-center justify-between"

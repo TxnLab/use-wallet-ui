@@ -95,6 +95,17 @@ const plugins = [passkeyPlugin({ session: true, disclosure: true })]
 </template>
 ```
 
+Choose how the connect dialog presents the passkey wallet with `passkey-layout` on `WalletUIProvider`, or per menu on `WalletButton` or `ConnectWalletMenu` (the menu prop wins):
+
+- **`'featured'`** (default): a full-width **Continue with passkey** button and a "New here? **Create a passkey**" link, then the other wallets. For consumer apps where the passkey is the main way in.
+- **`'list'`**: **Sign in with passkey** and **Create a passkey** rows in a "Passkey" group, above a "Wallets" group. For crypto-native apps where most users bring a wallet.
+
+```vue
+<WalletUIProvider passkey-layout="list">
+  <WalletButton passkey-layout="featured" />
+</WalletUIProvider>
+```
+
 `passkeyPlugin()` adds to the connected wallet menu, only while the passkey wallet is active:
 
 - **Export Recovery Phrase**: reveals the 25-word phrase after a fresh passkey prompt, and tells users to import it as a Falcon / quantum account (in Lute, Add account → Falcon25 account → Import; in Pera, the quantum import). The phrase hides after a timeout.
@@ -109,4 +120,4 @@ const plugins = [passkeyPlugin({ session: true, disclosure: true })]
 
 The plugin uses `useWalletManager()`, so it requires `@txnlab/use-wallet-vue` 5.2 or later, which any app with the passkey wallet has. The main entry still supports v4.6+. Read the adapter's [security model](https://github.com/TxnLab/use-wallet/tree/main/packages/wallets/passkey#security-model) before you ship it.
 
-For your own connect UI, render `PasskeyConnect` with the passkey wallet: "Create a passkey" passes `{ create: true }` to `handleWalletClick(wallet, args)`; forward it to `wallet.connect(args)`, and call `connect` before any `await`. `WalletList` no longer renders the passkey wallet. `getPasskeyErrorMessage(error)` returns a message for a `PasskeyError`, or `null` otherwise.
+For your own connect UI, render `PasskeyConnect` with the passkey wallet (and `layout="list"` for the list layout): "Create a passkey" passes `{ create: true }` to `handleWalletClick(wallet, args)`; forward it to `wallet.connect(args)`, and call `connect` before any `await`. `WalletList` no longer renders the passkey wallet. `getPasskeyErrorMessage(error)` returns a message for a `PasskeyError`, or `null` otherwise.

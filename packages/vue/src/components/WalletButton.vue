@@ -6,12 +6,19 @@ import ConnectedWalletMenu from './ConnectedWalletMenu.vue'
 import ConnectWalletButton from './ConnectWalletButton.vue'
 import ConnectWalletMenu from './ConnectWalletMenu.vue'
 
+import type { PasskeyConnectLayout } from '../utils/passkey'
+
 type ButtonSize = 'sm' | 'md' | 'lg'
 
 const props = defineProps<{
   size?: ButtonSize
   class?: string
   style?: Record<string, string | number>
+  /**
+   * How the connect dialog presents a passkey wallet: 'featured' or 'list'.
+   * Overrides the `WalletUIProvider` setting; the default is 'featured'.
+   */
+  passkeyLayout?: PasskeyConnectLayout
 }>()
 
 const { activeAddress } = useWallet()
@@ -26,7 +33,7 @@ const { activeAddress } = useWallet()
     />
   </ConnectedWalletMenu>
 
-  <ConnectWalletMenu v-else>
+  <ConnectWalletMenu v-else :passkey-layout="props.passkeyLayout">
     <ConnectWalletButton
       :size="props.size"
       :class="props.class"
