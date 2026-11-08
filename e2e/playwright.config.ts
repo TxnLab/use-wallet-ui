@@ -63,7 +63,11 @@ export default defineConfig({
     // Desktop Chrome - Light Mode (default)
     {
       name: 'chromium',
-      testIgnore: [/customization\/.+\.spec\.ts/, /vue\/.+\.spec\.ts/],
+      testIgnore: [
+        /customization\/.+\.spec\.ts/,
+        /vue\/.+\.spec\.ts/,
+        /passkey\/.+\.spec\.ts/,
+      ],
       use: {
         ...devices['Desktop Chrome'],
       },
@@ -72,7 +76,11 @@ export default defineConfig({
     // Desktop Chrome - Dark Mode (system preference)
     {
       name: 'chromium-dark',
-      testIgnore: [/customization\/.+\.spec\.ts/, /vue\/.+\.spec\.ts/],
+      testIgnore: [
+        /customization\/.+\.spec\.ts/,
+        /vue\/.+\.spec\.ts/,
+        /passkey\/.+\.spec\.ts/,
+      ],
       use: {
         ...devices['Desktop Chrome'],
         colorScheme: 'dark',
@@ -82,7 +90,11 @@ export default defineConfig({
     // Desktop Firefox
     {
       name: 'firefox',
-      testIgnore: [/customization\/.+\.spec\.ts/, /vue\/.+\.spec\.ts/],
+      testIgnore: [
+        /customization\/.+\.spec\.ts/,
+        /vue\/.+\.spec\.ts/,
+        /passkey\/.+\.spec\.ts/,
+      ],
       use: {
         ...devices['Desktop Firefox'],
       },
@@ -91,7 +103,11 @@ export default defineConfig({
     // Desktop Safari
     {
       name: 'webkit',
-      testIgnore: [/customization\/.+\.spec\.ts/, /vue\/.+\.spec\.ts/],
+      testIgnore: [
+        /customization\/.+\.spec\.ts/,
+        /vue\/.+\.spec\.ts/,
+        /passkey\/.+\.spec\.ts/,
+      ],
       use: {
         ...devices['Desktop Safari'],
       },
@@ -132,6 +148,25 @@ export default defineConfig({
       },
     },
 
+    // Passkey tests - run against the passkey examples with Chromium's
+    // virtual authenticator (WebAuthn over CDP), so Chromium only
+    {
+      name: 'passkey-react',
+      testMatch: /passkey\/.+\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://localhost:5176',
+      },
+    },
+    {
+      name: 'passkey-vue',
+      testMatch: /passkey\/.+\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://localhost:5177',
+      },
+    },
+
     // Customization tests - runs against react-custom example
     // This project tests CSS customization patterns (not run by default in CI)
     {
@@ -163,6 +198,20 @@ export default defineConfig({
     {
       command: 'pnpm --filter @txnlab/use-wallet-ui-vue-example dev',
       url: 'http://localhost:5175',
+      reuseExistingServer: !CI,
+      timeout: 120000,
+      cwd: '..',
+    },
+    {
+      command: 'pnpm --filter @txnlab/use-wallet-ui-react-passkey-example dev',
+      url: 'http://localhost:5176',
+      reuseExistingServer: !CI,
+      timeout: 120000,
+      cwd: '..',
+    },
+    {
+      command: 'pnpm --filter @txnlab/use-wallet-ui-vue-passkey-example dev',
+      url: 'http://localhost:5177',
       reuseExistingServer: !CI,
       timeout: 120000,
       cwd: '..',

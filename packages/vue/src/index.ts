@@ -6,6 +6,7 @@ export { default as ConnectedWalletButton } from './components/ConnectedWalletBu
 export { default as ConnectedWalletMenu } from './components/ConnectedWalletMenu.vue'
 export { default as WalletButton } from './components/WalletButton.vue'
 export { default as WalletList } from './components/WalletList.vue'
+export { default as PasskeyConnect } from './components/PasskeyConnect.vue'
 export { default as NfdAvatar } from './components/NfdAvatar.vue'
 export { default as AlgoSymbol } from './components/AlgoSymbol.vue'
 
@@ -17,6 +18,13 @@ export type { Theme, ResolvedTheme } from './composables/useResolvedTheme'
 
 export { default as WalletUIProvider } from './providers/WalletUIProvider.vue'
 export { useWalletUI } from './providers/walletUIContext'
+
+export { getPasskeyErrorMessage } from './utils/passkey'
+export type {
+  PasskeyConnectArgs,
+  PasskeyConnectLayout,
+  PasskeyConnectStatus,
+} from './utils/passkey'
 
 export { usePlugins } from './plugins/pluginContext'
 export type {

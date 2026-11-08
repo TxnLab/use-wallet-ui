@@ -11,10 +11,10 @@
   "dependencies": {
     "@perawallet/use-wallet-pera": "^1.0.0",
     "@tailwindcss/vite": "^4.1.0",
-    "@txnlab/use-wallet-defly": "^5.1.3",
-    "@txnlab/use-wallet-react": "^5.1.3",
+    "@txnlab/use-wallet-defly": "^5.2.0",
+    "@txnlab/use-wallet-react": "^5.2.0",
     "@txnlab/use-wallet-ui-react": "workspace:*",
-    "@txnlab/use-wallet-web3auth": "^5.1.3",
+    "@txnlab/use-wallet-web3auth": "^5.2.0",
     "@txnlab/utils-ts": "^0.1.0",
     "algosdk": "^3.7.0",
     "react": "^19.0.0",

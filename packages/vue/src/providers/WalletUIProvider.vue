@@ -14,6 +14,7 @@ import { WALLET_UI_CONTEXT_KEY } from './walletUIContext'
 import type { NfdView } from '../composables/useNfd'
 import type { Theme } from '../composables/useResolvedTheme'
 import type { PluginRenderContext, WalletUIPlugin } from '../plugins/types'
+import type { PasskeyConnectLayout } from '../utils/passkey'
 
 const THEME_STYLES_ID = 'wallet-ui-theme-styles'
 
@@ -85,12 +86,24 @@ const props = withDefaults(
     prefetchNfdView?: NfdView
     theme?: Theme
     plugins?: WalletUIPlugin[]
+    /**
+     * How connect dialogs present a passkey wallet, when one is configured.
+     * - 'list': "Sign in with passkey" and "Create a passkey" rows in a Passkey
+     *   group above a Wallets group (default). Suits apps where most users bring
+     *   a wallet.
+     * - 'featured': a "Continue with passkey" button leads, with the other
+     *   wallets below. Suits apps where the passkey is the main way in.
+     *
+     * A `passkey-layout` prop on `WalletButton` or `ConnectWalletMenu` overrides it.
+     */
+    passkeyLayout?: PasskeyConnectLayout
   }>(),
   {
     enablePrefetching: true,
     prefetchNfdView: 'thumbnail',
     theme: 'system',
     plugins: () => [],
+    passkeyLayout: 'list',
   },
 )
 
@@ -104,10 +117,13 @@ const dataTheme = computed(() =>
   props.theme === 'system' ? undefined : props.theme,
 )
 
+const passkeyLayout = computed(() => props.passkeyLayout)
+
 provide(WALLET_UI_CONTEXT_KEY, {
   queryClient,
   theme,
   resolvedTheme,
+  passkeyLayout,
 })
 
 const { activeAddress, activeWallet } = useWallet()

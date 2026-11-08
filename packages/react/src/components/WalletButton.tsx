@@ -6,6 +6,8 @@ import { ConnectedWalletMenu } from './ConnectedWalletMenu'
 import { type ButtonSize, ConnectWalletButton } from './ConnectWalletButton'
 import { ConnectWalletMenu } from './ConnectWalletMenu'
 
+import type { PasskeyConnectLayout } from '../utils/passkey'
+
 export interface WalletButtonProps {
   /** Size variant for the button */
   size?: ButtonSize
@@ -13,23 +15,37 @@ export interface WalletButtonProps {
   className?: string
   /** Inline styles to apply to the button (can include CSS variable overrides) */
   style?: React.CSSProperties
+  /**
+   * How the connect dialog presents a passkey wallet: 'list' or 'featured'.
+   * Overrides the `WalletUIProvider` setting; the default is 'list'.
+   */
+  passkeyLayout?: PasskeyConnectLayout
 }
 
-export function WalletButton({ size, className, style }: WalletButtonProps) {
+export function WalletButton({
+  size,
+  className,
+  style,
+  passkeyLayout,
+}: WalletButtonProps) {
   const { activeAddress } = useWallet()
 
   // If connected, show the connected wallet menu
   if (activeAddress) {
     return (
       <ConnectedWalletMenu>
-        <ConnectedWalletButton size={size} className={className} style={style} />
+        <ConnectedWalletButton
+          size={size}
+          className={className}
+          style={style}
+        />
       </ConnectedWalletMenu>
     )
   }
 
   // If not connected, show the ConnectWalletMenu with customized button
   return (
-    <ConnectWalletMenu>
+    <ConnectWalletMenu passkeyLayout={passkeyLayout}>
       <ConnectWalletButton size={size} className={className} style={style} />
     </ConnectWalletMenu>
   )

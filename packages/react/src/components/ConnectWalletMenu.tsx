@@ -14,8 +14,19 @@ import { useWallet } from '@txnlab/use-wallet-react'
 import React, { ReactElement, RefObject, useState } from 'react'
 
 import { useWalletUI } from '../providers/WalletUIProvider'
+import {
+  getPasskeyErrorCode,
+  getPasskeyErrorMessage,
+  isPasskeyWallet,
+  resolvePasskeyLayout,
+  type PasskeyConnectArgs,
+  type PasskeyConnectLayout,
+  type PasskeyConnectStatus,
+} from '../utils/passkey'
 
 import { ConnectWalletButton } from './ConnectWalletButton'
+import { PasskeyConnect } from './PasskeyConnect'
+import { WalletGroupLabel } from './WalletGroupLabel'
 import { WalletList } from './WalletList'
 
 import type { Wallet } from '@txnlab/use-wallet-react'
@@ -27,20 +38,38 @@ type RefableElement = ReactElement & {
 
 export interface ConnectWalletMenuProps {
   children?: RefableElement
+  /**
+   * How to present a passkey wallet: 'list' or 'featured'. Overrides the
+   * `WalletUIProvider` setting; the default is 'list'.
+   */
+  passkeyLayout?: PasskeyConnectLayout
 }
 
-export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
+export function ConnectWalletMenu({
+  children,
+  passkeyLayout: menuPasskeyLayout,
+}: ConnectWalletMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [animationState, setAnimationState] = useState<
     'starting' | 'entered' | 'exiting' | null
   >(null)
+  const [passkeyStatus, setPasskeyStatus] =
+    useState<PasskeyConnectStatus | null>(null)
 
   const { wallets, availableWallets, activeAddress } = useWallet()
-  const { theme } = useWalletUI()
+  const { theme, passkeyLayout: providerPasskeyLayout } = useWalletUI()
+  const passkeyLayout = resolvePasskeyLayout(
+    menuPasskeyLayout,
+    providerPasskeyLayout,
+  )
 
   // v5 filters wallets by the active network's capabilities (e.g. hides
   // Mnemonic on MainNet). v4 peers have no `availableWallets`, so fall back.
   const walletList = availableWallets ?? wallets
+
+  // A passkey wallet leads the dialog; the other wallets list below it
+  const passkeyWallet = walletList.find(isPasskeyWallet)
+  const otherWallets = walletList.filter((wallet) => !isPasskeyWallet(wallet))
 
   // Determine the data-theme attribute for the portal
   // Only set explicit themes, let 'system' use media query fallback
@@ -55,6 +84,7 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
       if (open) {
         setIsOpen(true)
         setAnimationState('starting')
+        setPasskeyStatus(null)
 
         // Start entry animation
         requestAnimationFrame(() => {
@@ -63,6 +93,7 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
       } else {
         // Start exit animation
         setAnimationState('exiting')
+        setPasskeyStatus(null)
 
         // Remove component after animation completes
         setTimeout(() => {
@@ -89,12 +120,43 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
   const labelId = useId()
   const descriptionId = useId()
 
-  const handleWalletClick = async (wallet: Wallet) => {
+  const handleWalletClick = async (
+    wallet: Wallet,
+    args?: PasskeyConnectArgs,
+  ) => {
+    const isPasskey = isPasskeyWallet(wallet)
     try {
-      await wallet.connect()
+      // Call connect before any await: Safari and iOS browsers drop the
+      // user's tap across an await, and the passkey prompt needs it
+      const connecting = wallet.connect(args)
+      if (isPasskey) {
+        setPasskeyStatus({
+          walletId: wallet.id,
+          pending: true,
+          error: null,
+          action: args?.create ? 'create' : 'sign-in',
+        })
+      }
+      await connecting
       context.onOpenChange(false)
     } catch (error) {
       console.error(`Error connecting to ${wallet.metadata.name}:`, error)
+
+      // Keep the dialog open for passkey errors, so the user can retry or
+      // switch between creating a passkey and signing in
+      const message = isPasskey ? getPasskeyErrorMessage(error) : null
+      if (message) {
+        const hint =
+          !args?.create && getPasskeyErrorCode(error) === 'cancelled'
+            ? " New here? Choose 'Create a passkey'."
+            : ''
+        setPasskeyStatus({
+          walletId: wallet.id,
+          pending: false,
+          error: message + hint,
+        })
+        return
+      }
       context.onOpenChange(false)
     }
   }
@@ -180,13 +242,64 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
                     </button>
                   </div>
 
-                  {/* Wallet list */}
-                  <div className="px-4 pb-3">
-                    <WalletList
-                      wallets={walletList}
-                      handleWalletClick={handleWalletClick}
-                    />
-                  </div>
+                  {passkeyWallet && passkeyLayout === 'list' ? (
+                    /* List layout: a Passkey group above a Wallets group */
+                    <div className="px-4 pb-3">
+                      <div className="flex flex-col gap-2.5">
+                        <PasskeyConnect
+                          layout="list"
+                          showLabel={otherWallets.length > 0}
+                          wallet={passkeyWallet}
+                          handleWalletClick={handleWalletClick}
+                          status={passkeyStatus}
+                        />
+                        {otherWallets.length > 0 && (
+                          <div className="flex flex-col gap-1">
+                            <WalletGroupLabel>Wallets</WalletGroupLabel>
+                            <WalletList
+                              wallets={otherWallets}
+                              handleWalletClick={handleWalletClick}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      {passkeyWallet && (
+                        <PasskeyConnect
+                          layout="featured"
+                          wallet={passkeyWallet}
+                          handleWalletClick={handleWalletClick}
+                          status={passkeyStatus}
+                        />
+                      )}
+
+                      {passkeyWallet && otherWallets.length > 0 && (
+                        <div className="flex items-center gap-3 px-6 pt-1 pb-2.5 text-xs text-[var(--wui-color-text-secondary)]">
+                          <span
+                            className="flex-1 h-px bg-[var(--wui-color-border)]"
+                            aria-hidden="true"
+                          />
+                          or connect a wallet
+                          <span
+                            className="flex-1 h-px bg-[var(--wui-color-border)]"
+                            aria-hidden="true"
+                          />
+                        </div>
+                      )}
+
+                      {/* Wallet list */}
+                      {(!passkeyWallet || otherWallets.length > 0) && (
+                        <div className="px-4 pb-3">
+                          <WalletList
+                            wallets={otherWallets}
+                            handleWalletClick={handleWalletClick}
+                          />
+                        </div>
+                      )}
+                    </>
+                  )}
 
                   {/* Footer section */}
                   <div className="px-6 py-5 border-t border-[var(--wui-color-border)] flex items-center justify-between">

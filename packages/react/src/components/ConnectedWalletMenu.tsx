@@ -28,6 +28,7 @@ import { useNfd } from '../hooks/useNfd'
 import { usePlugins } from '../plugins/PluginContext'
 import { PluginSlot } from '../plugins/PluginSlot'
 import { useWalletUI } from '../providers/WalletUIProvider'
+import { getPasskeyAccountDomain, isPasskeyWallet } from '../utils/passkey'
 
 import { AlgoSymbol } from './AlgoSymbol'
 import { ConnectedWalletButton } from './ConnectedWalletButton'
@@ -428,6 +429,17 @@ function ConnectedWalletMenuContent({ children }: ConnectedWalletMenuProps) {
                           <p className="text-sm text-[var(--wui-color-text-secondary)]">
                             {activeWallet.metadata.name}
                           </p>
+                          {/* A passkey account belongs to the site that created it */}
+                          {isPasskeyWallet(activeWallet) && (
+                            <span
+                              data-passkey-domain
+                              className="rounded-md bg-[var(--wui-color-bg-tertiary)] px-[7px] py-px text-xs text-[var(--wui-color-text-secondary)]"
+                            >
+                              {getPasskeyAccountDomain(
+                                activeWallet.activeAccount?.name,
+                              )}
+                            </span>
+                          )}
                         </div>
                       )}
 

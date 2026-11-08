@@ -7,6 +7,9 @@ export { ConnectedWalletButton } from './components/ConnectedWalletButton'
 export { ConnectedWalletMenu } from './components/ConnectedWalletMenu'
 export { WalletButton } from './components/WalletButton'
 export { WalletList } from './components/WalletList'
+export type { WalletListProps } from './components/WalletList'
+export { PasskeyConnect } from './components/PasskeyConnect'
+export type { PasskeyConnectProps } from './components/PasskeyConnect'
 export { NfdAvatar } from './components/NfdAvatar'
 
 // Hooks
@@ -18,6 +21,14 @@ export type { Theme, ResolvedTheme } from './hooks/useResolvedTheme'
 
 // Providers
 export { WalletUIProvider, useWalletUI } from './providers/WalletUIProvider'
+
+// Passkey wallet
+export { getPasskeyErrorMessage } from './utils/passkey'
+export type {
+  PasskeyConnectArgs,
+  PasskeyConnectLayout,
+  PasskeyConnectStatus,
+} from './utils/passkey'
 
 // Plugin system
 export { usePlugins } from './plugins/PluginContext'

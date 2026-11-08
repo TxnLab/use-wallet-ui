@@ -7,6 +7,7 @@ import dts from 'vite-plugin-dts'
 const entries = {
   index: resolve(__dirname, 'src/index.ts'),
   'plugins/export-key': resolve(__dirname, 'src/plugins/export-key/index.tsx'),
+  'plugins/passkey': resolve(__dirname, 'src/plugins/passkey/index.tsx'),
 }
 
 const globals = {
@@ -91,7 +92,7 @@ export default defineConfig({
           await fs.writeFile(indexDcts, indexContent)
 
           // Copy plugin types
-          const pluginDirs = ['export-key']
+          const pluginDirs = ['export-key', 'passkey']
           for (const dir of pluginDirs) {
             const pluginDts = resolve(typesDir, `plugins/${dir}/index.d.ts`)
             const pluginDcts = resolve(typesDir, `plugins/${dir}/index.d.cts`)
