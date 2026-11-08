@@ -36,7 +36,7 @@ function throwingStorage(): Storage {
   }
 }
 
-describe('passkey per-account storage', () => {
+describe('passkey disclosure dismissal', () => {
   afterEach(() => {
     vi.unstubAllGlobals()
   })
@@ -66,32 +66,5 @@ describe('passkey per-account storage', () => {
     expect(isDisclosureDismissed(ADDRESS)).toBe(false)
     expect(() => dismissDisclosure(ADDRESS)).not.toThrow()
     expect(isDisclosureDismissed(ADDRESS)).toBe(true)
-  })
-
-  it('keeps the recovery phrase flag separate from the disclosure', async () => {
-    const storage = memoryStorage()
-    vi.stubGlobal('localStorage', storage)
-    const {
-      isDisclosureDismissed,
-      isRecoveryPhraseShown,
-      markRecoveryPhraseShown,
-    } = await load()
-
-    expect(isRecoveryPhraseShown(ADDRESS)).toBe(false)
-    markRecoveryPhraseShown(ADDRESS)
-    expect(isRecoveryPhraseShown(ADDRESS)).toBe(true)
-    expect(isRecoveryPhraseShown('OTHERADDRESS')).toBe(false)
-    expect(isDisclosureDismissed(ADDRESS)).toBe(false)
-    expect(
-      storage.getItem(`wui:passkey-recovery-phrase-shown:${ADDRESS}`),
-    ).toBe('1')
-  })
-
-  it('remembers a shown recovery phrase in memory when storage throws', async () => {
-    vi.stubGlobal('localStorage', throwingStorage())
-    const { isRecoveryPhraseShown, markRecoveryPhraseShown } = await load()
-
-    expect(() => markRecoveryPhraseShown(ADDRESS)).not.toThrow()
-    expect(isRecoveryPhraseShown(ADDRESS)).toBe(true)
   })
 })

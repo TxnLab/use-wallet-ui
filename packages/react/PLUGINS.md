@@ -376,7 +376,7 @@ The plugin:
 - Injects menu items in the `after-wallet-info` slot, only while the passkey wallet is active
 - With `disclosure` on, shows a note that the account belongs to this site (order 5) until the user chooses "Got it". The dismissal is remembered per account address in `localStorage` (`wui:passkey-disclosure-dismissed:<address>`), or in memory for the page session if storage is unavailable.
 - With `session: true`, shows Locked or Unlocked with Unlock and Lock buttons (order 10). The adapter's `onLock` and `onUnlock` belong to your app, so the menu reads `isUnlocked` when it opens, after its own buttons, and every second while open.
-- Adds "Back up account" (order 20), which opens a dialog: a warning with Falcon / quantum import instructions, a fresh passkey prompt, then the 25-word recovery phrase with a countdown and copy-to-clipboard. The phrase stays in component state only, and closing clears the clipboard if it was copied (best effort). Until the phrase has been revealed once for the account, the item is tagged "Not backed up" (remembered per address in `localStorage`, like the disclosure). It records only that the phrase was shown, not that the user wrote it down.
+- Adds "Back up account" (order 20), which opens a dialog: a warning with Falcon / quantum import instructions, a fresh passkey prompt, then the 25-word recovery phrase with a countdown and copy-to-clipboard. The phrase stays in component state only, and closing clears the clipboard if it was copied (best effort).
 
 The adapter keeps `canUsePrivateKey` false, so the [Export Key Plugin](#export-key-plugin) never shows a passkey account's phrase as a regular account's.
 
@@ -384,7 +384,7 @@ The adapter keeps `canUsePrivateKey` false, so the [Export Key Plugin](#export-k
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `recoveryPhrase` | `boolean \| { displayTimeout?: number; backupReminder?: boolean }` | `true` | Add "Back up account". `displayTimeout` is the seconds before the phrase hides (default `60`); `backupReminder: false` drops the "Not backed up" tag. |
+| `recoveryPhrase` | `boolean \| { displayTimeout?: number }` | `true` | Add "Back up account". `displayTimeout` is the seconds before the phrase hides (default `60`). |
 | `session` | `boolean` | `false` | Show lock status with Unlock and Lock. Turn it on when the wallet uses `passkey({ session })`. |
 | `disclosure` | `boolean \| string` | `false` | Show the note on whose account it is until "Got it". A string replaces the text; `{domain}` becomes the account's domain. |
 

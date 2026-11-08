@@ -10,7 +10,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { getPasskeyErrorMessage } from '../../utils/passkey'
 
-import { markRecoveryPhraseShown } from './storage'
 import { usePasskeyAdapter } from './usePasskeyAdapter'
 
 import type { PluginRenderContext } from '../types'
@@ -127,7 +126,6 @@ export function PasskeyRecoveryDialog({
       ({ phrase }) => {
         // Drop the phrase if the dialog closed while the prompt was open
         if (!isMountedRef.current || isClosingRef.current) return
-        if (ctx.activeAddress) markRecoveryPhraseShown(ctx.activeAddress)
         setWords(phrase.split(' '))
         setTimeRemaining(displayTimeout)
         setStep('display')

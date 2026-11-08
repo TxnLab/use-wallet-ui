@@ -649,7 +649,7 @@ The connected wallet menu tags a passkey account with its domain (for example, `
 
 `passkeyPlugin()` adds to the connected wallet menu, only while the passkey wallet is active:
 
-- **Back up account**: a dialog that reveals the account's 25-word recovery phrase after a fresh passkey prompt, and tells users to import it as a Falcon / quantum account (in Lute, Add account → Falcon25 account → Import; in Pera, the quantum import). It hides the phrase after a timeout and clears the clipboard when it closes, if it can. Until the phrase has been revealed once, the item is tagged "Not backed up".
+- **Back up account**: a dialog that reveals the account's 25-word recovery phrase after a fresh passkey prompt, and tells users to import it as a Falcon / quantum account (in Lute, Add account → Falcon25 account → Import; in Pera, the quantum import). It hides the phrase after a timeout and clears the clipboard when it closes, if it can.
 - **Session status** (with `session: true`): Locked or Unlocked, with Unlock and Lock buttons
 - **A note on whose account it is** (with `disclosure: true`): "This account is created by and for example.com. Keep only what you need here, and move larger amounts to a wallet you control." It shows until the user chooses **Got it**, once per account.
 

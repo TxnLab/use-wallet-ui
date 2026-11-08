@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { PASSKEY_RECOVERY_DIALOG } from './constants'
-import { isRecoveryPhraseShown } from './storage'
 import type { MenuRenderContext } from '../types'
 
 const props = defineProps<{
   ctx: MenuRenderContext
-  /** Tag the item "Not backed up" until the phrase has been shown once */
-  backupReminder: boolean
 }>()
 
 // Only opens the dialog: the passkey prompt starts from its Reveal button
@@ -14,19 +11,12 @@ function handleClick(): void {
   props.ctx.closeMenu()
   props.ctx.openDialog(PASSKEY_RECOVERY_DIALOG)
 }
-
-// Read when the menu opens; revealing the phrase closes the menu first
-const notBackedUp =
-  props.backupReminder &&
-  !!props.ctx.activeAddress &&
-  !isRecoveryPhraseShown(props.ctx.activeAddress)
 </script>
 
 <template>
   <div class="border-t border-[var(--wui-color-border)] mt-2 mb-2" />
   <button
     @click="handleClick"
-    data-passkey-backup
     class="w-full flex items-center gap-2 px-2 py-2 rounded-lg text-sm text-[var(--wui-color-text-secondary)] hover:bg-[var(--wui-color-bg-hover)] transition-colors"
   >
     <!-- Numbered list: the recovery phrase is 25 numbered words. A key would
@@ -43,13 +33,6 @@ const notBackedUp =
       />
     </svg>
     <span class="flex-1 text-left">Back up account</span>
-    <span
-      v-if="notBackedUp"
-      data-passkey-not-backed-up
-      class="rounded-md bg-[var(--wui-color-bg-tertiary)] px-[7px] py-px text-xs text-[var(--wui-color-text-secondary)]"
-    >
-      Not backed up
-    </span>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       class="h-4 w-4 shrink-0 opacity-50"

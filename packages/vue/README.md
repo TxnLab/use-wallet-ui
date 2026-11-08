@@ -108,15 +108,15 @@ Choose how the connect dialog presents the passkey wallet with `passkey-layout` 
 
 `passkeyPlugin()` adds to the connected wallet menu, only while the passkey wallet is active:
 
-- **Back up account**: reveals the 25-word recovery phrase after a fresh passkey prompt, and tells users to import it as a Falcon / quantum account (in Lute, Add account → Falcon25 account → Import; in Pera, the quantum import). The phrase hides after a timeout. Until it has been revealed once, the item is tagged "Not backed up".
+- **Back up account**: reveals the 25-word recovery phrase after a fresh passkey prompt, and tells users to import it as a Falcon / quantum account (in Lute, Add account → Falcon25 account → Import; in Pera, the quantum import). The phrase hides after a timeout.
 - **Session status** (with `session: true`): Locked or Unlocked, with Unlock and Lock buttons
 - **A note on whose account it is** (with `disclosure: true`), shown until the user chooses **Got it**, once per account
 
-| Option           | Type                                                               | Default | Description                                                                                                                                   |
-| ---------------- | ------------------------------------------------------------------ | ------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `recoveryPhrase` | `boolean \| { displayTimeout?: number; backupReminder?: boolean }` | `true`  | Add "Back up account". `displayTimeout` is the seconds before the phrase hides (`60`); `backupReminder: false` drops the "Not backed up" tag. |
-| `session`        | `boolean`                                                          | `false` | Show lock status with Unlock and Lock. Turn it on with `passkey({ session })`.                                                                |
-| `disclosure`     | `boolean \| string`                                                | `false` | Show the note on whose account it is until "Got it". A string replaces it; `{domain}` is the domain.                                          |
+| Option           | Type                                     | Default | Description                                                                                          |
+| ---------------- | ---------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------- |
+| `recoveryPhrase` | `boolean \| { displayTimeout?: number }` | `true`  | Add "Back up account". `displayTimeout` is the seconds before the phrase hides (`60`).               |
+| `session`        | `boolean`                                | `false` | Show lock status with Unlock and Lock. Turn it on with `passkey({ session })`.                       |
+| `disclosure`     | `boolean \| string`                      | `false` | Show the note on whose account it is until "Got it". A string replaces it; `{domain}` is the domain. |
 
 The plugin uses `useWalletManager()`, so it requires `@txnlab/use-wallet-vue` 5.2 or later, which any app with the passkey wallet has. The main entry still supports v4.6+. Read the adapter's [security model](https://github.com/TxnLab/use-wallet/tree/main/packages/wallets/passkey#security-model) before you ship it.
 

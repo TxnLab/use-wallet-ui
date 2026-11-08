@@ -422,37 +422,6 @@ test.describe('Passkey wallet', () => {
     await expect(other).toBeDisabled()
     await expect(other).toHaveCSS('opacity', '0.5')
   })
-
-  test("tags 'Back up account' until the phrase has been shown", async ({
-    page,
-  }) => {
-    await addVirtualAuthenticator(page)
-    await createPasskeyAccount(page)
-    await openConnectedMenu(page)
-
-    const backup = page.getByRole('button', { name: /Back up account/ })
-    await expect(backup.locator('[data-passkey-not-backed-up]')).toHaveText(
-      'Not backed up',
-    )
-
-    await backup.click()
-    const dialog = page.locator('[data-passkey-recovery-dialog]')
-    await dialog.getByRole('button', { name: 'Reveal Recovery Phrase' }).click()
-    await expect(dialog.locator('[data-passkey-phrase] li')).toHaveCount(25)
-    await dialog.getByRole('button', { name: 'Done' }).click()
-    await expect(dialog).toBeHidden()
-
-    await openConnectedMenu(page)
-    await expect(backup).toBeVisible()
-    await expect(page.locator('[data-passkey-not-backed-up]')).toHaveCount(0)
-
-    // Remembered for this account across page loads
-    await page.reload()
-    await page.waitForSelector('[data-wallet-button]')
-    await openConnectedMenu(page)
-    await expect(backup).toBeVisible()
-    await expect(page.locator('[data-passkey-not-backed-up]')).toHaveCount(0)
-  })
 })
 
 // passkeyLayout: 'list', the default

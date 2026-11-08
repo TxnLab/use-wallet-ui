@@ -33,9 +33,6 @@ function createAddressFlag(keyPrefix: string): AddressFlag {
 const disclosureDismissed = createAddressFlag(
   'wui:passkey-disclosure-dismissed:',
 )
-const recoveryPhraseShown = createAddressFlag(
-  'wui:passkey-recovery-phrase-shown:',
-)
 
 /** Whether the user dismissed the passkey disclosure for this account */
 export const isDisclosureDismissed = (address: string): boolean =>
@@ -44,14 +41,3 @@ export const isDisclosureDismissed = (address: string): boolean =>
 /** Remember that the user dismissed the passkey disclosure for this account */
 export const dismissDisclosure = (address: string): void =>
   disclosureDismissed.set(address)
-
-/**
- * Whether this account's recovery phrase has been shown. Only that it was
- * revealed, not that the user wrote it down.
- */
-export const isRecoveryPhraseShown = (address: string): boolean =>
-  recoveryPhraseShown.has(address)
-
-/** Remember that this account's recovery phrase was shown */
-export const markRecoveryPhraseShown = (address: string): void =>
-  recoveryPhraseShown.set(address)
