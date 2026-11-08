@@ -3,6 +3,8 @@ import { test as base, type CDPSession, type Page } from '@playwright/test'
 type AuthenticatorOptions = {
   hasPrf?: boolean
   isUserVerified?: boolean
+  /** false keeps passkey prompts open, to see the pending state */
+  automaticPresenceSimulation?: boolean
 }
 
 export interface VirtualAuthenticator {
@@ -16,7 +18,11 @@ export interface VirtualAuthenticator {
  */
 export async function addVirtualAuthenticator(
   page: Page,
-  { hasPrf = true, isUserVerified = true }: AuthenticatorOptions = {},
+  {
+    hasPrf = true,
+    isUserVerified = true,
+    automaticPresenceSimulation = true,
+  }: AuthenticatorOptions = {},
 ): Promise<VirtualAuthenticator> {
   const client = await page.context().newCDPSession(page)
   await client.send('WebAuthn.enable')
@@ -31,7 +37,7 @@ export async function addVirtualAuthenticator(
         hasUserVerification: true,
         isUserVerified,
         hasPrf,
-        automaticPresenceSimulation: true,
+        automaticPresenceSimulation,
       },
     },
   )

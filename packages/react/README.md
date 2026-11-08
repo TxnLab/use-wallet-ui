@@ -642,14 +642,14 @@ function App() {
 The connect dialog:
 
 - Starts the passkey prompt straight from the tap, as Safari and iOS browsers require
-- Shows "Waiting for your passkey…" and disables both controls while the prompt is open
+- While the prompt is open, shows "Waiting for your passkey…" on the control the user pressed and dims the other
 - Stays open on passkey errors and explains them: a cancelled or timed-out prompt (or no passkey found), an in-app browser (open the page in Safari or Chrome), or a passkey provider without the PRF extension (try another provider)
 
 The connected wallet menu tags a passkey account with its domain (for example, `Passkey · localhost`), since the account belongs to the site that created it.
 
 `passkeyPlugin()` adds to the connected wallet menu, only while the passkey wallet is active:
 
-- **Export Recovery Phrase**: a dialog that reveals the account's 25-word phrase after a fresh passkey prompt, and tells users to import it as a Falcon / quantum account (in Lute, Add account → Falcon25 account → Import; in Pera, the quantum import). It hides the phrase after a timeout and clears the clipboard when it closes, if it can.
+- **Back up account**: a dialog that reveals the account's 25-word recovery phrase after a fresh passkey prompt, and tells users to import it as a Falcon / quantum account (in Lute, Add account → Falcon25 account → Import; in Pera, the quantum import). It hides the phrase after a timeout and clears the clipboard when it closes, if it can. Until the phrase has been revealed once, the item is tagged "Not backed up".
 - **Session status** (with `session: true`): Locked or Unlocked, with Unlock and Lock buttons
 - **A note on whose account it is** (with `disclosure: true`): "This account is created by and for example.com. Keep only what you need here, and move larger amounts to a wallet you control." It shows until the user chooses **Got it**, once per account.
 

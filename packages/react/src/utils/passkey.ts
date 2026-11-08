@@ -21,6 +21,8 @@ export interface PasskeyConnectStatus {
   walletId: string
   pending: boolean
   error: string | null
+  /** Which control started the request, so it can show the pending state */
+  action?: 'sign-in' | 'create'
 }
 
 /**

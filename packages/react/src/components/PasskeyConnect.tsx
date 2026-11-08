@@ -1,3 +1,5 @@
+import { cn } from '../utils/cn'
+
 import { WalletGroupLabel } from './WalletGroupLabel'
 import { WalletIcon } from './WalletIcon'
 
@@ -31,8 +33,18 @@ export interface PasskeyConnectProps {
   showLabel?: boolean
 }
 
+const WAITING = 'Waiting for your passkey…'
+
 const ROW_CLASS =
-  'flex w-full items-center gap-3 py-1.5 px-1.5 text-left text-[var(--wui-color-text)] transition-colors hover:bg-[var(--wui-color-bg-hover)] rounded-xl disabled:opacity-50 disabled:cursor-not-allowed'
+  'flex w-full items-center gap-3 py-1.5 px-1.5 text-left text-[var(--wui-color-text)] transition-colors hover:bg-[var(--wui-color-bg-hover)] disabled:hover:bg-transparent rounded-xl'
+
+// The control that started the request stays at full strength (and shows
+// the waiting state); the other one dims while the passkey prompt is open
+function pendingClass(isPressed: boolean): string {
+  return isPressed
+    ? 'disabled:cursor-wait'
+    : 'disabled:opacity-50 disabled:cursor-not-allowed'
+}
 
 /**
  * The passkey section of the connect dialog: one action signs in, and
@@ -49,6 +61,16 @@ export function PasskeyConnect({
 }: PasskeyConnectProps) {
   const current = status?.walletId === wallet.id ? status : null
   const pending = !!current?.pending
+  const pendingAction = pending ? (current?.action ?? 'sign-in') : null
+  const signingIn = pendingAction === 'sign-in'
+  const creating = pendingAction === 'create'
+
+  // Announced to screen readers; the pressed control shows it visually
+  const statusRegion = (
+    <p role="status" className="sr-only">
+      {pending ? WAITING : ''}
+    </p>
+  )
 
   if (layout === 'list') {
     return (
@@ -60,11 +82,12 @@ export function PasskeyConnect({
               type="button"
               onClick={() => handleWalletClick(wallet)}
               disabled={pending}
-              className={ROW_CLASS}
+              aria-busy={signingIn}
+              className={cn(ROW_CLASS, pendingClass(signingIn))}
             >
-              <WalletIcon wallet={wallet} />
+              {signingIn ? <SpinnerTile /> : <WalletIcon wallet={wallet} />}
               <span className="text-lg font-bold wallet-custom-font">
-                Sign in with passkey
+                {signingIn ? WAITING : 'Sign in with passkey'}
               </span>
             </button>
           </li>
@@ -73,36 +96,34 @@ export function PasskeyConnect({
               type="button"
               onClick={() => handleWalletClick(wallet, { create: true })}
               disabled={pending}
-              className={ROW_CLASS}
+              aria-busy={creating}
+              className={cn(ROW_CLASS, pendingClass(creating))}
             >
-              <div className="shrink-0 h-8 w-8 rounded-md border-[1.5px] border-dashed border-[var(--wui-color-text-tertiary)] text-[var(--wui-color-text-secondary)] flex items-center justify-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-[18px] w-[18px]"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                  aria-hidden="true"
-                >
-                  <path d="M12 5v14M5 12h14" />
-                </svg>
-              </div>
+              {creating ? (
+                <SpinnerTile />
+              ) : (
+                <div className="shrink-0 h-8 w-8 rounded-md border-[1.5px] border-dashed border-[var(--wui-color-text-tertiary)] text-[var(--wui-color-text-secondary)] flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-[18px] w-[18px]"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 5v14M5 12h14" />
+                  </svg>
+                </div>
+              )}
               <span className="text-lg font-bold wallet-custom-font">
-                Create a passkey
+                {creating ? WAITING : 'Create a passkey'}
               </span>
             </button>
           </li>
         </ul>
-        {pending && (
-          <p
-            role="status"
-            className="px-1.5 pb-1 text-sm text-[var(--wui-color-text-secondary)]"
-          >
-            Waiting for your passkey…
-          </p>
-        )}
+        {statusRegion}
         {!pending && current?.error && (
           <p
             role="alert"
@@ -124,25 +145,32 @@ export function PasskeyConnect({
         type="button"
         onClick={() => handleWalletClick(wallet)}
         disabled={pending}
-        className="flex w-full items-center justify-center gap-2.5 rounded-[14px] px-4 py-3 text-base font-semibold bg-[var(--wui-color-primary)] text-[var(--wui-color-primary-text)] hover:bg-[var(--wui-color-primary-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        aria-busy={signingIn}
+        className={cn(
+          'flex w-full items-center justify-center gap-2.5 rounded-[14px] px-4 py-3 text-base font-semibold bg-[var(--wui-color-primary)] text-[var(--wui-color-primary-text)] hover:bg-[var(--wui-color-primary-hover)] transition-colors',
+          pendingClass(signingIn),
+        )}
       >
-        <KeyRoundIcon />
-        {pending ? 'Waiting for your passkey…' : 'Continue with passkey'}
+        {signingIn ? <Spinner className="h-5 w-5" /> : <KeyRoundIcon />}
+        {signingIn ? WAITING : 'Continue with passkey'}
       </button>
       <p className="text-center text-sm text-[var(--wui-color-text-secondary)]">
-        New here?{' '}
+        {!creating && 'New here? '}
         <button
           type="button"
           onClick={() => handleWalletClick(wallet, { create: true })}
           disabled={pending}
-          className="font-medium text-[var(--wui-color-link)] hover:text-[var(--wui-color-link-hover)] disabled:opacity-50 disabled:cursor-not-allowed"
+          aria-busy={creating}
+          className={cn(
+            'inline-flex items-center gap-1.5 font-medium text-[var(--wui-color-link)] hover:text-[var(--wui-color-link-hover)]',
+            pendingClass(creating),
+          )}
         >
-          Create a passkey
+          {creating && <Spinner className="h-3.5 w-3.5" />}
+          {creating ? WAITING : 'Create a passkey'}
         </button>
       </p>
-      <p role="status" className="sr-only">
-        {pending ? 'Waiting for your passkey…' : ''}
-      </p>
+      {statusRegion}
       {!pending && current?.error && (
         <p
           role="alert"
@@ -152,6 +180,41 @@ export function PasskeyConnect({
         </p>
       )}
     </div>
+  )
+}
+
+/** A spinner in place of a 32 px wallet icon */
+function SpinnerTile() {
+  return (
+    <div className="shrink-0 h-8 w-8 rounded-md bg-[var(--wui-color-bg-secondary)] text-[var(--wui-color-text-secondary)] flex items-center justify-center">
+      <Spinner className="h-[18px] w-[18px]" />
+    </div>
+  )
+}
+
+function Spinner({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn('shrink-0 animate-spin', className)}
+      fill="none"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      />
+    </svg>
   )
 }
 

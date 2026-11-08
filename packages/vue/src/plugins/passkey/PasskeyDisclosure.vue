@@ -4,7 +4,7 @@ import { computed, ref } from 'vue'
 import { getPasskeyAccountDomain } from '../../utils/passkey'
 import type { MenuRenderContext } from '../types'
 
-import { dismissDisclosure, isDisclosureDismissed } from './disclosureStorage'
+import { dismissDisclosure, isDisclosureDismissed } from './storage'
 
 /**
  * Tells users the passkey account belongs to the site that created it. Shows

@@ -8,6 +8,9 @@ import type {
   PasskeyConnectStatus,
 } from '../utils/passkey'
 
+import { cn } from '../utils/cn'
+
+import Spinner from './Spinner.vue'
 import WalletGroupLabel from './WalletGroupLabel.vue'
 import WalletIcon from './WalletIcon.vue'
 
@@ -47,9 +50,24 @@ const current = computed(() =>
   props.status?.walletId === props.wallet.id ? props.status : null,
 )
 const pending = computed(() => !!current.value?.pending)
+const pendingAction = computed(() =>
+  pending.value ? (current.value?.action ?? 'sign-in') : null,
+)
+const signingIn = computed(() => pendingAction.value === 'sign-in')
+const creating = computed(() => pendingAction.value === 'create')
+
+const WAITING = 'Waiting for your passkey…'
 
 const ROW_CLASS =
-  'flex w-full items-center gap-3 py-1.5 px-1.5 text-left text-[var(--wui-color-text)] transition-colors hover:bg-[var(--wui-color-bg-hover)] rounded-xl disabled:opacity-50 disabled:cursor-not-allowed'
+  'flex w-full items-center gap-3 py-1.5 px-1.5 text-left text-[var(--wui-color-text)] transition-colors hover:bg-[var(--wui-color-bg-hover)] disabled:hover:bg-transparent rounded-xl'
+
+// The control that started the request stays at full strength (and shows
+// the waiting state); the other one dims while the passkey prompt is open
+function pendingClass(isPressed: boolean): string {
+  return isPressed
+    ? 'disabled:cursor-wait'
+    : 'disabled:opacity-50 disabled:cursor-not-allowed'
+}
 </script>
 
 <template>
@@ -65,11 +83,18 @@ const ROW_CLASS =
           type="button"
           @click="() => handleWalletClick(wallet)"
           :disabled="pending"
-          :class="ROW_CLASS"
+          :aria-busy="signingIn"
+          :class="cn(ROW_CLASS, pendingClass(signingIn))"
         >
-          <WalletIcon :wallet="wallet" />
+          <div
+            v-if="signingIn"
+            class="shrink-0 h-8 w-8 rounded-md bg-[var(--wui-color-bg-secondary)] text-[var(--wui-color-text-secondary)] flex items-center justify-center"
+          >
+            <Spinner class="h-[18px] w-[18px]" />
+          </div>
+          <WalletIcon v-else :wallet="wallet" />
           <span class="text-lg font-bold wallet-custom-font">
-            Sign in with passkey
+            {{ signingIn ? WAITING : 'Sign in with passkey' }}
           </span>
         </button>
       </li>
@@ -78,9 +103,17 @@ const ROW_CLASS =
           type="button"
           @click="() => handleWalletClick(wallet, { create: true })"
           :disabled="pending"
-          :class="ROW_CLASS"
+          :aria-busy="creating"
+          :class="cn(ROW_CLASS, pendingClass(creating))"
         >
           <div
+            v-if="creating"
+            class="shrink-0 h-8 w-8 rounded-md bg-[var(--wui-color-bg-secondary)] text-[var(--wui-color-text-secondary)] flex items-center justify-center"
+          >
+            <Spinner class="h-[18px] w-[18px]" />
+          </div>
+          <div
+            v-else
             class="shrink-0 h-8 w-8 rounded-md border-[1.5px] border-dashed border-[var(--wui-color-text-tertiary)] text-[var(--wui-color-text-secondary)] flex items-center justify-center"
           >
             <svg
@@ -97,20 +130,15 @@ const ROW_CLASS =
             </svg>
           </div>
           <span class="text-lg font-bold wallet-custom-font">
-            Create a passkey
+            {{ creating ? WAITING : 'Create a passkey' }}
           </span>
         </button>
       </li>
     </ul>
+    <!-- Announced to screen readers; the pressed control shows it visually -->
+    <p role="status" class="sr-only">{{ pending ? WAITING : '' }}</p>
     <p
-      v-if="pending"
-      role="status"
-      class="px-1.5 pb-1 text-sm text-[var(--wui-color-text-secondary)]"
-    >
-      Waiting for your passkey…
-    </p>
-    <p
-      v-else-if="current?.error"
+      v-if="!pending && current?.error"
       role="alert"
       class="mx-1.5 mb-1 rounded-lg bg-[var(--wui-color-danger-bg)] px-3 py-2 text-sm text-[var(--wui-color-danger-text)]"
     >
@@ -127,10 +155,18 @@ const ROW_CLASS =
       type="button"
       @click="() => handleWalletClick(wallet)"
       :disabled="pending"
-      class="flex w-full items-center justify-center gap-2.5 rounded-[14px] px-4 py-3 text-base font-semibold bg-[var(--wui-color-primary)] text-[var(--wui-color-primary-text)] hover:bg-[var(--wui-color-primary-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      :aria-busy="signingIn"
+      :class="
+        cn(
+          'flex w-full items-center justify-center gap-2.5 rounded-[14px] px-4 py-3 text-base font-semibold bg-[var(--wui-color-primary)] text-[var(--wui-color-primary-text)] hover:bg-[var(--wui-color-primary-hover)] transition-colors',
+          pendingClass(signingIn),
+        )
+      "
     >
+      <Spinner v-if="signingIn" class="h-5 w-5" />
       <!-- Key glyph: Lucide "key-round", ISC License, https://lucide.dev/license -->
       <svg
+        v-else
         xmlns="http://www.w3.org/2000/svg"
         class="h-5 w-5 shrink-0"
         viewBox="0 0 24 24"
@@ -146,22 +182,28 @@ const ROW_CLASS =
         />
         <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" />
       </svg>
-      {{ pending ? 'Waiting for your passkey…' : 'Continue with passkey' }}
+      {{ signingIn ? WAITING : 'Continue with passkey' }}
     </button>
     <p class="text-center text-sm text-[var(--wui-color-text-secondary)]">
-      New here?
+      <template v-if="!creating">New here? </template>
       <button
         type="button"
         @click="() => handleWalletClick(wallet, { create: true })"
         :disabled="pending"
-        class="font-medium text-[var(--wui-color-link)] hover:text-[var(--wui-color-link-hover)] disabled:opacity-50 disabled:cursor-not-allowed"
+        :aria-busy="creating"
+        :class="
+          cn(
+            'inline-flex items-center gap-1.5 font-medium text-[var(--wui-color-link)] hover:text-[var(--wui-color-link-hover)]',
+            pendingClass(creating),
+          )
+        "
       >
-        Create a passkey
+        <Spinner v-if="creating" class="h-3.5 w-3.5" />
+        {{ creating ? WAITING : 'Create a passkey' }}
       </button>
     </p>
-    <p role="status" class="sr-only">
-      {{ pending ? 'Waiting for your passkey…' : '' }}
-    </p>
+    <!-- Announced to screen readers; the pressed control shows it visually -->
+    <p role="status" class="sr-only">{{ pending ? WAITING : '' }}</p>
     <p
       v-if="!pending && current?.error"
       role="alert"

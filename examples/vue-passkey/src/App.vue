@@ -122,11 +122,11 @@ watchEffect((onCleanup) => {
           <p
             class="text-gray-500 dark:text-slate-400 text-sm mt-4 max-w-2xl mx-auto"
           >
-            Choose <strong>Continue with passkey</strong> (or
-            <strong>Sign in with passkey</strong> in the List layout) to sign
-            in, or <strong>Create a passkey</strong> for a new Falcon-1024
+            Choose <strong>Sign in with passkey</strong> (or
+            <strong>Continue with passkey</strong> in the Featured layout) to
+            sign in, or <strong>Create a passkey</strong> for a new Falcon-1024
             account. The connected menu shows the session's lock status and lets
-            you export the account's recovery phrase.
+            you back up the account with its recovery phrase.
           </p>
           <p
             class="text-gray-500 dark:text-slate-400 text-sm mt-2 max-w-2xl mx-auto"

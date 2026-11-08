@@ -80,7 +80,12 @@ async function handleWalletClick(
     // tap across an await, and the passkey prompt needs it
     const connecting = wallet.connect(args)
     if (isPasskey) {
-      passkeyStatus.value = { walletId: wallet.id, pending: true, error: null }
+      passkeyStatus.value = {
+        walletId: wallet.id,
+        pending: true,
+        error: null,
+        action: args?.create ? 'create' : 'sign-in',
+      }
     }
     await connecting
     closeMenu()

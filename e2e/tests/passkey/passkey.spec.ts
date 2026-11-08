@@ -204,7 +204,7 @@ test.describe('Passkey wallet', () => {
     await createPasskeyAccount(page)
     await openConnectedMenu(page)
 
-    await page.getByRole('button', { name: 'Export Recovery Phrase' }).click()
+    await page.getByRole('button', { name: /Back up account/ }).click()
     const dialog = page.locator('[data-passkey-recovery-dialog]')
     await expect(dialog).toBeVisible()
     await expect(dialog.locator('[data-passkey-falcon-note]')).toContainText(
@@ -232,7 +232,7 @@ test.describe('Passkey wallet', () => {
     await createPasskeyAccount(page)
     await openConnectedMenu(page)
 
-    await page.getByRole('button', { name: 'Export Recovery Phrase' }).click()
+    await page.getByRole('button', { name: /Back up account/ }).click()
     const dialog = page.locator('[data-passkey-recovery-dialog]')
     await dialog.getByRole('button', { name: 'Reveal Recovery Phrase' }).click()
     await expect(dialog.locator('[data-passkey-phrase] li')).toHaveCount(25)
@@ -241,7 +241,7 @@ test.describe('Passkey wallet', () => {
     await expect(dialog).toBeHidden()
 
     await openConnectedMenu(page)
-    await page.getByRole('button', { name: 'Export Recovery Phrase' }).click()
+    await page.getByRole('button', { name: /Back up account/ }).click()
     await expect(dialog.locator('[data-passkey-phrase]')).toHaveCount(0)
     await expect(
       dialog.getByRole('button', { name: 'Reveal Recovery Phrase' }),
@@ -353,7 +353,7 @@ test.describe('Passkey wallet', () => {
       isUserVerified: false,
     })
 
-    await page.getByRole('button', { name: 'Export Recovery Phrase' }).click()
+    await page.getByRole('button', { name: /Back up account/ }).click()
     const dialog = page.locator('[data-passkey-recovery-dialog]')
     await dialog.getByRole('button', { name: 'Reveal Recovery Phrase' }).click()
     await expect(dialog.getByRole('alert')).toHaveText(
@@ -389,7 +389,7 @@ test.describe('Passkey wallet', () => {
     await createPasskeyAccount(page)
     await openConnectedMenu(page)
 
-    await page.getByRole('button', { name: 'Export Recovery Phrase' }).click()
+    await page.getByRole('button', { name: /Back up account/ }).click()
     const dialog = page.locator('[data-passkey-recovery-dialog]')
     await dialog.getByRole('button', { name: 'Reveal Recovery Phrase' }).click()
     await expect(dialog.locator('[data-passkey-phrase] li')).toHaveCount(25)
@@ -403,6 +403,55 @@ test.describe('Passkey wallet', () => {
     await dialog.getByRole('button', { name: 'Done' }).click()
     await expect(dialog).toBeHidden()
     await expect.poll(readClipboard).toBe('')
+  })
+
+  test('shows which passkey action is waiting, and dims the other', async ({
+    page,
+  }) => {
+    // Without presence simulation the prompt stays open
+    await addVirtualAuthenticator(page, { automaticPresenceSimulation: false })
+    const section = await openConnectDialog(page)
+    await section.getByRole('button', { name: 'Create a passkey' }).click()
+
+    const pressed = section.locator('button[aria-busy="true"]')
+    await expect(pressed).toHaveText('Waiting for your passkey…')
+    await expect(pressed).toHaveCSS('opacity', '1')
+    await expect(section).not.toContainText('New here?')
+
+    const other = section.getByRole('button', { name: 'Continue with passkey' })
+    await expect(other).toBeDisabled()
+    await expect(other).toHaveCSS('opacity', '0.5')
+  })
+
+  test("tags 'Back up account' until the phrase has been shown", async ({
+    page,
+  }) => {
+    await addVirtualAuthenticator(page)
+    await createPasskeyAccount(page)
+    await openConnectedMenu(page)
+
+    const backup = page.getByRole('button', { name: /Back up account/ })
+    await expect(backup.locator('[data-passkey-not-backed-up]')).toHaveText(
+      'Not backed up',
+    )
+
+    await backup.click()
+    const dialog = page.locator('[data-passkey-recovery-dialog]')
+    await dialog.getByRole('button', { name: 'Reveal Recovery Phrase' }).click()
+    await expect(dialog.locator('[data-passkey-phrase] li')).toHaveCount(25)
+    await dialog.getByRole('button', { name: 'Done' }).click()
+    await expect(dialog).toBeHidden()
+
+    await openConnectedMenu(page)
+    await expect(backup).toBeVisible()
+    await expect(page.locator('[data-passkey-not-backed-up]')).toHaveCount(0)
+
+    // Remembered for this account across page loads
+    await page.reload()
+    await page.waitForSelector('[data-wallet-button]')
+    await openConnectedMenu(page)
+    await expect(backup).toBeVisible()
+    await expect(page.locator('[data-passkey-not-backed-up]')).toHaveCount(0)
   })
 })
 
@@ -489,5 +538,27 @@ test.describe('Passkey wallet, list layout', () => {
 
     await page.getByLabel('Passkey layout').selectOption('list')
     await openListDialog(page)
+  })
+
+  test('shows which passkey row is waiting, and dims the other', async ({
+    page,
+  }) => {
+    // Without presence simulation the prompt stays open
+    await addVirtualAuthenticator(page, { automaticPresenceSimulation: false })
+    const section = await openListDialog(page)
+    await section.getByRole('button', { name: 'Sign in with passkey' }).click()
+
+    const pressed = section.locator('button[aria-busy="true"]')
+    await expect(pressed).toHaveText('Waiting for your passkey…')
+    await expect(pressed).toHaveCSS('opacity', '1')
+
+    const other = section.getByRole('button', { name: 'Create a passkey' })
+    await expect(other).toBeDisabled()
+    await expect(other).toHaveCSS('opacity', '0.5')
+    // The pressed row carries the message; the status line is for screen
+    // readers only
+    await expect(
+      section.locator('p', { hasText: 'Waiting for your passkey…' }),
+    ).toHaveClass(/sr-only/)
   })
 })

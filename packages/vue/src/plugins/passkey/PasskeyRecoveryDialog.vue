@@ -4,6 +4,7 @@ import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { getPasskeyErrorMessage } from '../../utils/passkey'
 import type { PluginRenderContext } from '../types'
 
+import { markRecoveryPhraseShown } from './storage'
 import { usePasskeyAdapter } from './usePasskeyAdapter'
 
 type DialogStep = 'warning' | 'loading' | 'display' | 'error'
@@ -127,6 +128,9 @@ function handleReveal(): void {
     ({ phrase }) => {
       // Drop the phrase if the dialog closed while the prompt was open
       if (!isMounted || isClosing) return
+      if (props.ctx.activeAddress) {
+        markRecoveryPhraseShown(props.ctx.activeAddress)
+      }
       words.value = phrase.split(' ')
       timeRemaining.value = props.displayTimeout
       step.value = 'display'

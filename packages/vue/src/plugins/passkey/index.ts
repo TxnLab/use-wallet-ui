@@ -22,10 +22,15 @@ export type { PasskeyWalletAdapter } from '../../utils/passkey'
 
 export interface PasskeyPluginOptions {
   /**
-   * Add "Export Recovery Phrase" to the menu. Pass an object to set how long
-   * the phrase stays visible (seconds, default 60). Default: true
+   * Add "Back up account" to the menu, which reveals the recovery phrase.
+   * Pass an object to set how long the phrase stays visible (`displayTimeout`,
+   * seconds, default 60) or to turn off the "Not backed up" tag shown until
+   * the phrase has been revealed once (`backupReminder`, default true).
+   * Default: true
    */
-  recoveryPhrase?: boolean | { displayTimeout?: number }
+  recoveryPhrase?:
+    | boolean
+    | { displayTimeout?: number; backupReminder?: boolean }
   /**
    * Show the session's lock status with Unlock and Lock buttons. Turn it on
    * when the passkey wallet is configured with `passkey({ session })`.
@@ -82,16 +87,14 @@ export function passkeyPlugin(
   }
 
   if (recoveryPhrase) {
-    const displayTimeout =
-      typeof recoveryPhrase === 'object'
-        ? recoveryPhrase.displayTimeout
-        : undefined
+    const { displayTimeout, backupReminder = true } =
+      typeof recoveryPhrase === 'object' ? recoveryPhrase : {}
     menuItems.push({
       key: 'passkey-recovery-trigger',
       slot: 'after-wallet-info',
       order: 20,
       enabled,
-      render: (ctx) => h(PasskeyRecoveryMenuButton, { ctx }),
+      render: (ctx) => h(PasskeyRecoveryMenuButton, { ctx, backupReminder }),
     })
     dialogs.push({
       key: PASSKEY_RECOVERY_DIALOG,

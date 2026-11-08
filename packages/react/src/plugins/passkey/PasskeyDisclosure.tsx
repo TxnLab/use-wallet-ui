@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { getPasskeyAccountDomain } from '../../utils/passkey'
 
-import { dismissDisclosure, isDisclosureDismissed } from './disclosureStorage'
+import { dismissDisclosure, isDisclosureDismissed } from './storage'
 
 import type { MenuRenderContext } from '../types'
 

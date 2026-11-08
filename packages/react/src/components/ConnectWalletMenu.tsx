@@ -130,7 +130,12 @@ export function ConnectWalletMenu({
       // user's tap across an await, and the passkey prompt needs it
       const connecting = wallet.connect(args)
       if (isPasskey) {
-        setPasskeyStatus({ walletId: wallet.id, pending: true, error: null })
+        setPasskeyStatus({
+          walletId: wallet.id,
+          pending: true,
+          error: null,
+          action: args?.create ? 'create' : 'sign-in',
+        })
       }
       await connecting
       context.onOpenChange(false)
