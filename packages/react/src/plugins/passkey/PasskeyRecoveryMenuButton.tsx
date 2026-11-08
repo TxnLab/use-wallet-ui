@@ -16,8 +16,10 @@ export function PasskeyRecoveryMenuButton({ ctx }: { ctx: MenuRenderContext }) {
         onClick={handleClick}
         className="w-full flex items-center gap-2 px-2 py-2 rounded-lg text-sm text-[var(--wui-color-text-secondary)] hover:bg-[var(--wui-color-bg-hover)] transition-colors"
       >
-        {/* Numbered list: the recovery phrase is 25 numbered words. A key
-            would read as passkey sign-in. Heroicons, MIT License */}
+        {/* A plain shield: backing up is a protective step. No checkmark, so
+            it doesn't read as already done, and no key, which means passkey
+            sign-in. Heroicons solid shield-check without the check, MIT
+            License */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-4 w-4 shrink-0"
@@ -25,7 +27,7 @@ export function PasskeyRecoveryMenuButton({ ctx }: { ctx: MenuRenderContext }) {
           fill="currentColor"
           aria-hidden="true"
         >
-          <path d="M3 1.25a.75.75 0 0 0 0 1.5h.25v2.5a.75.75 0 0 0 1.5 0V2A.75.75 0 0 0 4 1.25H3ZM2.97 8.654a3.5 3.5 0 0 1 1.524-.12.034.034 0 0 1-.012.012L2.415 9.579A.75.75 0 0 0 2 10.25v1c0 .414.336.75.75.75h2.5a.75.75 0 0 0 0-1.5H3.927l1.225-.613c.52-.26.848-.79.848-1.371 0-.647-.429-1.327-1.193-1.451a5.03 5.03 0 0 0-2.277.155.75.75 0 0 0 .44 1.434ZM7.75 3a.75.75 0 0 0 0 1.5h9.5a.75.75 0 0 0 0-1.5h-9.5ZM7.75 9.25a.75.75 0 0 0 0 1.5h9.5a.75.75 0 0 0 0-1.5h-9.5ZM7.75 15.5a.75.75 0 0 0 0 1.5h9.5a.75.75 0 0 0 0-1.5h-9.5ZM2.625 13.875a.75.75 0 0 0 0 1.5h1.5a.125.125 0 0 1 0 .25H3.5a.75.75 0 0 0 0 1.5h.625a.125.125 0 0 1 0 .25h-1.5a.75.75 0 0 0 0 1.5h1.5a1.625 1.625 0 0 0 1.37-2.5 1.625 1.625 0 0 0-1.37-2.5h-1.5Z" />
+          <path d="M9.661 2.237a.531.531 0 0 1 .678 0 11.947 11.947 0 0 0 7.078 2.749.5.5 0 0 1 .479.425c.069.52.104 1.05.104 1.59 0 5.162-3.26 9.563-7.834 11.256a.48.48 0 0 1-.332 0C5.26 16.564 2 12.163 2 7c0-.538.035-1.069.104-1.589a.5.5 0 0 1 .48-.425 11.947 11.947 0 0 0 7.077-2.75Z" />
         </svg>
         <span className="flex-1 text-left">Back up account</span>
         <svg
