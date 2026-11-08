@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/TxnLab/use-wallet-ui/compare/v1.3.0...v1.4.0) (2026-11-08)
+
+
+### Features
+
+* support the use-wallet passkey wallet ([#85](https://github.com/TxnLab/use-wallet-ui/issues/85)) ([c2734e7](https://github.com/TxnLab/use-wallet-ui/commit/c2734e7a57b590ad82ee01486c08b8ff0db61022))
+
 # [1.3.0](https://github.com/TxnLab/use-wallet-ui/compare/v1.2.1...v1.3.0) (2026-11-05)
 
 
