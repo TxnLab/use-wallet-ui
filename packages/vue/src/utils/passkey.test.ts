@@ -117,12 +117,12 @@ describe('getPasskeyAccountDomain', () => {
 })
 
 describe('resolvePasskeyLayout', () => {
-  it("defaults to 'featured'", () => {
-    expect(resolvePasskeyLayout()).toBe('featured')
+  it("defaults to 'list'", () => {
+    expect(resolvePasskeyLayout()).toBe('list')
   })
 
   it("uses the provider's layout when the menu sets none", () => {
-    expect(resolvePasskeyLayout(undefined, 'list')).toBe('list')
+    expect(resolvePasskeyLayout(undefined, 'featured')).toBe('featured')
   })
 
   it("prefers the menu's layout over the provider's", () => {

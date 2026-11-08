@@ -323,7 +323,7 @@ Required wrapper that enables theming, NFD lookups, and data prefetching.
   enablePrefetching={true}    // Prefetch data for all wallet accounts
   prefetchNfdView="thumbnail" // NFD data view: 'tiny' | 'thumbnail' | 'brief' | 'full'
   queryClient={queryClient}   // Optional: your existing Tanstack Query client
-  passkeyLayout="featured"    // Passkey wallet layout: 'featured' | 'list'
+  passkeyLayout="list"        // Passkey wallet layout: 'list' | 'featured'
 >
   {children}
 </WalletUIProvider>
@@ -338,7 +338,7 @@ All-in-one wallet connection component.
   size="md"              // 'sm' | 'md' | 'lg'
   className="..."        // Additional CSS classes
   style={{...}}          // Inline styles (supports CSS variable overrides)
-  passkeyLayout="list"   // Optional: overrides WalletUIProvider's passkeyLayout
+  passkeyLayout="featured" // Optional: overrides WalletUIProvider's passkeyLayout
 />
 ```
 
@@ -361,7 +361,7 @@ Dropdown menu for wallet selection (disconnected state).
 </ConnectWalletMenu>
 
 // With its own passkey layout (overrides WalletUIProvider's passkeyLayout)
-<ConnectWalletMenu passkeyLayout="list" />
+<ConnectWalletMenu passkeyLayout="featured" />
 ```
 
 ### ConnectWalletButton
@@ -449,7 +449,7 @@ The passkey section of the connect dialog, for custom connect menus. Signing in 
 <PasskeyConnect
   wallet={passkeyWallet}
   handleWalletClick={(wallet, args) => wallet.connect(args)}
-  layout="featured" // 'featured' (default) | 'list'
+  layout="list"     // 'list' (default) | 'featured'
   showLabel={true}  // 'list' only: show the "Passkey" group label
 />
 ```
@@ -608,7 +608,7 @@ See the [Plugin Architecture Guide](PLUGINS.md) for full documentation.
 
 ## Passkey Wallet
 
-[`@txnlab/use-wallet-passkey`](https://github.com/TxnLab/use-wallet/tree/main/packages/wallets/passkey#readme) (use-wallet 5.2+) derives an app-scoped Falcon-1024 account from a passkey. Register it, and the connect dialog leads with it: a **Continue with passkey** button to sign in, a **Create a passkey** link for new users, and the other wallets below. A missing passkey and a cancelled prompt raise the same browser error, so creating stays a separate choice.
+[`@txnlab/use-wallet-passkey`](https://github.com/TxnLab/use-wallet/tree/main/packages/wallets/passkey#readme) (use-wallet 5.2+) derives an app-scoped Falcon-1024 account from a passkey. Register it, and the connect dialog shows a Passkey group with **Sign in with passkey** and **Create a passkey**, above your other wallets. The [`passkeyLayout`](#passkey-layout) option can lead with a **Continue with passkey** button instead. A missing passkey and a cancelled prompt raise the same browser error, so creating stays a separate choice.
 
 ```bash
 npm install @txnlab/use-wallet-passkey
@@ -661,15 +661,15 @@ For your own connect UI, `getPasskeyErrorMessage(error)` returns a message for a
 
 Choose how the connect dialog presents the passkey wallet with `passkeyLayout`:
 
-- **`'featured'`** (default): a full-width **Continue with passkey** button and a "New here? **Create a passkey**" link, then the other wallets under "or connect a wallet". For consumer apps where most users have no wallet, so the passkey is the main way in.
-- **`'list'`**: **Sign in with passkey** and **Create a passkey** rows in a "Passkey" group, above a "Wallets" group. For crypto-native apps where most users bring a wallet like Pera or Lute, and the passkey is one choice among many.
+- **`'list'`** (default): **Sign in with passkey** and **Create a passkey** rows in a "Passkey" group, above a "Wallets" group. For crypto-native apps where most users bring a wallet like Pera or Lute, and the passkey is one choice among many.
+- **`'featured'`**: a full-width **Continue with passkey** button and a "New here? **Create a passkey**" link, then the other wallets under "or connect a wallet". For consumer apps where most users have no wallet, so the passkey is the main way in.
 
 ```tsx
 // App-wide
-<WalletUIProvider passkeyLayout="list">
+<WalletUIProvider passkeyLayout="featured">
 
 // Per menu: a WalletButton or ConnectWalletMenu prop wins over the provider
-<WalletButton passkeyLayout="featured" />
+<WalletButton passkeyLayout="list" />
 ```
 
 With only the passkey wallet configured, neither layout shows the other-wallets heading. Without a passkey wallet, the dialog is the same in both.

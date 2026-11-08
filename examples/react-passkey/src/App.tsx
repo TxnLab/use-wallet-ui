@@ -28,11 +28,12 @@ const walletManager = new WalletManager({
 // `disclosure` shows the "whose account is this" note until "Got it"
 const plugins = [passkeyPlugin({ session: true, disclosure: true })]
 
-// Start from ?layout=list to link to the list layout
+// Start from ?layout=featured to link to the featured layout
 function initialPasskeyLayout(): PasskeyConnectLayout {
-  return new URLSearchParams(window.location.search).get('layout') === 'list'
-    ? 'list'
-    : 'featured'
+  return new URLSearchParams(window.location.search).get('layout') ===
+    'featured'
+    ? 'featured'
+    : 'list'
 }
 
 function App() {
@@ -88,8 +89,8 @@ function App() {
                     }
                     className="text-sm px-2 py-1 rounded border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-800 dark:text-white"
                   >
-                    <option value="featured">Featured</option>
                     <option value="list">List</option>
+                    <option value="featured">Featured</option>
                   </select>
                   {/* Theme selector */}
                   <select

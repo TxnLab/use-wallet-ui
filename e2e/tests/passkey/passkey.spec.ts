@@ -35,9 +35,10 @@ async function createPasskeyAccount(page: Page): Promise<string> {
   return (await button.innerText()).trim()
 }
 
+// passkeyLayout: 'featured' (the examples start in it with ?layout=featured)
 test.describe('Passkey wallet', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/')
+    await page.goto('/?layout=featured')
     await page.waitForSelector('[data-wallet-theme]')
   })
 
@@ -405,10 +406,10 @@ test.describe('Passkey wallet', () => {
   })
 })
 
-// passkeyLayout: 'list' (the examples start in it with ?layout=list)
+// passkeyLayout: 'list', the default
 test.describe('Passkey wallet, list layout', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/?layout=list')
+    await page.goto('/')
     await page.waitForSelector('[data-wallet-theme]')
   })
 

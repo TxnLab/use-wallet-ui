@@ -16,8 +16,8 @@ export interface WalletButtonProps {
   /** Inline styles to apply to the button (can include CSS variable overrides) */
   style?: React.CSSProperties
   /**
-   * How the connect dialog presents a passkey wallet: 'featured' or 'list'.
-   * Overrides the `WalletUIProvider` setting; the default is 'featured'.
+   * How the connect dialog presents a passkey wallet: 'list' or 'featured'.
+   * Overrides the `WalletUIProvider` setting; the default is 'list'.
    */
   passkeyLayout?: PasskeyConnectLayout
 }

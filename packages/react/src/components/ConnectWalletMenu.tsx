@@ -39,8 +39,8 @@ type RefableElement = ReactElement & {
 export interface ConnectWalletMenuProps {
   children?: RefableElement
   /**
-   * How to present a passkey wallet: 'featured' or 'list'. Overrides the
-   * `WalletUIProvider` setting; the default is 'featured'.
+   * How to present a passkey wallet: 'list' or 'featured'. Overrides the
+   * `WalletUIProvider` setting; the default is 'list'.
    */
   passkeyLayout?: PasskeyConnectLayout
 }
@@ -263,6 +263,7 @@ export function ConnectWalletMenu({
                     <>
                       {passkeyWallet && (
                         <PasskeyConnect
+                          layout="featured"
                           wallet={passkeyWallet}
                           handleWalletClick={handleWalletClick}
                           status={passkeyStatus}

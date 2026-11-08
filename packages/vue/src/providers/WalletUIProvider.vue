@@ -88,10 +88,11 @@ const props = withDefaults(
     plugins?: WalletUIPlugin[]
     /**
      * How connect dialogs present a passkey wallet, when one is configured.
-     * - 'featured': a "Continue with passkey" button leads, with the other
-     *   wallets below (default). Suits apps where the passkey is the main way in.
      * - 'list': "Sign in with passkey" and "Create a passkey" rows in a Passkey
-     *   group above a Wallets group. Suits apps where most users bring a wallet.
+     *   group above a Wallets group (default). Suits apps where most users bring
+     *   a wallet.
+     * - 'featured': a "Continue with passkey" button leads, with the other
+     *   wallets below. Suits apps where the passkey is the main way in.
      *
      * A `passkey-layout` prop on `WalletButton` or `ConnectWalletMenu` overrides it.
      */
@@ -102,7 +103,7 @@ const props = withDefaults(
     prefetchNfdView: 'thumbnail',
     theme: 'system',
     plugins: () => [],
-    passkeyLayout: 'featured',
+    passkeyLayout: 'list',
   },
 )
 

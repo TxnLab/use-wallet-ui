@@ -22,9 +22,9 @@ export interface PasskeyConnectProps {
   /** Pending state or error for the passkey wallet's connect request */
   status?: PasskeyConnectStatus | null
   /**
-   * `'featured'` (default): a "Continue with passkey" button and a "Create a
-   * passkey" link. `'list'`: "Sign in with passkey" and "Create a passkey"
-   * rows under a "Passkey" group label.
+   * `'list'` (default): "Sign in with passkey" and "Create a passkey" rows
+   * under a "Passkey" group label. `'featured'`: a "Continue with passkey"
+   * button and a "Create a passkey" link.
    */
   layout?: PasskeyConnectLayout
   /** Show the "Passkey" group label in the `'list'` layout. Default: true */
@@ -44,7 +44,7 @@ export function PasskeyConnect({
   wallet,
   handleWalletClick,
   status,
-  layout = 'featured',
+  layout = 'list',
   showLabel = true,
 }: PasskeyConnectProps) {
   const current = status?.walletId === wallet.id ? status : null

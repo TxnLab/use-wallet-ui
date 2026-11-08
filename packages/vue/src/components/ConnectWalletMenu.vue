@@ -20,8 +20,8 @@ import WalletList from './WalletList.vue'
 
 const props = defineProps<{
   /**
-   * How to present a passkey wallet: 'featured' or 'list'. Overrides the
-   * `WalletUIProvider` setting; the default is 'featured'.
+   * How to present a passkey wallet: 'list' or 'featured'. Overrides the
+   * `WalletUIProvider` setting; the default is 'list'.
    */
   passkeyLayout?: PasskeyConnectLayout
 }>()
@@ -193,6 +193,7 @@ async function handleWalletClick(
             <template v-else>
               <PasskeyConnect
                 v-if="passkeyWallet"
+                layout="featured"
                 :wallet="passkeyWallet"
                 :handle-wallet-click="handleWalletClick"
                 :status="passkeyStatus"

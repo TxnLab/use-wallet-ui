@@ -62,7 +62,7 @@ import { WalletButton, WalletUIProvider } from '@txnlab/use-wallet-ui-vue'
 
 ## Passkey Wallet
 
-[`@txnlab/use-wallet-passkey`](https://github.com/TxnLab/use-wallet/tree/main/packages/wallets/passkey#readme) (use-wallet 5.2+) derives an app-scoped Falcon-1024 account from a passkey. Register it, and the connect dialog leads with it: a **Continue with passkey** button to sign in, a **Create a passkey** link for new users, and the other wallets below. A missing passkey and a cancelled prompt raise the same browser error, so creating stays a separate choice. Passkey errors keep the dialog open with a message the user can act on, and the connected menu tags the account with its domain.
+[`@txnlab/use-wallet-passkey`](https://github.com/TxnLab/use-wallet/tree/main/packages/wallets/passkey#readme) (use-wallet 5.2+) derives an app-scoped Falcon-1024 account from a passkey. Register it, and the connect dialog shows a Passkey group with **Sign in with passkey** and **Create a passkey**, above your other wallets. The `passkey-layout` option below can lead with a **Continue with passkey** button instead. A missing passkey and a cancelled prompt raise the same browser error, so creating stays a separate choice. Passkey errors keep the dialog open with a message the user can act on, and the connected menu tags the account with its domain.
 
 ```bash
 pnpm add @txnlab/use-wallet-passkey
@@ -97,12 +97,12 @@ const plugins = [passkeyPlugin({ session: true, disclosure: true })]
 
 Choose how the connect dialog presents the passkey wallet with `passkey-layout` on `WalletUIProvider`, or per menu on `WalletButton` or `ConnectWalletMenu` (the menu prop wins):
 
-- **`'featured'`** (default): a full-width **Continue with passkey** button and a "New here? **Create a passkey**" link, then the other wallets. For consumer apps where the passkey is the main way in.
-- **`'list'`**: **Sign in with passkey** and **Create a passkey** rows in a "Passkey" group, above a "Wallets" group. For crypto-native apps where most users bring a wallet.
+- **`'list'`** (default): **Sign in with passkey** and **Create a passkey** rows in a "Passkey" group, above a "Wallets" group. For crypto-native apps where most users bring a wallet.
+- **`'featured'`**: a full-width **Continue with passkey** button and a "New here? **Create a passkey**" link, then the other wallets. For consumer apps where the passkey is the main way in.
 
 ```vue
-<WalletUIProvider passkey-layout="list">
-  <WalletButton passkey-layout="featured" />
+<WalletUIProvider passkey-layout="featured">
+  <WalletButton passkey-layout="list" />
 </WalletUIProvider>
 ```
 

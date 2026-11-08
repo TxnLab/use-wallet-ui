@@ -12,11 +12,11 @@ import WalletInfo from './components/WalletInfo.vue'
 
 const theme = ref<Theme>('system')
 
-// Start from ?layout=list to link to the list layout
+// Start from ?layout=featured to link to the featured layout
 const passkeyLayout = ref<PasskeyConnectLayout>(
-  new URLSearchParams(window.location.search).get('layout') === 'list'
-    ? 'list'
-    : 'featured',
+  new URLSearchParams(window.location.search).get('layout') === 'featured'
+    ? 'featured'
+    : 'list',
 )
 
 // Create the plugin once: `session` matches `passkey({ session: true })`, and
@@ -74,8 +74,8 @@ watchEffect((onCleanup) => {
                 aria-label="Passkey layout"
                 class="text-sm px-2 py-1 rounded border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-800 dark:text-white"
               >
-                <option value="featured">Featured</option>
                 <option value="list">List</option>
+                <option value="featured">Featured</option>
               </select>
               <!-- Theme selector -->
               <select

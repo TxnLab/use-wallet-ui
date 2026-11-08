@@ -25,19 +25,20 @@ export interface PasskeyConnectStatus {
 
 /**
  * How the connect dialog presents a passkey wallet:
+ * - `'list'` (default): "Sign in with passkey" and "Create a passkey" rows in
+ *   a Passkey group above a Wallets group. Suits apps where most users bring
+ *   a wallet.
  * - `'featured'`: a "Continue with passkey" button leads, with the other
  *   wallets below. Suits apps where most users have no wallet.
- * - `'list'`: "Sign in with passkey" and "Create a passkey" rows in a Passkey
- *   group above a Wallets group. Suits apps where most users bring a wallet.
  */
 export type PasskeyConnectLayout = 'featured' | 'list'
 
-/** A menu's own layout wins over the provider's; the default is `'featured'` */
+/** A menu's own layout wins over the provider's; the default is `'list'` */
 export function resolvePasskeyLayout(
   menuLayout?: PasskeyConnectLayout,
   providerLayout?: PasskeyConnectLayout,
 ): PasskeyConnectLayout {
-  return menuLayout ?? providerLayout ?? 'featured'
+  return menuLayout ?? providerLayout ?? 'list'
 }
 
 /** Arguments for connecting the passkey wallet */

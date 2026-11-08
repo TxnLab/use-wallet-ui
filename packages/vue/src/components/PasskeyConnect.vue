@@ -32,15 +32,15 @@ const props = withDefaults(
     /** Pending state or error for the passkey wallet's connect request */
     status?: PasskeyConnectStatus | null
     /**
-     * `'featured'` (default): a "Continue with passkey" button and a "Create
-     * a passkey" link. `'list'`: "Sign in with passkey" and "Create a
-     * passkey" rows under a "Passkey" group label.
+     * `'list'` (default): "Sign in with passkey" and "Create a passkey"
+     * rows under a "Passkey" group label. `'featured'`: a "Continue with
+     * passkey" button and a "Create a passkey" link.
      */
     layout?: PasskeyConnectLayout
     /** Show the "Passkey" group label in the `'list'` layout. Default: true */
     showLabel?: boolean
   }>(),
-  { layout: 'featured', showLabel: true },
+  { layout: 'list', showLabel: true },
 )
 
 const current = computed(() =>
