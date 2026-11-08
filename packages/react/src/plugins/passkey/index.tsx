@@ -31,23 +31,25 @@ export interface PasskeyPluginOptions {
    */
   session?: boolean
   /**
-   * Tell users the account belongs to this site. Pass a string to replace the
-   * text; `{domain}` is replaced with the account's domain. Default: true
+   * Tell users the account belongs to this site, until they choose "Got it"
+   * (remembered per account). Pass a string to replace the text; `{domain}`
+   * is replaced with the account's domain. The menu always shows the domain
+   * as a tag. Default: false
    */
   disclosure?: boolean | string
 }
 
 /**
  * Plugin that adds passkey account features to the ConnectedWalletMenu:
- * recovery phrase export, session lock status, and a note on whose account it
- * is. Only visible when the passkey wallet is active.
+ * recovery phrase export, session lock status, and an optional note on whose
+ * account it is. Only visible when the passkey wallet is active.
  *
  * Requires @txnlab/use-wallet-react 5.2 or later.
  */
 export function passkeyPlugin(
   options: PasskeyPluginOptions = {},
 ): WalletUIPlugin {
-  const { recoveryPhrase = true, session = false, disclosure = true } = options
+  const { recoveryPhrase = true, session = false, disclosure = false } = options
 
   const enabled = (ctx: { activeWallet: { id: string } | null }) =>
     isPasskeyWallet(ctx.activeWallet)

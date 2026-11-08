@@ -19,10 +19,12 @@ import {
   getPasskeyErrorMessage,
   isPasskeyWallet,
   type PasskeyConnectArgs,
+  type PasskeyConnectStatus,
 } from '../utils/passkey'
 
 import { ConnectWalletButton } from './ConnectWalletButton'
-import { WalletList, type PasskeyConnectStatus } from './WalletList'
+import { PasskeyConnect } from './PasskeyConnect'
+import { WalletList } from './WalletList'
 
 import type { Wallet } from '@txnlab/use-wallet-react'
 
@@ -49,6 +51,10 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
   // v5 filters wallets by the active network's capabilities (e.g. hides
   // Mnemonic on MainNet). v4 peers have no `availableWallets`, so fall back.
   const walletList = availableWallets ?? wallets
+
+  // A passkey wallet leads the dialog; the other wallets list below it
+  const passkeyWallet = walletList.find(isPasskeyWallet)
+  const otherWallets = walletList.filter((wallet) => !isPasskeyWallet(wallet))
 
   // Determine the data-theme attribute for the portal
   // Only set explicit themes, let 'system' use media query fallback
@@ -122,7 +128,7 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
       if (message) {
         const hint =
           !args?.create && getPasskeyErrorCode(error) === 'cancelled'
-            ? " New here? Choose 'Create passkey'."
+            ? " New here? Choose 'Create a passkey'."
             : ''
         setPasskeyStatus({
           walletId: wallet.id,
@@ -216,14 +222,37 @@ export function ConnectWalletMenu({ children }: ConnectWalletMenuProps) {
                     </button>
                   </div>
 
-                  {/* Wallet list */}
-                  <div className="px-4 pb-3">
-                    <WalletList
-                      wallets={walletList}
+                  {passkeyWallet && (
+                    <PasskeyConnect
+                      wallet={passkeyWallet}
                       handleWalletClick={handleWalletClick}
-                      passkeyStatus={passkeyStatus}
+                      status={passkeyStatus}
                     />
-                  </div>
+                  )}
+
+                  {passkeyWallet && otherWallets.length > 0 && (
+                    <div className="flex items-center gap-3 px-6 pt-1 pb-2.5 text-xs text-[var(--wui-color-text-secondary)]">
+                      <span
+                        className="flex-1 h-px bg-[var(--wui-color-border)]"
+                        aria-hidden="true"
+                      />
+                      or connect a wallet
+                      <span
+                        className="flex-1 h-px bg-[var(--wui-color-border)]"
+                        aria-hidden="true"
+                      />
+                    </div>
+                  )}
+
+                  {/* Wallet list */}
+                  {(!passkeyWallet || otherWallets.length > 0) && (
+                    <div className="px-4 pb-3">
+                      <WalletList
+                        wallets={otherWallets}
+                        handleWalletClick={handleWalletClick}
+                      />
+                    </div>
+                  )}
 
                   {/* Footer section */}
                   <div className="px-6 py-5 border-t border-[var(--wui-color-border)] flex items-center justify-between">

@@ -6,6 +6,7 @@ export { default as ConnectedWalletButton } from './components/ConnectedWalletBu
 export { default as ConnectedWalletMenu } from './components/ConnectedWalletMenu.vue'
 export { default as WalletButton } from './components/WalletButton.vue'
 export { default as WalletList } from './components/WalletList.vue'
+export { default as PasskeyConnect } from './components/PasskeyConnect.vue'
 export { default as NfdAvatar } from './components/NfdAvatar.vue'
 export { default as AlgoSymbol } from './components/AlgoSymbol.vue'
 

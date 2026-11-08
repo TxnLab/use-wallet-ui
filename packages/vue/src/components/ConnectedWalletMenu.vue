@@ -9,6 +9,7 @@ import { useNfd } from '../composables/useNfd'
 import { usePlugins } from '../plugins/pluginContext'
 import PluginSlot from '../plugins/PluginSlot.vue'
 import { useWalletUI } from '../providers/walletUIContext'
+import { getPasskeyAccountDomain, isPasskeyWallet } from '../utils/passkey'
 
 import AlgoSymbol from './AlgoSymbol.vue'
 import ConnectedWalletButton from './ConnectedWalletButton.vue'
@@ -299,6 +300,16 @@ function toggleBalanceView(): void {
                 <p class="text-sm text-[var(--wui-color-text-secondary)]">
                   {{ activeWallet.metadata.name }}
                 </p>
+                <!-- A passkey account belongs to the site that created it -->
+                <span
+                  v-if="isPasskeyWallet(activeWallet)"
+                  data-passkey-domain
+                  class="rounded-md bg-[var(--wui-color-bg-tertiary)] px-[7px] py-px text-xs text-[var(--wui-color-text-secondary)]"
+                >
+                  {{
+                    getPasskeyAccountDomain(activeWallet.activeAccount?.name)
+                  }}
+                </span>
               </div>
 
               <PluginSlot slot="after-wallet-info" :ctx="pluginCtx" />

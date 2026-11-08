@@ -11,8 +11,9 @@ import WalletInfo from './components/WalletInfo.vue'
 
 const theme = ref<Theme>('system')
 
-// Create the plugin once: `session` matches `passkey({ session: true })`
-const plugins = [passkeyPlugin({ session: true })]
+// Create the plugin once: `session` matches `passkey({ session: true })`, and
+// `disclosure` shows the "whose account is this" note until "Got it"
+const plugins = [passkeyPlugin({ session: true, disclosure: true })]
 
 // Sync app theme with the theme switcher
 // This adds/removes a 'dark' class on the root element for Tailwind
@@ -100,10 +101,22 @@ watchEffect((onCleanup) => {
           <p
             class="text-gray-500 dark:text-slate-400 text-sm mt-4 max-w-2xl mx-auto"
           >
-            Choose <strong>Create passkey</strong> for a new Falcon-1024
-            account, or <strong>Sign in</strong> with one you made here before.
-            The connected menu shows the session's lock status and lets you
-            export the account's recovery phrase.
+            Choose <strong>Continue with passkey</strong> to sign in, or
+            <strong>Create a passkey</strong> for a new Falcon-1024 account. The
+            connected menu shows the session's lock status and lets you export
+            the account's recovery phrase.
+          </p>
+          <p
+            class="text-gray-500 dark:text-slate-400 text-sm mt-2 max-w-2xl mx-auto"
+          >
+            The note on whose account it is shows until you choose
+            <strong>Got it</strong>. To see it again, remove the
+            <code
+              class="text-xs bg-gray-100 dark:bg-slate-800 px-1.5 py-0.5 rounded"
+            >
+              wui:passkey-disclosure-dismissed:&lt;address&gt;
+            </code>
+            key from this site's local storage.
           </p>
         </div>
 

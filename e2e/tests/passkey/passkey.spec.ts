@@ -4,13 +4,14 @@ import type { Page } from '@playwright/test'
 
 // Runs against examples/react-passkey (passkey-react project) and
 // examples/vue-passkey (passkey-vue project). Both register
-// passkey({ session: true }), lute(), pera() and passkeyPlugin({ session: true }).
+// passkey({ session: true }), lute(), pera() and
+// passkeyPlugin({ session: true, disclosure: true }).
 
 async function openConnectDialog(page: Page) {
   await page.getByRole('button', { name: 'Connect Wallet' }).click()
-  const row = page.locator('[data-wallet-id="passkey"]')
-  await expect(row).toBeVisible()
-  return row
+  const section = page.locator('[data-passkey-connect]')
+  await expect(section).toBeVisible()
+  return section
 }
 
 async function openConnectedMenu(page: Page) {
@@ -18,10 +19,16 @@ async function openConnectedMenu(page: Page) {
   await expect(page.getByRole('button', { name: 'Disconnect' })).toBeVisible()
 }
 
+// Click outside the menu: the Vue menu doesn't close on Escape
+async function closeConnectedMenu(page: Page) {
+  await page.mouse.click(5, 700)
+  await expect(page.getByRole('button', { name: 'Disconnect' })).toBeHidden()
+}
+
 /** Creates a passkey account and returns the connected button's label */
 async function createPasskeyAccount(page: Page): Promise<string> {
-  const row = await openConnectDialog(page)
-  await row.getByRole('button', { name: 'Create passkey' }).click()
+  const section = await openConnectDialog(page)
+  await section.getByRole('button', { name: 'Create a passkey' }).click()
   await expect(page.getByRole('dialog')).toBeHidden()
   const button = page.locator('[data-wallet-button]')
   await expect(button).not.toHaveText(/Connect Wallet/)
@@ -38,24 +45,25 @@ test.describe('Passkey wallet', () => {
     expect(pageErrors).toEqual([])
   })
 
-  test('shows Create passkey and Sign in for the passkey wallet only', async ({
+  test('leads with the passkey and lists the other wallets below', async ({
     page,
   }) => {
-    const row = await openConnectDialog(page)
+    const section = await openConnectDialog(page)
     await expect(
-      row.getByRole('button', { name: 'Create passkey' }),
+      section.getByRole('button', { name: 'Continue with passkey' }),
     ).toBeVisible()
     await expect(
-      row.getByRole('button', { name: 'Sign in with passkey' }),
+      section.getByRole('button', { name: 'Create a passkey' }),
     ).toBeVisible()
 
-    // Other wallets stay single-button rows
     const dialog = page.getByRole('dialog')
+    await expect(dialog.getByText('or connect a wallet')).toBeVisible()
     await expect(dialog.getByRole('button', { name: /Lute/ })).toBeVisible()
     await expect(dialog.getByRole('button', { name: /Pera/ })).toBeVisible()
+    // The passkey wallet isn't repeated in the list
     await expect(
-      dialog.getByRole('button', { name: 'Create passkey' }),
-    ).toHaveCount(1)
+      dialog.getByRole('button', { name: /Passkey icon/ }),
+    ).toHaveCount(0)
   })
 
   test('creates a passkey, disconnects, and signs back in to the same account', async ({
@@ -71,22 +79,89 @@ test.describe('Passkey wallet', () => {
       page.getByRole('button', { name: 'Connect Wallet' }),
     ).toBeVisible()
 
-    const row = await openConnectDialog(page)
-    await row.getByRole('button', { name: 'Sign in with passkey' }).click()
+    const section = await openConnectDialog(page)
+    await section.getByRole('button', { name: 'Continue with passkey' }).click()
     await expect(page.getByRole('dialog')).toBeHidden()
     await expect(page.locator('[data-wallet-button]')).toHaveText(label)
   })
 
-  test("shows a note on whose account it is, naming the account's domain", async ({
+  test("tags the account with its domain and shows the note until 'Got it'", async ({
     page,
   }) => {
     await addVirtualAuthenticator(page)
     await createPasskeyAccount(page)
     await openConnectedMenu(page)
 
-    await expect(page.locator('[data-passkey-disclosure]')).toHaveText(
+    await expect(page.locator('[data-passkey-domain]')).toHaveText('localhost')
+    const note = page.locator('[data-passkey-disclosure]')
+    await expect(note).toContainText(
       'This account is created by and for localhost. Keep only what you need here, and move larger amounts to a wallet you control.',
     )
+
+    // Let the menu settle (balance and NFD lookups re-render it), so a later
+    // re-render can't be what hides the note
+    await page.waitForTimeout(1500)
+    await note.getByRole('button', { name: 'Got it' }).click()
+    await expect(note).toHaveCount(0, { timeout: 500 })
+    await expect(page.locator('[data-passkey-domain]')).toHaveText('localhost')
+
+    // Dismissed for this account, across menu opens and page loads
+    await page.keyboard.press('Escape')
+    await page.reload()
+    await page.waitForSelector('[data-wallet-button]')
+    await openConnectedMenu(page)
+    await expect(page.locator('[data-passkey-domain]')).toBeVisible()
+    await expect(note).toHaveCount(0)
+  })
+
+  test('shows the note again for a different passkey account', async ({
+    page,
+  }) => {
+    await addVirtualAuthenticator(page)
+    const first = await createPasskeyAccount(page)
+    await openConnectedMenu(page)
+    await page
+      .locator('[data-passkey-disclosure]')
+      .getByRole('button', { name: 'Got it' })
+      .click()
+    await page.getByRole('button', { name: 'Disconnect' }).click()
+
+    // A second passkey is a different account
+    const second = await createPasskeyAccount(page)
+    expect(second).not.toBe(first)
+    await openConnectedMenu(page)
+    await expect(page.locator('[data-passkey-disclosure]')).toBeVisible()
+  })
+
+  test('dismisses the note for the session when storage is unavailable', async ({
+    page,
+  }) => {
+    // Block only the disclosure's storage keys; the wallet keeps its own
+    await page.addInitScript(() => {
+      const blocked = (key: string) =>
+        key.startsWith('wui:passkey-disclosure-dismissed:')
+      const { getItem, setItem } = Storage.prototype
+      Storage.prototype.getItem = function (key: string) {
+        if (blocked(key)) throw new DOMException('Blocked', 'SecurityError')
+        return getItem.call(this, key)
+      }
+      Storage.prototype.setItem = function (key: string, value: string) {
+        if (blocked(key)) throw new DOMException('Blocked', 'SecurityError')
+        return setItem.call(this, key, value)
+      }
+    })
+    await page.reload()
+    await addVirtualAuthenticator(page)
+    await createPasskeyAccount(page)
+    await openConnectedMenu(page)
+
+    const note = page.locator('[data-passkey-disclosure]')
+    await note.getByRole('button', { name: 'Got it' }).click()
+    await expect(note).toHaveCount(0)
+
+    await closeConnectedMenu(page)
+    await openConnectedMenu(page)
+    await expect(note).toHaveCount(0)
   })
 
   test('locks and unlocks the session from the menu', async ({ page }) => {
@@ -178,16 +253,16 @@ test.describe('Passkey wallet', () => {
     // An authenticator with no credentials: the browser rejects the request
     // the same way it would a cancelled prompt
     await addVirtualAuthenticator(page)
-    const row = await openConnectDialog(page)
-    await row.getByRole('button', { name: 'Sign in with passkey' }).click()
+    const section = await openConnectDialog(page)
+    await section.getByRole('button', { name: 'Continue with passkey' }).click()
 
-    await expect(row.getByRole('alert')).toHaveText(
-      "The passkey request was cancelled or timed out, or no passkey was found. New here? Choose 'Create passkey'.",
+    await expect(section.getByRole('alert')).toHaveText(
+      "The passkey request was cancelled or timed out, or no passkey was found. New here? Choose 'Create a passkey'.",
     )
     await expect(page.getByRole('dialog')).toBeVisible()
 
     // The user can go straight to creating one
-    await row.getByRole('button', { name: 'Create passkey' }).click()
+    await section.getByRole('button', { name: 'Create a passkey' }).click()
     await expect(page.getByRole('dialog')).toBeHidden()
     await expect(page.locator('[data-wallet-button]')).not.toHaveText(
       /Connect Wallet/,
@@ -198,10 +273,10 @@ test.describe('Passkey wallet', () => {
     // Without user verification the browser rejects the prompt, as it does
     // when the user cancels it
     await addVirtualAuthenticator(page, { isUserVerified: false })
-    const row = await openConnectDialog(page)
-    await row.getByRole('button', { name: 'Create passkey' }).click()
+    const section = await openConnectDialog(page)
+    await section.getByRole('button', { name: 'Create a passkey' }).click()
 
-    await expect(row.getByRole('alert')).toHaveText(
+    await expect(section.getByRole('alert')).toHaveText(
       'The passkey request was cancelled or timed out, or no passkey was found.',
     )
     await expect(page.getByRole('dialog')).toBeVisible()
@@ -211,15 +286,15 @@ test.describe('Passkey wallet', () => {
     page,
   }) => {
     await addVirtualAuthenticator(page, { hasPrf: false })
-    const row = await openConnectDialog(page)
-    await row.getByRole('button', { name: 'Create passkey' }).click()
+    const section = await openConnectDialog(page)
+    await section.getByRole('button', { name: 'Create a passkey' }).click()
 
-    await expect(row.getByRole('alert')).toContainText(
+    await expect(section.getByRole('alert')).toContainText(
       "Your passkey provider doesn't support passkey accounts. Try a different provider",
     )
   })
 
-  test('still connects other wallets from a single-button row', async ({
+  test('still connects other wallets from a single-button section', async ({
     page,
   }) => {
     // Pera opens its own modal; the passkey example only polyfills Buffer
@@ -293,9 +368,9 @@ test.describe('Passkey wallet', () => {
 
   test('clears a connect error when the dialog reopens', async ({ page }) => {
     await addVirtualAuthenticator(page)
-    const row = await openConnectDialog(page)
-    await row.getByRole('button', { name: 'Sign in with passkey' }).click()
-    await expect(row.getByRole('alert')).toBeVisible()
+    const section = await openConnectDialog(page)
+    await section.getByRole('button', { name: 'Continue with passkey' }).click()
+    await expect(section.getByRole('alert')).toBeVisible()
 
     await page.getByRole('button', { name: 'Close dialog' }).click()
     await expect(page.getByRole('dialog')).toBeHidden()

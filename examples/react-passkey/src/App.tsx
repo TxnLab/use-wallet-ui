@@ -23,8 +23,9 @@ const walletManager = new WalletManager({
   defaultNetwork: NetworkId.TESTNET,
 })
 
-// Create the plugin once: `session` matches `passkey({ session: true })`
-const plugins = [passkeyPlugin({ session: true })]
+// Create the plugin once: `session` matches `passkey({ session: true })`, and
+// `disclosure` shows the "whose account is this" note until "Got it"
+const plugins = [passkeyPlugin({ session: true, disclosure: true })]
 
 function App() {
   const [theme, setTheme] = useState<Theme>('system')
@@ -102,10 +103,18 @@ function App() {
                 .
               </p>
               <p className="text-gray-500 dark:text-slate-400 text-sm mt-4 max-w-2xl mx-auto">
-                Choose <strong>Create passkey</strong> for a new Falcon-1024
-                account, or <strong>Sign in</strong> with one you made here
-                before. The connected menu shows the session&apos;s lock status
-                and lets you export the account&apos;s recovery phrase.
+                Choose <strong>Continue with passkey</strong> to sign in, or{' '}
+                <strong>Create a passkey</strong> for a new Falcon-1024 account.
+                The connected menu shows the session&apos;s lock status and lets
+                you export the account&apos;s recovery phrase.
+              </p>
+              <p className="text-gray-500 dark:text-slate-400 text-sm mt-2 max-w-2xl mx-auto">
+                The note on whose account it is shows until you choose{' '}
+                <strong>Got it</strong>. To see it again, remove the{' '}
+                <code className="text-xs bg-gray-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
+                  wui:passkey-disclosure-dismissed:&lt;address&gt;
+                </code>{' '}
+                key from this site&apos;s local storage.
               </p>
             </div>
 

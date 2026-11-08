@@ -12,6 +12,7 @@ import {
 } from '../utils/passkey'
 
 import ConnectWalletButton from './ConnectWalletButton.vue'
+import PasskeyConnect from './PasskeyConnect.vue'
 import WalletList from './WalletList.vue'
 
 const { wallets, availableWallets, activeAddress } = useWallet()
@@ -20,6 +21,12 @@ const { theme } = useWalletUI()
 // v5 filters wallets by the active network's capabilities (e.g. hides
 // Mnemonic on MainNet). v4 peers have no `availableWallets`, so fall back.
 const walletList = computed(() => availableWallets?.value ?? wallets.value)
+
+// A passkey wallet leads the dialog; the other wallets list below it
+const passkeyWallet = computed(() => walletList.value.find(isPasskeyWallet))
+const otherWallets = computed(() =>
+  walletList.value.filter((wallet) => !isPasskeyWallet(wallet)),
+)
 
 const isOpen = ref(false)
 const animationState = ref<'starting' | 'entered' | 'exiting' | null>(null)
@@ -71,7 +78,7 @@ async function handleWalletClick(
     if (message) {
       const hint =
         !args?.create && getPasskeyErrorCode(error) === 'cancelled'
-          ? " New here? Choose 'Create passkey'."
+          ? " New here? Choose 'Create a passkey'."
           : ''
       passkeyStatus.value = {
         walletId: wallet.id,
@@ -145,11 +152,35 @@ async function handleWalletClick(
               </button>
             </div>
 
-            <div class="px-4 pb-3">
+            <PasskeyConnect
+              v-if="passkeyWallet"
+              :wallet="passkeyWallet"
+              :handle-wallet-click="handleWalletClick"
+              :status="passkeyStatus"
+            />
+
+            <div
+              v-if="passkeyWallet && otherWallets.length > 0"
+              class="flex items-center gap-3 px-6 pt-1 pb-2.5 text-xs text-[var(--wui-color-text-secondary)]"
+            >
+              <span
+                class="flex-1 h-px bg-[var(--wui-color-border)]"
+                aria-hidden="true"
+              />
+              or connect a wallet
+              <span
+                class="flex-1 h-px bg-[var(--wui-color-border)]"
+                aria-hidden="true"
+              />
+            </div>
+
+            <div
+              v-if="!passkeyWallet || otherWallets.length > 0"
+              class="px-4 pb-3"
+            >
               <WalletList
-                :wallets="walletList"
+                :wallets="otherWallets"
                 :handle-wallet-click="handleWalletClick"
-                :passkey-status="passkeyStatus"
               />
             </div>
 

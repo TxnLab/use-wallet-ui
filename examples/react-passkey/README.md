@@ -15,8 +15,8 @@ Open http://localhost:5176. Passkeys need a secure context, and browsers treat `
 
 ## Features
 
-- **Create passkey / Sign in**: the connect dialog's two passkey actions
-- **passkeyPlugin**: recovery phrase export, session lock status with Unlock and Lock, and a note on whose account it is
+- **Continue with passkey / Create a passkey**: the connect dialog's passkey-first section
+- **passkeyPlugin**: recovery phrase export, session lock status with Unlock and Lock, and a note on whose account it is (`disclosure: true`, shown until "Got it")
 - **Lute and Pera**: wallets that can import the recovery phrase as a Falcon / quantum account
 
 ## Structure

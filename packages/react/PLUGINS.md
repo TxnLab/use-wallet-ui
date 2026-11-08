@@ -354,24 +354,27 @@ import { exportKeyPlugin } from '@txnlab/use-wallet-ui-react/plugins/export-key'
 
 ### Passkey Plugin
 
-Adds passkey account features to the connected wallet menu for the passkey wallet from [`@txnlab/use-wallet-passkey`](https://github.com/TxnLab/use-wallet/tree/main/packages/wallets/passkey#readme). The connect dialog's "Create passkey" and "Sign in" buttons are built in; this plugin covers the connected account.
+Adds passkey account features to the connected wallet menu for the passkey wallet from [`@txnlab/use-wallet-passkey`](https://github.com/TxnLab/use-wallet/tree/main/packages/wallets/passkey#readme). The connect dialog's passkey-first section (**Continue with passkey**, **Create a passkey**) and the menu's domain tag are built in; this plugin covers the connected account.
 
 ```tsx
 import { WalletUIProvider } from '@txnlab/use-wallet-ui-react'
 import { passkeyPlugin } from '@txnlab/use-wallet-ui-react/plugins/passkey'
 
 // `session` matches `passkey({ session: true })` in your WalletManager
-const plugins = [passkeyPlugin({ session: true })]
+const plugins = [passkeyPlugin({ session: true, disclosure: true })]
 
 function App() {
-  return <WalletUIProvider plugins={plugins}>{/* ... */}</WalletUIProvider>
+  return (
+    <WalletUIProvider plugins={plugins}>
+      {/* ... */}
+    </WalletUIProvider>
+  )
 }
 ```
 
 The plugin:
-
 - Injects menu items in the `after-wallet-info` slot, only while the passkey wallet is active
-- Shows a note that the account belongs to this site (order 5)
+- With `disclosure` on, shows a note that the account belongs to this site (order 5) until the user chooses "Got it". The dismissal is remembered per account address in `localStorage` (`wui:passkey-disclosure-dismissed:<address>`), or in memory for the page session if storage is unavailable.
 - With `session: true`, shows Locked or Unlocked with Unlock and Lock buttons (order 10). The adapter's `onLock` and `onUnlock` belong to your app, so the menu reads `isUnlocked` when it opens, after its own buttons, and every second while open.
 - Adds "Export Recovery Phrase" (order 20), which opens a dialog: a warning with Falcon / quantum import instructions, a fresh passkey prompt, then the 25-word phrase with a countdown and copy-to-clipboard. The phrase stays in component state only, and closing clears the clipboard if it was copied (best effort).
 
@@ -383,7 +386,21 @@ The adapter keeps `canUsePrivateKey` false, so the [Export Key Plugin](#export-k
 |--------|------|---------|-------------|
 | `recoveryPhrase` | `boolean \| { displayTimeout?: number }` | `true` | Add "Export Recovery Phrase". `displayTimeout` is the seconds before the phrase hides (default `60`). |
 | `session` | `boolean` | `false` | Show lock status with Unlock and Lock. Turn it on when the wallet uses `passkey({ session })`. |
-| `disclosure` | `boolean \| string` | `true` | Show the note on whose account it is. A string replaces the text; `{domain}` becomes the account's domain. |
+| `disclosure` | `boolean \| string` | `false` | Show the note on whose account it is until "Got it". A string replaces the text; `{domain}` becomes the account's domain. |
+
+#### Requirements
+
+The plugin reaches the adapter's own methods (`unlock`, `lock`, `exportRecoveryPhrase`) through `useWalletManager()`, which `@txnlab/use-wallet-react` added in 5.2. `@txnlab/use-wallet-passkey` itself requires use-wallet 5.2, so any app with the passkey wallet has it. The library has no dependency on `@txnlab/use-wallet-passkey`.
+
+For your own components, the entry also exports `usePasskeyAdapter(wallet)`, which returns the adapter behind a `useWallet()` wallet object (or `null` for other wallets). Call its methods before any `await` in a click handler: Safari and iOS browsers drop the tap across one, and the passkey prompt needs it.
+
+#### Subpath Import
+
+```ts
+// Separate entry — only included if imported
+import { passkeyPlugin } from '@txnlab/use-wallet-ui-react/plugins/passkey'
+```
+
 ## Publishing Plugins
 
 Plugins are plain objects, so they can be published as npm packages. A plugin package should:

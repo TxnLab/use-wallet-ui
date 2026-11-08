@@ -427,16 +427,25 @@ function Profile() {
 
 ### WalletList
 
-Renders a list of wallets (used internally by ConnectWalletMenu). The passkey wallet's row has two buttons: "Create passkey" calls `handleWalletClick(wallet, { create: true })` and "Sign in" calls `handleWalletClick(wallet)`, so forward `args` to `wallet.connect`. Call `wallet.connect` before any `await`, or Safari and iOS browsers drop the passkey prompt.
+Renders a list of wallets (used internally by ConnectWalletMenu). The dialog renders the passkey wallet in its own section above the list, so pass the other wallets here.
 
 ```jsx
 <WalletList
   wallets={wallets}
-  handleWalletClick={(wallet, args) => wallet.connect(args)}
+  handleWalletClick={(wallet) => wallet.connect()}
 />
 ```
 
-Pass `passkeyStatus` (`{ walletId, pending, error }`) to show a pending message or an error under the passkey row.
+### PasskeyConnect
+
+The passkey-first section of the connect dialog, for custom connect menus: **Continue with passkey** calls `handleWalletClick(wallet)` and **Create a passkey** calls `handleWalletClick(wallet, { create: true })`. Forward `args` to `wallet.connect(args)` before any `await`, or Safari and iOS browsers drop the passkey prompt. Pass `status` (`{ walletId, pending, error }`) to disable the controls while the prompt is open and to show an error.
+
+```jsx
+<PasskeyConnect
+  wallet={passkeyWallet}
+  handleWalletClick={(wallet, args) => wallet.connect(args)}
+/>
+```
 
 ## Hooks
 
@@ -589,7 +598,7 @@ See the [Plugin Architecture Guide](PLUGINS.md) for full documentation.
 
 ## Passkey Wallet
 
-[`@txnlab/use-wallet-passkey`](https://github.com/TxnLab/use-wallet/tree/main/packages/wallets/passkey#readme) (use-wallet 5.2+) derives an app-scoped Falcon-1024 account from a passkey. Register it, and the connect dialog shows it with two buttons: **Create passkey** and **Sign in**. A missing passkey and a cancelled prompt raise the same browser error, so the user chooses.
+[`@txnlab/use-wallet-passkey`](https://github.com/TxnLab/use-wallet/tree/main/packages/wallets/passkey#readme) (use-wallet 5.2+) derives an app-scoped Falcon-1024 account from a passkey. Register it, and the connect dialog leads with it: a **Continue with passkey** button to sign in, a **Create a passkey** link for new users, and the other wallets below. A missing passkey and a cancelled prompt raise the same browser error, so creating stays a separate choice.
 
 ```bash
 npm install @txnlab/use-wallet-passkey
@@ -623,13 +632,16 @@ function App() {
 The connect dialog:
 
 - Starts the passkey prompt straight from the tap, as Safari and iOS browsers require
+- Shows "Waiting for your passkey…" and disables both controls while the prompt is open
 - Stays open on passkey errors and explains them: a cancelled or timed-out prompt (or no passkey found), an in-app browser (open the page in Safari or Chrome), or a passkey provider without the PRF extension (try another provider)
+
+The connected wallet menu tags a passkey account with its domain (for example, `Passkey · localhost`), since the account belongs to the site that created it.
 
 `passkeyPlugin()` adds to the connected wallet menu, only while the passkey wallet is active:
 
 - **Export Recovery Phrase**: a dialog that reveals the account's 25-word phrase after a fresh passkey prompt, and tells users to import it as a Falcon / quantum account (in Lute, Add account → Falcon25 account → Import; in Pera, the quantum import). It hides the phrase after a timeout and clears the clipboard when it closes, if it can.
 - **Session status** (with `session: true`): Locked or Unlocked, with Unlock and Lock buttons
-- **A note on whose account it is**: "This account is created by and for example.com. Keep only what you need here, and move larger amounts to a wallet you control."
+- **A note on whose account it is** (with `disclosure: true`): "This account is created by and for example.com. Keep only what you need here, and move larger amounts to a wallet you control." It shows until the user chooses **Got it**, once per account.
 
 The plugin uses `useWalletManager()`, so it requires `@txnlab/use-wallet-react` 5.2 or later, which any app with the passkey wallet has. The main entry still supports v4.6+. See [Passkey Plugin](PLUGINS.md#passkey-plugin) for options, and the adapter's [security model](https://github.com/TxnLab/use-wallet/tree/main/packages/wallets/passkey#security-model) before you ship it.
 

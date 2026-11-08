@@ -16,6 +16,13 @@ export interface PasskeyWalletAdapter {
   exportRecoveryPhrase: () => Promise<{ scheme: 'falcon-1024'; phrase: string }>
 }
 
+/** The status of a passkey connect request, shown under the passkey section */
+export interface PasskeyConnectStatus {
+  walletId: string
+  pending: boolean
+  error: string | null
+}
+
 /** Arguments for connecting the passkey wallet */
 export interface PasskeyConnectArgs {
   /** Create a new passkey (and account) instead of signing in */

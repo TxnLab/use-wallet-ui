@@ -62,7 +62,7 @@ import { WalletButton, WalletUIProvider } from '@txnlab/use-wallet-ui-vue'
 
 ## Passkey Wallet
 
-[`@txnlab/use-wallet-passkey`](https://github.com/TxnLab/use-wallet/tree/main/packages/wallets/passkey#readme) (use-wallet 5.2+) derives an app-scoped Falcon-1024 account from a passkey. Register it, and the connect dialog shows it with two buttons: **Create passkey** and **Sign in**. A missing passkey and a cancelled prompt raise the same browser error, so the user chooses. Passkey errors keep the dialog open with a message the user can act on.
+[`@txnlab/use-wallet-passkey`](https://github.com/TxnLab/use-wallet/tree/main/packages/wallets/passkey#readme) (use-wallet 5.2+) derives an app-scoped Falcon-1024 account from a passkey. Register it, and the connect dialog leads with it: a **Continue with passkey** button to sign in, a **Create a passkey** link for new users, and the other wallets below. A missing passkey and a cancelled prompt raise the same browser error, so creating stays a separate choice. Passkey errors keep the dialog open with a message the user can act on, and the connected menu tags the account with its domain.
 
 ```bash
 pnpm add @txnlab/use-wallet-passkey
@@ -85,7 +85,7 @@ import { WalletButton, WalletUIProvider } from '@txnlab/use-wallet-ui-vue'
 import { passkeyPlugin } from '@txnlab/use-wallet-ui-vue/plugins/passkey'
 
 // `session` matches `passkey({ session: true })`
-const plugins = [passkeyPlugin({ session: true })]
+const plugins = [passkeyPlugin({ session: true, disclosure: true })]
 </script>
 
 <template>
@@ -99,14 +99,14 @@ const plugins = [passkeyPlugin({ session: true })]
 
 - **Export Recovery Phrase**: reveals the 25-word phrase after a fresh passkey prompt, and tells users to import it as a Falcon / quantum account (in Lute, Add account → Falcon25 account → Import; in Pera, the quantum import). The phrase hides after a timeout.
 - **Session status** (with `session: true`): Locked or Unlocked, with Unlock and Lock buttons
-- **A note on whose account it is**, naming the account's domain
+- **A note on whose account it is** (with `disclosure: true`), shown until the user chooses **Got it**, once per account
 
-| Option           | Type                                     | Default | Description                                                                                   |
-| ---------------- | ---------------------------------------- | ------- | --------------------------------------------------------------------------------------------- |
-| `recoveryPhrase` | `boolean \| { displayTimeout?: number }` | `true`  | Add "Export Recovery Phrase". `displayTimeout` is the seconds before the phrase hides (`60`). |
-| `session`        | `boolean`                                | `false` | Show lock status with Unlock and Lock. Turn it on with `passkey({ session })`.                |
-| `disclosure`     | `boolean \| string`                      | `true`  | Show the note on whose account it is. A string replaces it; `{domain}` becomes the domain.    |
+| Option           | Type                                     | Default | Description                                                                                          |
+| ---------------- | ---------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------- |
+| `recoveryPhrase` | `boolean \| { displayTimeout?: number }` | `true`  | Add "Export Recovery Phrase". `displayTimeout` is the seconds before the phrase hides (`60`).        |
+| `session`        | `boolean`                                | `false` | Show lock status with Unlock and Lock. Turn it on with `passkey({ session })`.                       |
+| `disclosure`     | `boolean \| string`                      | `false` | Show the note on whose account it is until "Got it". A string replaces it; `{domain}` is the domain. |
 
 The plugin uses `useWalletManager()`, so it requires `@txnlab/use-wallet-vue` 5.2 or later, which any app with the passkey wallet has. The main entry still supports v4.6+. Read the adapter's [security model](https://github.com/TxnLab/use-wallet/tree/main/packages/wallets/passkey#security-model) before you ship it.
 
-For your own connect UI, `WalletList` passes `{ create: true }` from "Create passkey" to `handleWalletClick(wallet, args)`; forward it to `wallet.connect(args)`, and call `connect` before any `await`. `getPasskeyErrorMessage(error)` returns a message for a `PasskeyError`, or `null` otherwise.
+For your own connect UI, render `PasskeyConnect` with the passkey wallet: "Create a passkey" passes `{ create: true }` to `handleWalletClick(wallet, args)`; forward it to `wallet.connect(args)`, and call `connect` before any `await`. `WalletList` no longer renders the passkey wallet. `getPasskeyErrorMessage(error)` returns a message for a `PasskeyError`, or `null` otherwise.
