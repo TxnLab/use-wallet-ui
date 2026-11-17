@@ -99,7 +99,7 @@
   },
   "devDependencies": {
     "@tailwindcss/cli": "4.3.5",
-    "@txnlab/use-wallet-passkey": "5.3.0",
+    "@txnlab/use-wallet-passkey": "5.4.0",
     "@txnlab/use-wallet-react": "^5.2.0",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
