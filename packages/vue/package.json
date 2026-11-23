@@ -89,14 +89,14 @@
   "dependencies": {
     "@floating-ui/vue": "1.1.11",
     "@headlessui/vue": "1.7.23",
-    "@tanstack/vue-query": "5.107.1",
+    "@tanstack/vue-query": "5.108.3",
     "@txnlab/utils-ts": "0.1.0",
     "clsx": "2.1.1",
-    "tailwind-merge": "3.7.0"
+    "tailwind-merge": "3.7.1"
   },
   "devDependencies": {
     "@tailwindcss/cli": "4.3.5",
-    "@txnlab/use-wallet-passkey": "5.4.0",
+    "@txnlab/use-wallet-passkey": "5.4.1",
     "@txnlab/use-wallet-vue": "^5.2.0",
     "@types/node": "22.15.3",
     "@vitejs/plugin-vue": "5.2.4",
@@ -110,7 +110,7 @@
     "vite-plugin-dts": "4.5.4",
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "3.2.6",
-    "vue": "3.5.45",
+    "vue": "3.5.46",
     "vue-tsc": "2.2.12"
   }
 }
